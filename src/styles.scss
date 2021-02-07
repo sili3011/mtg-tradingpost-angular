@@ -1,1 +1,43 @@
-/* You can add global styles to this file, and also import other style files */
+html,
+body {
+  height: 100%;
+  background-color: #303030;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+@import "~@angular/material/theming";
+
+$mtg-primary: (
+  50: #f9f0e2,
+  100: #f0d9b7,
+  200: #e6c088,
+  300: #dba658,
+  400: #d49334,
+  500: #cc8010,
+  600: #c7780e,
+  700: #c06d0c,
+  800: #b96309,
+  900: #ad5005,
+  A100: #ffe7d8,
+  A200: #ffc8a5,
+  A400: #ffa972,
+  A700: #ff9959,
+  contrast: (
+    A100: #ffe7d8,
+    A200: #ffc8a5,
+    A400: #ffa972,
+    A700: #ff9959,
+  ),
+);
+
+$app-primary: mat-palette($mat-light-blue);
+$app-accent: mat-palette($mat-light-blue);
+$app-warn: mat-palette($mat-red);
+
+$theme-dark: mat-dark-theme($app-primary, $app-accent, $app-warn);
+$theme-light: mat-light-theme($app-primary, $app-accent, $app-warn);
+
+@include angular-material-theme($theme-dark);
