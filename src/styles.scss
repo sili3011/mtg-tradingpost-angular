@@ -1,11 +1,27 @@
-html,
-body {
+html {
+  overflow: hidden;
   height: 100%;
-  background-color: #303030;
+  min-height: 100%;
 }
+
 body {
-  margin: 0;
-  font-family: Roboto, "Helvetica Neue", sans-serif;
+  margin: 0px;
+  font-family: "Roboto", sans-serif;
+  height: calc(100% - 30px);
+  min-height: calc(100% - 30px);
+  background-color: #303030;
+  color: white;
+}
+
+* {
+  -webkit-font-smoothing: antialased;
+  -moz-osx-font-smoothing: antialased;
+  font-family: "Roboto", sans-serif;
+}
+
+/* SPACER */
+.spacer {
+  flex: 1 1 auto;
 }
 
 @import "~@angular/material/theming";

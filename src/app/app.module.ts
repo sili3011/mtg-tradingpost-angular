@@ -6,9 +6,10 @@ import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { SharedModule } from './modules/shared/shared.module';
+import { NavigationComponent } from './components/navigation/navigation.component';
 
 @NgModule({
-  declarations: [AppComponent, DashboardComponent],
+  declarations: [AppComponent, DashboardComponent, NavigationComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,

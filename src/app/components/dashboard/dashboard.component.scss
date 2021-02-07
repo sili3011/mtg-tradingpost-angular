@@ -1,0 +1,13 @@
+.card {
+  width: 350px;
+}
+
+.card-header-image {
+  background-size: cover;
+  height: 200px;
+}
+
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
+}
