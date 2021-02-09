@@ -7,7 +7,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { LayoutModule } from '@angular/cdk/layout';
+import { CovalentLayoutModule } from '@covalent/core/layout';
 
 @NgModule({
   declarations: [],
@@ -20,7 +20,7 @@ import { LayoutModule } from '@angular/cdk/layout';
     MatSidenavModule,
     MatListModule,
     MatGridListModule,
-    LayoutModule,
+    CovalentLayoutModule,
   ],
 })
 export class SharedModule {}
