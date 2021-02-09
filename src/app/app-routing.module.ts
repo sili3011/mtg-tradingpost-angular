@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { SidenavService } from './services/sidenav.service';
 
 const routes: Routes = [
   { path: '', component: DashboardComponent },
@@ -11,6 +10,6 @@ const routes: Routes = [
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
   exports: [RouterModule],
-  providers: [SidenavService],
+  providers: [],
 })
 export class AppRoutingModule {}

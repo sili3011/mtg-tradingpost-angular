@@ -8,11 +8,14 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatGridListModule } from '@angular/material/grid-list';
 import { CovalentLayoutModule } from '@covalent/core/layout';
+import { FlexModule } from '@angular/flex-layout/flex';
+import { FlexLayoutModule } from '@angular/flex-layout';
 
 @NgModule({
   declarations: [],
   imports: [CommonModule],
   exports: [
+    // Angular Material
     MatCardModule,
     MatButtonModule,
     MatToolbarModule,
@@ -20,7 +23,11 @@ import { CovalentLayoutModule } from '@covalent/core/layout';
     MatSidenavModule,
     MatListModule,
     MatGridListModule,
+    // Covalent
     CovalentLayoutModule,
+    // Angular Flex
+    FlexModule,
+    FlexLayoutModule,
   ],
 })
 export class SharedModule {}

@@ -58,10 +58,8 @@ $theme-light: mat-light-theme($app-primary, $app-accent, $app-warn);
 
 @include angular-material-theme($theme-dark);
 
-@import '~@covalent/core/theming/all-theme';
+@import "~@covalent/core/theming/all-theme";
 
 @include covalent-core();
-
 @include covalent-utilities();
-
 @include covalent-layout();
