@@ -7,9 +7,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { SharedModule } from './modules/shared/shared.module';
 import { NavigationComponent } from './components/navigation/navigation.component';
+import { CollectionComponent } from './components/collection/collection.component';
 
 @NgModule({
-  declarations: [AppComponent, DashboardComponent, NavigationComponent],
+  declarations: [AppComponent, DashboardComponent, NavigationComponent, CollectionComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
