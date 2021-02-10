@@ -11,6 +11,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { MatInputModule } from '@angular/material/input';
+import { MatSortModule } from '@angular/material/sort';
+import { MatRippleModule } from '@angular/material/core';
 import { FlexModule } from '@angular/flex-layout/flex';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
@@ -30,6 +32,8 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatTableModule,
     MatPaginatorModule,
     MatInputModule,
+    MatSortModule,
+    MatRippleModule,
     // Angular Flex
     FlexModule,
     FlexLayoutModule,
