@@ -24,6 +24,7 @@
     "@angular/platform-browser": "~11.1.2",
     "@angular/platform-browser-dynamic": "~11.1.2",
     "@angular/router": "~11.1.2",
+    "mobx": "^6.1.5",
     "ng-packagr": "^11.2.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
