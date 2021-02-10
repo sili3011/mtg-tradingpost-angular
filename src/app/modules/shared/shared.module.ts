@@ -7,7 +7,6 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSidenavModule } from '@angular/material/sidenav';
 import { MatListModule } from '@angular/material/list';
 import { MatGridListModule } from '@angular/material/grid-list';
-import { CovalentLayoutModule } from '@covalent/core/layout';
 import { FlexModule } from '@angular/flex-layout/flex';
 import { FlexLayoutModule } from '@angular/flex-layout';
 
@@ -23,8 +22,6 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     MatSidenavModule,
     MatListModule,
     MatGridListModule,
-    // Covalent
-    CovalentLayoutModule,
     // Angular Flex
     FlexModule,
     FlexLayoutModule,
