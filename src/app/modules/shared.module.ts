@@ -37,6 +37,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     // Angular Flex
     FlexModule,
     FlexLayoutModule,
+    // Third Party
   ],
 })
 export class SharedModule {}
