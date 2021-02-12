@@ -4,6 +4,7 @@ import { defaultDB, defaultNetworth } from '../defaults/database.defaults';
 import { CardAdapter } from '../models/card-adapter';
 import { Deck } from '../models/deck';
 import { LISTTYPES } from '../models/enums';
+import { CollectionChain } from 'lodash';
 import * as db from '../../assets/db.json';
 import * as LocalStorage from 'lowdb/adapters/LocalStorage';
 import * as lowdb from 'lowdb';
@@ -128,8 +129,8 @@ export class DbService implements OnInit {
   }
 
   updateCardValue() {
-    const currentValue = store.getters.getCollectionValue;
-    this.db!.set('networth.value', currentValue).write();
+    // const currentValue = store.getters.getCollectionValue;
+    // this.db!.set('networth.value', currentValue).write();
     this.db!.set('networth.lastSync', new Date().getTime()).write();
     //UPDATE VALUE OF EACH CARD
     const identifiers: Array<CardIdentifier> = [];
@@ -141,15 +142,15 @@ export class DbService implements OnInit {
       'data',
       (data) => (cards.find((c) => c.id === data.id)!.prices = data.prices)
     );
-    store.commit('setCardsOfCollection', {
-      networth: this.getCards(LISTTYPES.collection),
-    });
+    // store.commit('setCardsOfCollection', {
+    //   networth: this.getCards(LISTTYPES.collection),
+    // });
   }
 
   addCard(card: CardAdapter, listType: number): CardAdapter | undefined {
     if (
       this.getCollectionChainCards(listType)!
-        .find((c) => c.id === card.id)
+        .find((c: CardAdapter) => c.id === card.id)
         .value()
     ) {
       return undefined;
@@ -157,13 +158,13 @@ export class DbService implements OnInit {
     card.amount = 1;
     this.getCollectionChainCards(listType)!.push(card).write();
     return this.getCollectionChainCards(listType)!
-      .find((c) => c.id === card.id)
+      .find((c: CardAdapter) => c.id === card.id)
       .value();
   }
 
   increment(card: CardAdapter, listType: number) {
     const inDB = this.getCollectionChainCards(listType)!.find(
-      (c) => c.id === card.id
+      (c: CardAdapter) => c.id === card.id
     );
     const currentAmount = inDB.value().amount;
     inDB.assign({ amount: currentAmount + 1 }).write();
@@ -171,12 +172,12 @@ export class DbService implements OnInit {
 
   decrement(card: CardAdapter, listType: number): boolean {
     const inDB = this.getCollectionChainCards(listType)!.find(
-      (c) => c.id === card.id
+      (c: CardAdapter) => c.id === card.id
     );
     const currentAmount = inDB.value().amount;
     if (currentAmount - 1 === 0) {
       this.getCollectionChainCards(listType)!
-        .remove((c) => c === inDB.value())
+        .remove((c: CardAdapter) => c === inDB.value())
         .write();
       return false;
     }
