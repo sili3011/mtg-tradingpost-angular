@@ -7,6 +7,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { SharedModule } from './modules/shared.module';
 import { NavigationComponent } from './components/navigation/navigation.component';
 import { CollectionComponent } from './components/collection/collection.component';
+import { DatabaseSelectionDialogComponent } from './components/dialogs/database-selection-dialog/database-selection-dialog.component';
 
 @NgModule({
   declarations: [
@@ -14,6 +15,7 @@ import { CollectionComponent } from './components/collection/collection.componen
     DashboardComponent,
     NavigationComponent,
     CollectionComponent,
+    DatabaseSelectionDialogComponent,
   ],
   imports: [
     BrowserModule,

@@ -28,16 +28,16 @@ interface DB extends File {
 @Injectable({
   providedIn: 'root',
 })
-export class DbService implements OnInit {
+export class DBService implements OnInit {
   private db!: lowdb.LowdbSync<DB>;
   private adapter = new LocalStorage(JSON.stringify(db));
 
-  constructor() {}
-
-  ngOnInit() {
+  constructor() {
     this.db = lowdb(this.adapter);
     this.db.defaults(defaultDB).write();
+  }
 
+  ngOnInit() {
     // init stores
     // store.commit('setOwner', { owner: this.getOwner() });
     // store.commit('setDecks', { decks: this.getDecks() });
