@@ -16,6 +16,7 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FlexModule } from '@angular/flex-layout/flex';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { NgxMatFileInputModule } from '@angular-material-components/file-input';
 
 @NgModule({
   declarations: [],
@@ -40,6 +41,7 @@ import { FlexLayoutModule } from '@angular/flex-layout';
     FlexModule,
     FlexLayoutModule,
     // Third Party
+    NgxMatFileInputModule,
   ],
 })
 export class SharedModule {}

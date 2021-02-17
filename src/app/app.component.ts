@@ -16,7 +16,11 @@ export class AppComponent implements OnInit {
 
   ngOnInit() {
     if (!this.dbService.getHasBeenInitialized()) {
-      this.dialog.open(DatabaseSelectionDialogComponent);
+      this.dialog.open(DatabaseSelectionDialogComponent, {
+        width: '50%',
+        height: '50%',
+        disableClose: true,
+      });
     }
   }
 }

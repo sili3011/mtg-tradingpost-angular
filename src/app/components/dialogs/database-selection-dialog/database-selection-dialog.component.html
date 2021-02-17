@@ -1,9 +1,7 @@
-<h1 mat-dialog-title>Favorite Animal</h1>
+<h1 mat-dialog-title>Manage your collection</h1>
 <div mat-dialog-content>
-  My favorite animal is:
-  <ul>
-    <li><span>&#10003;</span> Panda</li>
-    <li><span>&#10003;</span> Unicorn</li>
-    <li><span>&#10003;</span> Lion</li>
-  </ul>
+  <mat-form-field>
+    <ngx-mat-file-input [multiple]="false" [accept]="'.json'" [color]="">
+    </ngx-mat-file-input>
+  </mat-form-field>
 </div>
