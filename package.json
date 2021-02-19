@@ -25,6 +25,7 @@
     "@angular/platform-browser": "~11.1.2",
     "@angular/platform-browser-dynamic": "~11.1.2",
     "@angular/router": "~11.1.2",
+    "@mdi/angular-material": "^5.9.55",
     "lodash": "^4.17.20",
     "lowdb": "^1.0.0",
     "mobx": "^6.1.7",

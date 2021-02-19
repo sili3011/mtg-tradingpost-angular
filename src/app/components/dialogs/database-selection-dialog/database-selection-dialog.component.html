@@ -1,7 +1,11 @@
 <h1 mat-dialog-title>Manage your collection</h1>
 <div mat-dialog-content>
-  <mat-form-field>
-    <ngx-mat-file-input [multiple]="false" [accept]="'.json'" [color]="">
-    </ngx-mat-file-input>
-  </mat-form-field>
+  <div fxLayout="row">
+    <mat-icon svgIcon="database" class="primary_color"></mat-icon>
+    <mat-form-field style="width: 90%; font-size: large">
+      <ngx-mat-file-input [multiple]="false" [accept]="'.json'" [color]="">
+      </ngx-mat-file-input>
+    </mat-form-field>
+  </div>
+  <mat-icon svgIcon="account-star" class="primary_color"></mat-icon>
 </div>
