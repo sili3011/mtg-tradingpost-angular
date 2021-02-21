@@ -9,17 +9,17 @@ import { FormControl, Validators } from '@angular/forms';
 })
 export class DatabaseSelectionDialogComponent implements OnInit {
   files: Array<any> = [];
-  fileControl: FormControl;
+  dbControl: FormControl;
 
   constructor() {
-    this.fileControl = new FormControl(this.files, [
+    this.dbControl = new FormControl(this.files, [
       Validators.required,
       MaxSizeValidator(2 * 1024),
     ]);
   }
 
   ngOnInit(): void {
-    this.fileControl.valueChanges.subscribe((files: any) => {
+    this.dbControl.valueChanges.subscribe((files: any) => {
       if (!Array.isArray(files)) {
         this.files = [files];
       } else {

@@ -1,11 +1,46 @@
 <h1 mat-dialog-title>Manage your collection</h1>
 <div mat-dialog-content>
-  <div fxLayout="row">
-    <mat-icon svgIcon="database" class="primary_color"></mat-icon>
-    <mat-form-field style="width: 90%; font-size: large">
-      <ngx-mat-file-input [multiple]="false" [accept]="'.json'" [color]="">
-      </ngx-mat-file-input>
-    </mat-form-field>
-  </div>
-  <mat-icon svgIcon="account-star" class="primary_color"></mat-icon>
+  <form>
+    <div fxLayout="row">
+      <mat-icon svgIcon="database" class="input" color="primary"></mat-icon>
+      <mat-form-field name="file" class="form-field">
+        <ngx-mat-file-input [multiple]="false" [accept]="'.json'" [color]="">
+        </ngx-mat-file-input>
+      </mat-form-field>
+    </div>
+    <div fxLayout="row">
+      <mat-icon svgIcon="rename-box" class="input" color="primary"></mat-icon>
+      <mat-form-field class="form-field">
+        <mat-label>name of db</mat-label>
+        <input matInput />
+      </mat-form-field>
+    </div>
+    <div fxLayout="row">
+      <mat-icon svgIcon="account-star" class="input" color="primary"></mat-icon>
+      <mat-form-field class="form-field">
+        <mat-label>owner</mat-label>
+        <input matInput />
+      </mat-form-field>
+    </div>
+  </form>
+</div>
+<div>
+  <button
+    mat-fab
+    color="primary"
+    aria-label="Example icon button with a delete icon"
+  >
+    <mat-icon svgIcon="database-plus" style="color: #303030"></mat-icon>
+  </button>
+  <button
+    mat-fab
+    color="primary"
+    aria-label="Example icon button with a bookmark icon"
+  >
+    <mat-icon svgIcon="database-refresh" style="color: #303030"></mat-icon>
+  </button>
+</div>
+<div mat-dialog-actions>
+  <button mat-button color="primary">Primary</button>
+  <button mat-button color="primary">Primary</button>
 </div>

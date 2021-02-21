@@ -37,6 +37,7 @@ import { NgxMatFileInputModule } from '@angular-material-components/file-input';
     MatSortModule,
     MatRippleModule,
     MatDialogModule,
+    MatInputModule,
     // Angular Flex
     FlexModule,
     FlexLayoutModule,
