@@ -1,6 +1,6 @@
 import { MaxSizeValidator } from '@angular-material-components/file-input';
 import { Component, OnInit } from '@angular/core';
-import { FormControl, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'mtg-database-selection-dialog',
@@ -8,23 +8,20 @@ import { FormControl, Validators } from '@angular/forms';
   styleUrls: ['./database-selection-dialog.component.scss'],
 })
 export class DatabaseSelectionDialogComponent implements OnInit {
-  files: Array<any> = [];
-  dbControl: FormControl;
+  dbGroup: FormGroup;
 
   constructor() {
-    this.dbControl = new FormControl(this.files, [
-      Validators.required,
-      MaxSizeValidator(2 * 1024),
-    ]);
+    this.dbGroup = new FormGroup({
+      file: new FormControl(undefined, [
+        Validators.required,
+        MaxSizeValidator(2 * 1024),
+      ]),
+      name: new FormControl('', Validators.required),
+      owner: new FormControl('', Validators.required),
+    });
   }
 
   ngOnInit(): void {
-    this.dbControl.valueChanges.subscribe((files: any) => {
-      if (!Array.isArray(files)) {
-        this.files = [files];
-      } else {
-        this.files = files;
-      }
-    });
+    this.dbGroup.valueChanges.subscribe((changed) => console.log(changed));
   }
 }

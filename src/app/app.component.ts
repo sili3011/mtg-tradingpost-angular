@@ -18,7 +18,6 @@ export class AppComponent implements OnInit {
     if (!this.dbService.getHasBeenInitialized()) {
       this.dialog.open(DatabaseSelectionDialogComponent, {
         width: '50%',
-        height: '50%',
         disableClose: true,
       });
     }

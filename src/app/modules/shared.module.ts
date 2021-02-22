@@ -17,6 +17,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { FlexModule } from '@angular/flex-layout/flex';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { NgxMatFileInputModule } from '@angular-material-components/file-input';
+import { ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [],
@@ -38,6 +39,8 @@ import { NgxMatFileInputModule } from '@angular-material-components/file-input';
     MatRippleModule,
     MatDialogModule,
     MatInputModule,
+    // AngularForms
+    ReactiveFormsModule,
     // Angular Flex
     FlexModule,
     FlexLayoutModule,
