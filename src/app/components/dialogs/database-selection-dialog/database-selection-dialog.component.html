@@ -6,12 +6,27 @@
         <mat-icon svgIcon="database" class="input" color="primary"></mat-icon>
         <mat-form-field class="form-field">
           <ngx-mat-file-input
-            [multiple]="false"
-            [accept]="'.json'"
-            [color]=""
             formControlName="file"
-          >
-          </ngx-mat-file-input>
+            placeholder="DB as JSON"
+            valuePlaceholder="No file selected"
+            [required]="true"
+            [accept]="'.json'"
+          ></ngx-mat-file-input>
+          <mat-icon color="primary" matSuffix>folder</mat-icon>
+          <mat-error *ngIf="dbGroup.get('file')?.hasError('required')">
+            Please select a file
+          </mat-error>
+          <mat-error *ngIf="dbGroup.get('file')?.hasError('maxContentSize')">
+            The total size must not exceed
+            {{
+              dbGroup.get("file")?.getError("maxContentSize").maxSize
+                | byteFormat
+            }}
+            ({{
+              dbGroup.get("file")?.getError("maxContentSize").actualSize
+                | byteFormat
+            }}).
+          </mat-error>
         </mat-form-field>
       </div>
       <div fxLayout="row">
@@ -35,18 +50,13 @@
     </form>
   </div>
   <div style="text-align: center">
-    <button
-      mat-fab
-      color="primary"
-      aria-label="Example icon button with a delete icon"
-      style="margin-right: 10px"
-    >
+    <button mat-fab color="primary" style="margin-right: 10px">
       <mat-icon svgIcon="database-plus" style="color: #303030"></mat-icon>
     </button>
     <button
       mat-fab
       color="primary"
-      aria-label="Example icon button with a bookmark icon"
+      [disabled]="!file || file.files?.length === 0 || file.files[0].size === 0"
     >
       <mat-icon svgIcon="database-refresh" style="color: #303030"></mat-icon>
     </button>

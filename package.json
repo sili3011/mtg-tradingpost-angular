@@ -12,7 +12,6 @@
   },
   "private": true,
   "dependencies": {
-    "@angular-material-components/file-input": "^5.0.1",
     "@angular/animations": "~11.1.2",
     "@angular/cdk": "^11.2.0",
     "@angular/common": "~11.1.2",
@@ -30,6 +29,7 @@
     "lowdb": "^1.0.0",
     "mobx": "^6.1.7",
     "ng-packagr": "^11.2.1",
+    "ngx-material-file-input": "^2.1.1",
     "rxjs": "~6.6.0",
     "scryfall-sdk": "^2.1.1",
     "tslib": "^2.0.0",

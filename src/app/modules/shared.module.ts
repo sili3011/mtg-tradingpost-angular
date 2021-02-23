@@ -16,8 +16,8 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { FlexModule } from '@angular/flex-layout/flex';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { NgxMatFileInputModule } from '@angular-material-components/file-input';
 import { ReactiveFormsModule } from '@angular/forms';
+import { MaterialFileInputModule } from 'ngx-material-file-input';
 
 @NgModule({
   declarations: [],
@@ -45,7 +45,7 @@ import { ReactiveFormsModule } from '@angular/forms';
     FlexModule,
     FlexLayoutModule,
     // Third Party
-    NgxMatFileInputModule,
+    MaterialFileInputModule,
   ],
 })
 export class SharedModule {}
