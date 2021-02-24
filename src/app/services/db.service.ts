@@ -8,6 +8,7 @@ import { CollectionChain } from 'lodash';
 import * as db from '../../assets/db.json';
 import * as LocalStorage from 'lowdb/adapters/LocalStorage';
 import * as lowdb from 'lowdb';
+import { UserStore } from '../stores/user.store';
 
 export interface Networth {
   value: number;
@@ -32,24 +33,26 @@ export class DBService implements OnInit {
   private db!: lowdb.LowdbSync<DB>;
   private adapter = new LocalStorage(JSON.stringify(db));
 
-  constructor() {
+  constructor(private userStore: UserStore) {
     this.db = lowdb(this.adapter);
     this.db.defaults(defaultDB).write();
   }
 
   ngOnInit() {
     // init stores
-    // store.commit('setOwner', { owner: this.getOwner() });
-    // store.commit('setDecks', { decks: this.getDecks() });
-    // store.commit('setCardsOfCollection', {
-    //   cards: this.getCards(LISTTYPES.collection),
-    // });
-    // store.commit('setCardsOfWishlist', {
-    //   cards: this.getCards(LISTTYPES.whishlist),
-    // });
-    // store.commit('setNetworth', {
-    //   networth: this.getNetworth(),
-    // });
+    if (this.getHasBeenInitialized()) {
+      this.userStore.owner = this.getOwner();
+      // store.commit('setDecks', { decks: this.getDecks() });
+      // store.commit('setCardsOfCollection', {
+      //   cards: this.getCards(LISTTYPES.collection),
+      // });
+      // store.commit('setCardsOfWishlist', {
+      //   cards: this.getCards(LISTTYPES.whishlist),
+      // });
+      // store.commit('setNetworth', {
+      //   networth: this.getNetworth(),
+      // });
+    }
   }
 
   setDB(input: DB) {

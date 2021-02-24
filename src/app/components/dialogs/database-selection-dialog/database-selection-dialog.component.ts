@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
 import { FileInput, FileValidator } from 'ngx-material-file-input';
+import { DBService } from 'src/app/services/db.service';
 
 @Component({
   selector: 'mtg-database-selection-dialog',
@@ -11,7 +13,10 @@ export class DatabaseSelectionDialogComponent implements OnInit {
   dbGroup: FormGroup;
   inputJSON: any;
 
-  constructor() {
+  constructor(
+    private dbService: DBService,
+    private dialogRef: MatDialogRef<DatabaseSelectionDialogComponent>
+  ) {
     this.dbGroup = new FormGroup({
       file: new FormControl(undefined, [
         Validators.required,
@@ -79,5 +84,18 @@ export class DatabaseSelectionDialogComponent implements OnInit {
 
   get file() {
     return this.dbGroup.get('file')?.value;
+  }
+
+  get hasBeenInitialized() {
+    return this.dbService.getHasBeenInitialized();
+  }
+
+  close() {
+    this.dialogRef.close();
+  }
+
+  confirm() {
+    this.dbService.setDB(this.inputJSON);
+    this.close();
   }
 }
