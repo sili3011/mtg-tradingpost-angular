@@ -1,4 +1,4 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { CardIdentifier, Cards } from 'scryfall-sdk';
 import { defaultDB, defaultNetworth } from '../defaults/database.defaults';
 import { CardAdapter } from '../models/card-adapter';
@@ -9,6 +9,7 @@ import * as db from '../../assets/db.json';
 import * as LocalStorage from 'lowdb/adapters/LocalStorage';
 import * as lowdb from 'lowdb';
 import { UserStore } from '../stores/user.store';
+import { CardsStore } from '../stores/cards.store';
 
 export interface Networth {
   value: number;
@@ -29,29 +30,20 @@ interface DB extends File {
 @Injectable({
   providedIn: 'root',
 })
-export class DBService implements OnInit {
+export class DBService {
   private db!: lowdb.LowdbSync<DB>;
   private adapter = new LocalStorage(JSON.stringify(db));
 
-  constructor(private userStore: UserStore) {
+  constructor(private userStore: UserStore, private cardsStore: CardsStore) {
     this.db = lowdb(this.adapter);
     this.db.defaults(defaultDB).write();
-  }
-
-  ngOnInit() {
     // init stores
     if (this.getHasBeenInitialized()) {
       this.userStore.owner = this.getOwner();
+      this.cardsStore.collection = this.getCards(LISTTYPES.collection);
+      this.cardsStore.wishlist = this.getCards(LISTTYPES.whishlist);
+      this.cardsStore.networth = this.getNetworth();
       // store.commit('setDecks', { decks: this.getDecks() });
-      // store.commit('setCardsOfCollection', {
-      //   cards: this.getCards(LISTTYPES.collection),
-      // });
-      // store.commit('setCardsOfWishlist', {
-      //   cards: this.getCards(LISTTYPES.whishlist),
-      // });
-      // store.commit('setNetworth', {
-      //   networth: this.getNetworth(),
-      // });
     }
   }
 
