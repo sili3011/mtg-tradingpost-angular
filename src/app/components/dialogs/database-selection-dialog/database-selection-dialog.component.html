@@ -50,26 +50,40 @@
     </form>
   </div>
   <div style="text-align: center">
-    <button mat-fab color="primary" style="margin-right: 10px">
+    <button
+      mat-fab
+      color="primary"
+      style="margin-right: 10px"
+      (click)="createNew = true"
+    >
       <mat-icon svgIcon="database-plus" style="color: #303030"></mat-icon>
     </button>
     <button
       mat-fab
       color="primary"
-      [disabled]="!file || file.files?.length === 0 || file.files[0].size === 0"
+      [disabled]="
+        (!file || file.files?.length === 0 || file.files[0].size === 0) &&
+        !hasBeenInitialized
+      "
+      (click)="createBackup()"
     >
       <mat-icon svgIcon="database-refresh" style="color: #303030"></mat-icon>
     </button>
   </div>
   <div mat-dialog-actions>
-    <button mat-button color="primary" [disabled]="!hasBeenInitialized">
+    <button
+      mat-button
+      color="primary"
+      [disabled]="!hasBeenInitialized"
+      (click)="close()"
+    >
       Close
     </button>
     <div style="flex: 1 1 auto"></div>
     <button
       mat-button
       color="primary"
-      [disabled]="!inputJSON"
+      [disabled]="!inputJSON && !hasBeenInitialized"
       (click)="confirm()"
     >
       Confirm

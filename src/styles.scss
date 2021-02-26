@@ -97,6 +97,7 @@ $theme-light: mat-light-theme($primary, $accent, $warn);
 html,
 body {
   height: 100%;
+  overflow-y: hidden;
 }
 body {
   margin: 0;

@@ -10,6 +10,8 @@ import { CollectionComponent } from './components/collection/collection.componen
 import { DatabaseSelectionDialogComponent } from './components/dialogs/database-selection-dialog/database-selection-dialog.component';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { HttpClientModule } from '@angular/common/http';
+import { SettingsComponent } from './components/settings/settings.component';
+import { OverwriteDatabaseConfirmationDialogComponent } from './components/dialogs/overwrite-database-confirmation-dialog/overwrite-database-confirmation-dialog.component';
 
 @NgModule({
   declarations: [
@@ -18,6 +20,8 @@ import { HttpClientModule } from '@angular/common/http';
     NavigationComponent,
     CollectionComponent,
     DatabaseSelectionDialogComponent,
+    SettingsComponent,
+    OverwriteDatabaseConfirmationDialogComponent,
   ],
   imports: [
     BrowserModule,

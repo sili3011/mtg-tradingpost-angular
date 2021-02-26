@@ -37,18 +37,20 @@ export class DBService {
   constructor(private userStore: UserStore, private cardsStore: CardsStore) {
     this.db = lowdb(this.adapter);
     this.db.defaults(defaultDB).write();
-    // init stores
-    if (this.getHasBeenInitialized()) {
-      this.userStore.owner = this.getOwner();
-      this.cardsStore.collection = this.getCards(LISTTYPES.collection);
-      this.cardsStore.wishlist = this.getCards(LISTTYPES.whishlist);
-      this.cardsStore.networth = this.getNetworth();
-      // store.commit('setDecks', { decks: this.getDecks() });
-    }
+    this.initStores();
+  }
+
+  initStores() {
+    this.userStore.owner = this.getOwner();
+    this.cardsStore.collection = this.getCards(LISTTYPES.collection);
+    this.cardsStore.wishlist = this.getCards(LISTTYPES.whishlist);
+    this.cardsStore.networth = this.getNetworth();
+    // store.commit('setDecks', { decks: this.getDecks() });
   }
 
   setDB(input: DB) {
     this.db!.setState(input).write();
+    this.initStores();
   }
 
   createBackup(): File {
@@ -210,6 +212,7 @@ export class DBService {
     this.setName(name);
     this.setOwner(owner);
     this.setHasBeenInitialized(true);
+    this.initStores();
   }
 
   resetDB() {

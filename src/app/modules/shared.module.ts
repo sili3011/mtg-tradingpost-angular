@@ -14,6 +14,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSortModule } from '@angular/material/sort';
 import { MatRippleModule } from '@angular/material/core';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { FlexModule } from '@angular/flex-layout/flex';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -39,6 +40,7 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
     MatRippleModule,
     MatDialogModule,
     MatInputModule,
+    MatCheckboxModule,
     // AngularForms
     ReactiveFormsModule,
     // Angular Flex

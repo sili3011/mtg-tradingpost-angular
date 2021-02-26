@@ -1,8 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { MatDialogRef } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FileInput, FileValidator } from 'ngx-material-file-input';
 import { DBService } from 'src/app/services/db.service';
+import { saveAs } from 'file-saver';
+import { OverwriteDatabaseConfirmationDialogComponent } from '../overwrite-database-confirmation-dialog/overwrite-database-confirmation-dialog.component';
+import { isWhileStatement } from 'typescript';
 
 @Component({
   selector: 'mtg-database-selection-dialog',
@@ -13,9 +16,13 @@ export class DatabaseSelectionDialogComponent implements OnInit {
   dbGroup: FormGroup;
   inputJSON: any;
 
+  backupped: boolean = false;
+  createNew: boolean = false;
+
   constructor(
     private dbService: DBService,
-    private dialogRef: MatDialogRef<DatabaseSelectionDialogComponent>
+    private dialogRef: MatDialogRef<DatabaseSelectionDialogComponent>,
+    private dialog: MatDialog
   ) {
     this.dbGroup = new FormGroup({
       file: new FormControl(undefined, [
@@ -41,6 +48,7 @@ export class DatabaseSelectionDialogComponent implements OnInit {
             name: this.inputJSON.name,
             owner: this.inputJSON.owner,
           });
+          this.createNew = false;
         };
         fileReader.readAsText(fileInput);
       }
@@ -61,6 +69,28 @@ export class DatabaseSelectionDialogComponent implements OnInit {
         this.setDummyFileToShow();
       }
     });
+
+    if (this.dbService.getHasBeenInitialized()) {
+      this.dbGroup.patchValue({
+        name: this.dbService.getName(),
+        owner: this.dbService.getOwner(),
+      });
+
+      const json = this.dbService.createBackup();
+      const blob = new Blob([JSON.stringify(json)], {
+        type: 'text/json;charset=utf-8',
+      });
+      const dbAsFile = new File(
+        [blob],
+        this.name + '_' + this.owner + '.json',
+        {
+          type: 'application/json',
+        }
+      );
+      this.dbGroup.patchValue({
+        file: new FileInput([dbAsFile]),
+      });
+    }
   }
 
   setDummyFileToShow() {
@@ -72,6 +102,18 @@ export class DatabaseSelectionDialogComponent implements OnInit {
           }),
         ]),
       });
+  }
+
+  createBackup() {
+    const json = this.dbService.createBackup();
+    const blob = new Blob([JSON.stringify(json)], {
+      type: 'text/json;charset=utf-8',
+    });
+    saveAs(
+      blob,
+      this.dbService.getName() + '_' + this.dbService.getOwner() + '.json'
+    );
+    this.backupped = true;
   }
 
   get name() {
@@ -95,7 +137,35 @@ export class DatabaseSelectionDialogComponent implements OnInit {
   }
 
   confirm() {
-    this.dbService.setDB(this.inputJSON);
-    this.close();
+    if (
+      (this.createNew && !this.backupped) ||
+      (!this.createNew &&
+        (this.name !== this.dbService.getName() ||
+          this.owner !== this.dbService.getOwner()))
+    ) {
+      let ref = this.dialog.open(OverwriteDatabaseConfirmationDialogComponent, {
+        width: '50%',
+        disableClose: true,
+        panelClass: 'confirmDialog',
+      });
+
+      ref.afterClosed().subscribe(() => {
+        if (ref.componentInstance.confirmed) {
+          if (this.createNew) {
+            this.dbService.createNewDB(this.name, this.owner);
+          } else {
+            this.dbService.setDB(this.inputJSON);
+          }
+          this.close();
+        }
+      });
+    } else {
+      if (this.createNew) {
+        this.dbService.createNewDB(this.name, this.owner);
+      } else {
+        this.dbService.setDB(this.inputJSON);
+      }
+      this.close();
+    }
   }
 }
