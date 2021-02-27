@@ -27,7 +27,7 @@
             "tsConfig": "tsconfig.app.json",
             "aot": true,
             "assets": ["src/favicon.ico", "src/assets", { "glob": "mdi.svg", "input": "node_modules/@mdi/angular-material/", "output": "./assets" }],
-            "styles": ["src/styles.scss"],
+            "styles": ["src/styles.scss", "node_modules/mana-font/css/mana.css" , "node_modules/keyrune/css/keyrune.css"],
             "scripts": [],
             "allowedCommonJsDependencies": ["lodash", "lowdb", "scryfall-sdk", "file-saver"]
           },

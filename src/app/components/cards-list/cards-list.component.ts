@@ -13,7 +13,14 @@ import { CardsStore } from 'src/app/stores/cards.store';
   styleUrls: ['./cards-list.component.scss'],
 })
 export class CardsListComponent implements OnInit {
-  displayedColumns: string[] = ['id', 'name'];
+  displayedColumns: string[] = [
+    'name',
+    'set',
+    'mana_cost',
+    'cmc',
+    'prices.eur',
+    'amount',
+  ];
   dataSource: MatTableDataSource<CardAdapter>;
 
   @Input()
