@@ -29,7 +29,7 @@
             "assets": ["src/favicon.ico", "src/assets", { "glob": "mdi.svg", "input": "node_modules/@mdi/angular-material/", "output": "./assets" }],
             "styles": ["src/styles.scss"],
             "scripts": [],
-            "allowedCommonJsDependencies": ["lodash", "lowdb", "scryfall-sdk"]
+            "allowedCommonJsDependencies": ["lodash", "lowdb", "scryfall-sdk", "file-saver"]
           },
           "configurations": {
             "production": {

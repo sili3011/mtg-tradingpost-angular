@@ -4,6 +4,7 @@ import { DefaultDeserializer } from 'v8';
 import { CardAdapter } from '../models/card-adapter';
 import { Networth } from '../services/db.service';
 import { defaultNetworth } from '../defaults/database.defaults';
+import { LISTTYPES } from '../models/enums';
 
 @Injectable({
   providedIn: 'root',

@@ -43,7 +43,7 @@ export class DBService {
   initStores() {
     this.userStore.owner = this.getOwner();
     this.cardsStore.collection = this.getCards(LISTTYPES.collection);
-    this.cardsStore.wishlist = this.getCards(LISTTYPES.whishlist);
+    this.cardsStore.wishlist = this.getCards(LISTTYPES.wishlist);
     this.cardsStore.networth = this.getNetworth();
     // store.commit('setDecks', { decks: this.getDecks() });
   }
@@ -101,7 +101,7 @@ export class DBService {
     switch (listType) {
       case LISTTYPES.collection:
         return this.getCollection();
-      case LISTTYPES.whishlist:
+      case LISTTYPES.wishlist:
         return this.getWishlist();
       default:
         return [];
@@ -112,7 +112,7 @@ export class DBService {
     switch (listType) {
       case LISTTYPES.collection:
         return this.db!.get('collection');
-      case LISTTYPES.whishlist:
+      case LISTTYPES.wishlist:
         return this.db!.get('wishlist');
     }
   }

@@ -12,6 +12,8 @@ import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { HttpClientModule } from '@angular/common/http';
 import { SettingsComponent } from './components/settings/settings.component';
 import { OverwriteDatabaseConfirmationDialogComponent } from './components/dialogs/overwrite-database-confirmation-dialog/overwrite-database-confirmation-dialog.component';
+import { CardsListComponent } from './components/cards-list/cards-list.component';
+import { WishlistComponent } from './components/wishlist/wishlist.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,8 @@ import { OverwriteDatabaseConfirmationDialogComponent } from './components/dialo
     DatabaseSelectionDialogComponent,
     SettingsComponent,
     OverwriteDatabaseConfirmationDialogComponent,
+    CardsListComponent,
+    WishlistComponent,
   ],
   imports: [
     BrowserModule,

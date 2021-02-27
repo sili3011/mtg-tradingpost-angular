@@ -1,6 +1,6 @@
 export enum LISTTYPES {
   collection,
-  whishlist,
+  wishlist,
 }
 
 export enum DECKTYPES {
