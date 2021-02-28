@@ -75,4 +75,8 @@ export class CardsListComponent implements OnInit {
     filtered = filtered.map((_) => (_ = _.toLowerCase()));
     return filtered;
   }
+
+  imageTooltip(image: string): string {
+    return `<img src="${image}" style="border-radius: 25px;">`;
+  }
 }

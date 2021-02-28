@@ -107,3 +107,7 @@ body {
 .mat-sort-header-container {
   justify-content: inherit;
 }
+
+.fitToImage {
+  max-width: unset !important;
+}
