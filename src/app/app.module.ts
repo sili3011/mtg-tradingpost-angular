@@ -14,6 +14,8 @@ import { SettingsComponent } from './components/settings/settings.component';
 import { OverwriteDatabaseConfirmationDialogComponent } from './components/dialogs/overwrite-database-confirmation-dialog/overwrite-database-confirmation-dialog.component';
 import { CardsListComponent } from './components/cards-list/cards-list.component';
 import { WishlistComponent } from './components/wishlist/wishlist.component';
+import { ManaComponent } from './utils/mana/mana.component';
+import { SetComponent } from './utils/set/set.component';
 
 @NgModule({
   declarations: [
@@ -26,6 +28,8 @@ import { WishlistComponent } from './components/wishlist/wishlist.component';
     OverwriteDatabaseConfirmationDialogComponent,
     CardsListComponent,
     WishlistComponent,
+    ManaComponent,
+    SetComponent,
   ],
   imports: [
     BrowserModule,

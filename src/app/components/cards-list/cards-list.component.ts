@@ -65,4 +65,14 @@ export class CardsListComponent implements OnInit {
       this.dataSource.paginator.firstPage();
     }
   }
+
+  manas(manaCost: string) {
+    let filtered: Array<string> = [];
+    manaCost
+      .split('{')
+      .filter((_) => _ !== '')
+      .forEach((_) => filtered.push(_.replace('}', '').replace('/', '')));
+    filtered = filtered.map((_) => (_ = _.toLowerCase()));
+    return filtered;
+  }
 }

@@ -27,14 +27,22 @@
       </ng-container>
       <ng-container matColumnDef="set">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Set</th>
-        <td mat-cell *matCellDef="let row">{{ row.set }}</td>
+        <td mat-cell *matCellDef="let row">
+          {{ row.set }} <mtg-set></mtg-set>
+        </td>
       </ng-container>
       <ng-container matColumnDef="mana_cost">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Mana Cost</th>
         <td mat-cell *matCellDef="let row">
-          {{ row.mana_cost }}
-          <i class="ms ms-g ms-cost ms-shadow ms-fw"></i>
-          <i class="ms ms-g"></i>
+          <div fxLayout="row">
+            <mtg-mana
+              *ngFor="let manas of manas(row.mana_cost)"
+              [symbol]="manas"
+              [cost]="true"
+              [shadow]="true"
+              [fixed]="true"
+            ></mtg-mana>
+          </div>
         </td>
       </ng-container>
       <ng-container matColumnDef="cmc">
