@@ -29,16 +29,11 @@ export class SetComponent {
     let data = keyrune.split('{');
     this.sets = this.dataSanitizer(data[1]);
     this.rarities = this.dataSanitizer(data[2]);
-    console.log(this.sets);
   }
 
   dataSanitizer(data: string): Array<string> {
-    return data
-      .split('[')
-      .pop()!
-      .split(']')[0]
-      .split(' ')
-      .map((d) => d.substring(1, d.length - 1));
+    let inner = data.split('[').pop()!.split(']')[0];
+    return inner.substring(1, inner.length - 1).split('" "');
   }
 
   checkRarity(rar: string): boolean {
@@ -64,6 +59,10 @@ export class SetComponent {
     classes += this.gradient || this.foil ? 'ss-grad ' : '';
     classes += this.foil ? 'ss-foil ' : '';
 
-    return `<i title=${this.set} alt=${this.set} aria-hidden class="${classes}"></i>`;
+    return `<i 
+    title="${this.sets[this.sets.indexOf(this.set) - 1]}"
+    alt="${
+      this.sets[this.sets.indexOf(this.set) - 1]
+    }" aria-hidden class="${classes}"></i>`;
   }
 }
