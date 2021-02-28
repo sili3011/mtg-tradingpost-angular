@@ -3,8 +3,9 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { IReactionDisposer, autorun } from 'mobx';
+import { Prices } from 'scryfall-sdk';
 import { CardAdapter } from 'src/app/models/card-adapter';
-import { LISTTYPES } from 'src/app/models/enums';
+import { CURRENCY, LISTTYPES } from 'src/app/models/enums';
 import { CardsStore } from 'src/app/stores/cards.store';
 
 @Component({
@@ -29,6 +30,8 @@ export class CardsListComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
+  selectedCurrency!: CURRENCY;
+
   disposer!: IReactionDisposer;
 
   constructor(private cardsStore: CardsStore) {
@@ -38,13 +41,14 @@ export class CardsListComponent implements OnInit {
   ngOnInit(): void {
     this.disposer = autorun(() => {
       switch (this.listType) {
-        case LISTTYPES.collection:
+        case LISTTYPES.COLLECTION:
           this.dataSource = new MatTableDataSource(this.cardsStore.collection);
           break;
-        case LISTTYPES.wishlist:
+        case LISTTYPES.WISHLIST:
           this.dataSource = new MatTableDataSource(this.cardsStore.wishlist);
           break;
       }
+      this.selectedCurrency = this.cardsStore.networth.currency;
     });
   }
 
@@ -78,5 +82,15 @@ export class CardsListComponent implements OnInit {
 
   imageTooltip(image: string): string {
     return `<img src="${image}" style="border-radius: 25px;">`;
+  }
+
+  getPriceByCurrency(prices: Prices): string {
+    switch (this.selectedCurrency) {
+      case CURRENCY.EUR:
+        return prices.eur + '€';
+      case CURRENCY.USD:
+        return prices.usd + '$';
+    }
+    return '';
   }
 }

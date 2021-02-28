@@ -3,7 +3,7 @@ import { CardIdentifier, Cards } from 'scryfall-sdk';
 import { defaultDB, defaultNetworth } from '../defaults/database.defaults';
 import { CardAdapter } from '../models/card-adapter';
 import { Deck } from '../models/deck';
-import { LISTTYPES } from '../models/enums';
+import { CURRENCY, LISTTYPES } from '../models/enums';
 import { CollectionChain } from 'lodash';
 import * as db from '../../assets/db.json';
 import * as LocalStorage from 'lowdb/adapters/LocalStorage';
@@ -13,7 +13,7 @@ import { CardsStore } from '../stores/cards.store';
 
 export interface Networth {
   value: number;
-  currency: string;
+  currency: CURRENCY;
   lastSync: number;
 }
 
@@ -34,23 +34,14 @@ export class DBService {
   private db!: lowdb.LowdbSync<DB>;
   private adapter = new LocalStorage(JSON.stringify(db));
 
-  constructor(private userStore: UserStore, private cardsStore: CardsStore) {
+  constructor() {
     this.db = lowdb(this.adapter);
     this.db.defaults(defaultDB).write();
-    this.initStores();
-  }
-
-  initStores() {
-    this.userStore.owner = this.getOwner();
-    this.cardsStore.collection = this.getCards(LISTTYPES.collection);
-    this.cardsStore.wishlist = this.getCards(LISTTYPES.wishlist);
-    this.cardsStore.networth = this.getNetworth();
-    // store.commit('setDecks', { decks: this.getDecks() });
+    console.log(this.getOwner(), 'db');
   }
 
   setDB(input: DB) {
     this.db!.setState(input).write();
-    this.initStores();
   }
 
   createBackup(): File {
@@ -99,9 +90,9 @@ export class DBService {
 
   getCards(listType: number): Array<CardAdapter> {
     switch (listType) {
-      case LISTTYPES.collection:
+      case LISTTYPES.COLLECTION:
         return this.getCollection();
-      case LISTTYPES.wishlist:
+      case LISTTYPES.WISHLIST:
         return this.getWishlist();
       default:
         return [];
@@ -110,9 +101,9 @@ export class DBService {
 
   getCollectionChainCards(listType: LISTTYPES): CollectionChain<CardAdapter> {
     switch (listType) {
-      case LISTTYPES.collection:
+      case LISTTYPES.COLLECTION:
         return this.db!.get('collection');
-      case LISTTYPES.wishlist:
+      case LISTTYPES.WISHLIST:
         return this.db!.get('wishlist');
     }
   }
@@ -140,7 +131,7 @@ export class DBService {
       (data) => (cards.find((c) => c.id === data.id)!.prices = data.prices)
     );
     // store.commit('setCardsOfCollection', {
-    //   networth: this.getCards(LISTTYPES.collection),
+    //   networth: this.getCards(LISTTYPES.COLLECTION),
     // });
   }
 
@@ -212,7 +203,6 @@ export class DBService {
     this.setName(name);
     this.setOwner(owner);
     this.setHasBeenInitialized(true);
-    this.initStores();
   }
 
   resetDB() {

@@ -1,18 +1,30 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { observable } from 'mobx';
-import { DefaultDeserializer } from 'v8';
 import { CardAdapter } from '../models/card-adapter';
-import { Networth } from '../services/db.service';
+import { DBService, Networth } from '../services/db.service';
 import { defaultNetworth } from '../defaults/database.defaults';
-import { LISTTYPES } from '../models/enums';
+import { CURRENCY, LISTTYPES } from '../models/enums';
 
 @Injectable({
   providedIn: 'root',
 })
-export class CardsStore implements OnInit {
+export class CardsStore {
   @observable collection: Array<CardAdapter> = [];
   @observable wishlist: Array<CardAdapter> = [];
   @observable networth: Networth = defaultNetworth;
 
-  ngOnInit(): void {}
+  constructor(private dbService: DBService) {
+    this.pullFromDB();
+  }
+
+  pullFromDB() {
+    this.collection = this.dbService.getCards(LISTTYPES.COLLECTION);
+    this.wishlist = this.dbService.getCards(LISTTYPES.WISHLIST);
+    this.networth = this.dbService.getNetworth();
+  }
+
+  setCurrency(cur: CURRENCY) {
+    this.networth.currency = cur;
+    this.dbService.setNetworth(this.networth);
+  }
 }

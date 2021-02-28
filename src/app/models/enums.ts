@@ -1,10 +1,15 @@
 export enum LISTTYPES {
-  collection,
-  wishlist,
+  COLLECTION,
+  WISHLIST,
 }
 
 export enum DECKTYPES {
-  none,
-  standard,
-  commander,
+  NONE,
+  STANDARD,
+  COMMANDER,
+}
+
+export enum CURRENCY {
+  EUR = 'eur',
+  USD = 'usd',
 }

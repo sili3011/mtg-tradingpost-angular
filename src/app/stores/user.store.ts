@@ -1,11 +1,18 @@
-import { Injectable, OnInit } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { observable } from 'mobx';
+import { DBService } from '../services/db.service';
 
 @Injectable({
   providedIn: 'root',
 })
-export class UserStore implements OnInit {
+export class UserStore {
   @observable owner: string = '';
 
-  ngOnInit(): void {}
+  constructor(private dbService: DBService) {
+    this.pullFromDB();
+  }
+
+  pullFromDB() {
+    this.owner = this.dbService.getOwner();
+  }
 }

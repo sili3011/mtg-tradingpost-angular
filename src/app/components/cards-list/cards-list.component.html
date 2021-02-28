@@ -63,7 +63,9 @@
       </ng-container>
       <ng-container matColumnDef="prices.eur">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Value</th>
-        <td mat-cell *matCellDef="let row">{{ row.prices.eur }}€</td>
+        <td mat-cell *matCellDef="let row">
+          {{ getPriceByCurrency(row.prices) }}
+        </td>
       </ng-container>
       <ng-container matColumnDef="amount">
         <th

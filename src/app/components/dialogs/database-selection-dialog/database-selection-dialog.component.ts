@@ -1,25 +1,30 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { FileInput, FileValidator } from 'ngx-material-file-input';
 import { DBService } from 'src/app/services/db.service';
 import { saveAs } from 'file-saver';
 import { OverwriteDatabaseConfirmationDialogComponent } from '../overwrite-database-confirmation-dialog/overwrite-database-confirmation-dialog.component';
-import { isWhileStatement } from 'typescript';
+import { CardsStore } from 'src/app/stores/cards.store';
+import { UserStore } from 'src/app/stores/user.store';
 
 @Component({
   selector: 'mtg-database-selection-dialog',
   templateUrl: './database-selection-dialog.component.html',
   styleUrls: ['./database-selection-dialog.component.scss'],
 })
-export class DatabaseSelectionDialogComponent implements OnInit {
+export class DatabaseSelectionDialogComponent implements OnInit, OnDestroy {
   dbGroup: FormGroup;
   inputJSON: any;
 
   backupped: boolean = false;
   createNew: boolean = false;
 
+  subscriptions: Array<any> = [];
+
   constructor(
+    private userStore: UserStore,
+    private cardsStore: CardsStore,
     private dbService: DBService,
     private dialogRef: MatDialogRef<DatabaseSelectionDialogComponent>,
     private dialog: MatDialog
@@ -35,40 +40,46 @@ export class DatabaseSelectionDialogComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.dbGroup.get('file')!.valueChanges.subscribe((fileInput) => {
-      if (fileInput.files) {
-        fileInput = fileInput.files[0];
-      }
-      if (fileInput.size > 0) {
-        let fileReader = new FileReader();
-        fileReader.onload = (e) => {
-          const stringDummy = e.target!.result as string;
-          this.inputJSON = JSON.parse(stringDummy);
-          this.dbGroup.patchValue({
-            name: this.inputJSON.name,
-            owner: this.inputJSON.owner,
-          });
-          this.createNew = false;
-        };
-        fileReader.readAsText(fileInput);
-      }
-    });
+    this.subscriptions.push(
+      this.dbGroup.get('file')!.valueChanges.subscribe((fileInput) => {
+        if (fileInput.files) {
+          fileInput = fileInput.files[0];
+        }
+        if (fileInput.size > 0) {
+          let fileReader = new FileReader();
+          fileReader.onload = (e) => {
+            const stringDummy = e.target!.result as string;
+            this.inputJSON = JSON.parse(stringDummy);
+            this.dbGroup.patchValue({
+              name: this.inputJSON.name,
+              owner: this.inputJSON.owner,
+            });
+            this.createNew = false;
+          };
+          fileReader.readAsText(fileInput);
+        }
+      })
+    );
 
-    this.dbGroup.get('name')!.valueChanges.subscribe((name) => {
-      if (!this.inputJSON) {
-        this.setDummyFileToShow();
-      } else if (name !== this.inputJSON.name) {
-        this.setDummyFileToShow();
-      }
-    });
+    this.subscriptions.push(
+      this.dbGroup.get('name')!.valueChanges.subscribe((name) => {
+        if (!this.inputJSON) {
+          this.setDummyFileToShow();
+        } else if (name !== this.inputJSON.name) {
+          this.setDummyFileToShow();
+        }
+      })
+    );
 
-    this.dbGroup.get('owner')!.valueChanges.subscribe((owner) => {
-      if (!this.inputJSON) {
-        this.setDummyFileToShow();
-      } else if (owner !== this.inputJSON.owner) {
-        this.setDummyFileToShow();
-      }
-    });
+    this.subscriptions.push(
+      this.dbGroup.get('owner')!.valueChanges.subscribe((owner) => {
+        if (!this.inputJSON) {
+          this.setDummyFileToShow();
+        } else if (owner !== this.inputJSON.owner) {
+          this.setDummyFileToShow();
+        }
+      })
+    );
 
     if (this.dbService.getHasBeenInitialized()) {
       this.dbGroup.patchValue({
@@ -91,6 +102,10 @@ export class DatabaseSelectionDialogComponent implements OnInit {
         file: new FileInput([dbAsFile]),
       });
     }
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach((sub) => sub.unsubscribe());
   }
 
   setDummyFileToShow() {
@@ -151,21 +166,22 @@ export class DatabaseSelectionDialogComponent implements OnInit {
 
       ref.afterClosed().subscribe(() => {
         if (ref.componentInstance.confirmed) {
-          if (this.createNew) {
-            this.dbService.createNewDB(this.name, this.owner);
-          } else {
-            this.dbService.setDB(this.inputJSON);
-          }
-          this.close();
+          this.complete();
         }
       });
     } else {
-      if (this.createNew) {
-        this.dbService.createNewDB(this.name, this.owner);
-      } else {
-        this.dbService.setDB(this.inputJSON);
-      }
-      this.close();
+      this.complete();
     }
+  }
+
+  complete() {
+    if (this.createNew) {
+      this.dbService.createNewDB(this.name, this.owner);
+    } else {
+      this.dbService.setDB(this.inputJSON);
+    }
+    this.userStore.pullFromDB();
+    this.cardsStore.pullFromDB();
+    this.close();
   }
 }

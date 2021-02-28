@@ -7,4 +7,13 @@
   >
     Manage DB
   </button>
+
+  <mat-select
+    matSelect
+    [(value)]="selectedCurrency"
+    [formControl]="currencyControl"
+  >
+    <mat-option [value]="currencies.EUR">€</mat-option>
+    <mat-option [value]="currencies.USD">$</mat-option>
+  </mat-select>
 </mat-card>

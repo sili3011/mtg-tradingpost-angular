@@ -1,3 +1,5 @@
+import { CURRENCY } from '../models/enums';
+
 export const defaultDB = {
   hasBeenInitialized: false,
   name: '',
@@ -7,13 +9,13 @@ export const defaultDB = {
   decks: [],
   networth: {
     value: 0.0,
-    currency: 'eur',
+    currency: CURRENCY.EUR,
     lastSync: new Date().getTime(),
   },
 };
 
 export const defaultNetworth = {
   value: 0.0,
-  currency: 'eur',
+  currency: CURRENCY.EUR,
   lastSync: new Date().getTime(),
 };
