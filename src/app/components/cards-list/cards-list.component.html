@@ -28,7 +28,12 @@
       <ng-container matColumnDef="set">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Set</th>
         <td mat-cell *matCellDef="let row">
-          {{ row.set }} <mtg-set></mtg-set>
+          <mtg-set
+            [set]="row.set"
+            [rarity]="row.rarity"
+            [fixed]="true"
+            size="2x"
+          ></mtg-set>
         </td>
       </ng-container>
       <ng-container matColumnDef="mana_cost">

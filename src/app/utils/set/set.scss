@@ -1,0 +1,32 @@
+@import "~keyrune/sass/_variables.scss";
+
+@function first($list) {
+  @return nth($list, 1);
+}
+
+@function second($list) {
+  @return nth($list, 2);
+}
+
+$sets: ([]);
+
+@each $set in $keyrune_sets {
+  $pair: ();
+  $pair: append($pair, first($set));
+  $pair: append($pair, second($set));
+  $sets: append($sets, $pair);
+}
+
+:export {
+  sets: $sets;
+}
+
+$rarities: ([]);
+
+@each $rarity in $keyrune_palette {
+  $rarities: append($rarities, first($rarity));
+}
+
+:export {
+  rarities: $rarities;
+}

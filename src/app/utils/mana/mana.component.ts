@@ -51,7 +51,7 @@ export class ManaComponent {
 
     return `<i title=${this.icons[this.symbol]} alt=${
       this.icons[this.symbol]
-    } class="${classes}"></i>`;
+    } aria-hidden class="${classes}"></i>`;
   }
 }
 
