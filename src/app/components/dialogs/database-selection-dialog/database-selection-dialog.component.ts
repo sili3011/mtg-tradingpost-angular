@@ -23,8 +23,6 @@ export class DatabaseSelectionDialogComponent implements OnInit, OnDestroy {
   subscriptions: Array<any> = [];
 
   constructor(
-    private userStore: UserStore,
-    private cardsStore: CardsStore,
     private dbService: DBService,
     private dialogRef: MatDialogRef<DatabaseSelectionDialogComponent>,
     private dialog: MatDialog
@@ -180,8 +178,6 @@ export class DatabaseSelectionDialogComponent implements OnInit, OnDestroy {
     } else {
       this.dbService.setDB(this.inputJSON);
     }
-    this.userStore.pullFromDB();
-    this.cardsStore.pullFromDB();
     this.close();
   }
 }

@@ -3,9 +3,10 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { IReactionDisposer, autorun } from 'mobx';
-import { Prices } from 'scryfall-sdk';
+import { Card, Prices } from 'scryfall-sdk';
 import { CardAdapter } from 'src/app/models/card-adapter';
 import { CURRENCY, LISTTYPES } from 'src/app/models/enums';
+import { DBService } from 'src/app/services/db.service';
 import { CardsStore } from 'src/app/stores/cards.store';
 
 @Component({
@@ -32,9 +33,11 @@ export class CardsListComponent implements OnInit {
 
   selectedCurrency!: CURRENCY;
 
+  cardsList: Array<CardAdapter> = [];
+
   disposer!: IReactionDisposer;
 
-  constructor(private cardsStore: CardsStore) {
+  constructor(private cardsStore: CardsStore, private dbService: DBService) {
     this.dataSource = new MatTableDataSource();
   }
 
@@ -42,12 +45,13 @@ export class CardsListComponent implements OnInit {
     this.disposer = autorun(() => {
       switch (this.listType) {
         case LISTTYPES.COLLECTION:
-          this.dataSource = new MatTableDataSource(this.cardsStore.collection);
+          this.cardsList = this.cardsStore.collection;
           break;
         case LISTTYPES.WISHLIST:
-          this.dataSource = new MatTableDataSource(this.cardsStore.wishlist);
+          this.cardsList = this.cardsStore.wishlist;
           break;
       }
+      this.dataSource = new MatTableDataSource(this.cardsList);
       this.selectedCurrency = this.cardsStore.networth.currency;
     });
   }
@@ -92,5 +96,15 @@ export class CardsListComponent implements OnInit {
         return prices.usd + '$';
     }
     return '';
+  }
+
+  increment(card: CardAdapter) {
+    this.dbService.increment(card, this.listType);
+  }
+
+  decrement(card: CardAdapter) {
+    if (!this.dbService.decrement(card, this.listType)) {
+      this.dataSource = new MatTableDataSource(this.cardsList);
+    }
   }
 }

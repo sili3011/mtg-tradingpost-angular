@@ -34,14 +34,23 @@ export class DBService {
   private db!: lowdb.LowdbSync<DB>;
   private adapter = new LocalStorage(JSON.stringify(db));
 
-  constructor() {
+  constructor(private userStore: UserStore, private cardsStore: CardsStore) {
     this.db = lowdb(this.adapter);
     this.db.defaults(defaultDB).write();
-    console.log(this.getOwner(), 'db');
+    this.initStores();
+  }
+
+  initStores() {
+    this.userStore.owner = this.getOwner();
+    this.cardsStore.collection = this.getCards(LISTTYPES.COLLECTION);
+    this.cardsStore.wishlist = this.getCards(LISTTYPES.WISHLIST);
+    this.cardsStore.networth = this.getNetworth();
+    // store.commit('setDecks', { decks: this.getDecks() });
   }
 
   setDB(input: DB) {
     this.db!.setState(input).write();
+    this.initStores();
   }
 
   createBackup(): File {
@@ -114,6 +123,10 @@ export class DBService {
 
   getNetworth(): Networth {
     return this.db!.get('networth').value();
+  }
+
+  setCurrency(currency: CURRENCY) {
+    this.db!.set('networth.currency', currency).write();
   }
 
   updateCardValue() {
@@ -203,6 +216,7 @@ export class DBService {
     this.setName(name);
     this.setOwner(owner);
     this.setHasBeenInitialized(true);
+    this.initStores();
   }
 
   resetDB() {

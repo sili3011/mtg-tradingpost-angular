@@ -1,107 +1,129 @@
 <mat-card style="margin: 2%; height: 100%">
-  <div *ngIf="this.dataSource.data.length > 0">
-    <div fxLayout="row">
-      <mat-form-field style="margin-left: 15%; margin-right: 12%; width: 70%">
-        <input matInput (keyup)="applyFilter($event)" #input />
-        <mat-placeholder class="placeholder" *ngIf="dataSource.filter === ''"
-          >Search</mat-placeholder
-        >
-        <mat-icon
-          svgIcon="magnify"
-          class="input"
-          color="primary"
-          matSuffix
-        ></mat-icon>
-      </mat-form-field>
-      <span class="spacer"></span>
-      <button mat-button color="primary" style="margin-right: 3%">
-        <mat-icon color="primary"> add_circle </mat-icon>
-        ADD CARD
-      </button>
-    </div>
-
-    <table mat-table [dataSource]="dataSource" matSort style="width: 100%">
-      <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-        <td
-          mat-cell
-          *matCellDef="let row"
-          [matTooltip]="imageTooltip(row.image_uris.normal)"
-          matTooltipClass="fitToImage"
-        >
-          {{ row.name }}
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="set">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Set</th>
-        <td mat-cell *matCellDef="let row">
-          <mtg-set
-            [set]="row.set"
-            [rarity]="row.rarity"
-            [fixed]="true"
-            size="2x"
-          ></mtg-set>
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="mana_cost">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Mana Cost</th>
-        <td mat-cell *matCellDef="let row">
-          <div fxLayout="row">
-            <mtg-mana
-              *ngFor="let manas of manas(row.mana_cost)"
-              [symbol]="manas"
-              [cost]="true"
-              [shadow]="true"
-              [fixed]="true"
-            ></mtg-mana>
-          </div>
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="cmc">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>CMC</th>
-        <td mat-cell *matCellDef="let row">{{ row.cmc }}</td>
-      </ng-container>
-      <ng-container matColumnDef="prices.eur">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Value</th>
-        <td mat-cell *matCellDef="let row">
-          {{ getPriceByCurrency(row.prices) }}
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="amount">
-        <th
-          mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header
-          style="justify-content: center"
-        >
-          Amount
-        </th>
-        <td mat-cell *matCellDef="let row">
-          <div fxLayout="row" style="justify-content: center">
-            <button mat-icon-button color="primary" style="margin-right: 10px">
-              <mat-icon color="primary"> remove </mat-icon>
-            </button>
-            <span style="margin-top: 1em; margin-bottom: 1em">{{
-              row.amount
-            }}</span>
-            <button mat-icon-button color="primary" style="margin-left: 10px">
-              <mat-icon color="primary"> add </mat-icon>
-            </button>
-          </div>
-        </td>
-      </ng-container>
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-      <tr class="mat-row" *matNoDataRow>
-        <td class="mat-cell" colspan="10">
-          No data matching the filter "{{ input.value }}"
-        </td>
-      </tr>
-    </table>
-
-    <mat-paginator
-      [pageSizeOptions]="[10, 25, 100]"
-      style="position: absolute; bottom: 0px; right: 0px"
-    ></mat-paginator>
+  <div fxLayout="row">
+    <mat-form-field style="margin-left: 15%; margin-right: 12%; width: 70%">
+      <input
+        matInput
+        (keyup)="applyFilter($event)"
+        #input
+        [disabled]="this.dataSource.data.length <= 0"
+      />
+      <mat-placeholder class="placeholder" *ngIf="dataSource.filter === ''"
+        >Search</mat-placeholder
+      >
+      <mat-icon
+        svgIcon="magnify"
+        class="input"
+        color="primary"
+        [ngStyle]="{
+          color: this.dataSource.data.length <= 0 ? 'grey' : 'primary'
+        }"
+        matSuffix
+      ></mat-icon>
+    </mat-form-field>
+    <span class="spacer"></span>
+    <button mat-button color="primary" style="margin-right: 3%">
+      <mat-icon color="primary"> add_circle </mat-icon>
+      ADD CARD
+    </button>
   </div>
+
+  <table
+    mat-table
+    [dataSource]="dataSource"
+    matSort
+    style="width: 100%"
+    *ngIf="this.dataSource.data.length > 0"
+  >
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+      <td
+        mat-cell
+        *matCellDef="let row"
+        [matTooltip]="imageTooltip(row.image_uris.normal)"
+        matTooltipClass="fitToImage"
+      >
+        {{ row.name }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="set">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Set</th>
+      <td mat-cell *matCellDef="let row">
+        <mtg-set
+          [set]="row.set"
+          [rarity]="row.rarity"
+          [fixed]="true"
+          size="2x"
+        ></mtg-set>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="mana_cost">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Mana Cost</th>
+      <td mat-cell *matCellDef="let row">
+        <div fxLayout="row">
+          <mtg-mana
+            *ngFor="let manas of manas(row.mana_cost)"
+            [symbol]="manas"
+            [cost]="true"
+            [shadow]="true"
+            [fixed]="true"
+          ></mtg-mana>
+        </div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="cmc">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>CMC</th>
+      <td mat-cell *matCellDef="let row">{{ row.cmc }}</td>
+    </ng-container>
+    <ng-container matColumnDef="prices.eur">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header>Value</th>
+      <td mat-cell *matCellDef="let row">
+        {{ getPriceByCurrency(row.prices) }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="amount">
+      <th
+        mat-header-cell
+        *matHeaderCellDef
+        mat-sort-header
+        style="justify-content: center"
+      >
+        Amount
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <div fxLayout="row" style="justify-content: center">
+          <button
+            mat-icon-button
+            color="primary"
+            style="margin-right: 10px"
+            (click)="decrement(row)"
+          >
+            <mat-icon color="primary"> remove </mat-icon>
+          </button>
+          <span style="margin-top: 1em; margin-bottom: 1em">{{
+            row.amount
+          }}</span>
+          <button
+            mat-icon-button
+            color="primary"
+            style="margin-left: 10px"
+            (click)="increment(row)"
+          >
+            <mat-icon color="primary"> add </mat-icon>
+          </button>
+        </div>
+      </td>
+    </ng-container>
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+    <tr class="mat-row" *matNoDataRow>
+      <td class="mat-cell" colspan="10">
+        No data matching the filter "{{ input.value }}"
+      </td>
+    </tr>
+  </table>
+
+  <mat-paginator
+    [pageSizeOptions]="[10, 25, 100]"
+    style="position: absolute; bottom: 0px; right: 0px"
+  ></mat-paginator>
 </mat-card>

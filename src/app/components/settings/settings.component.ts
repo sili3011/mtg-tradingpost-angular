@@ -2,10 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { autorun, IReactionDisposer } from 'mobx';
-import { Card } from 'scryfall-sdk';
 import { CURRENCY } from 'src/app/models/enums';
+import { DBService } from 'src/app/services/db.service';
 import { CardsStore } from 'src/app/stores/cards.store';
-import { UserStore } from 'src/app/stores/user.store';
 import { DatabaseSelectionDialogComponent } from '../dialogs/database-selection-dialog/database-selection-dialog.component';
 
 @Component({
@@ -22,7 +21,11 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
   subscriptions: Array<any> = [];
 
-  constructor(private dialog: MatDialog, private cardStore: CardsStore) {}
+  constructor(
+    private dialog: MatDialog,
+    private cardStore: CardsStore,
+    private dbService: DBService
+  ) {}
 
   ngOnInit(): void {
     this.disposer = autorun(() => {
@@ -31,7 +34,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
 
     this.subscriptions.push(
       this.currencyControl.valueChanges.subscribe((currency) =>
-        this.cardStore.setCurrency(currency)
+        this.dbService.setCurrency(currency)
       )
     );
   }
