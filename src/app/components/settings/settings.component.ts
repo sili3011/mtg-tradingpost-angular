@@ -30,6 +30,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.disposer = autorun(() => {
       this.selectedCurrency = this.cardStore.networth.currency;
+      this.currencyControl.setValue(this.selectedCurrency);
     });
 
     this.subscriptions.push(

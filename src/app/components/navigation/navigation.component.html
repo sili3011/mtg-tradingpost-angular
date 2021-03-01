@@ -19,8 +19,8 @@
       mode="side"
       opened
       class="sidenav_container"
-      (mouseenter)="onSidenavToggle()"
-      (mouseleave)="onSidenavToggle()"
+      (mouseenter)="onSidenavToggle(true)"
+      (mouseleave)="onSidenavToggle(false)"
       [@onSideNavChange]="sideNavState ? 'open' : 'close'"
     >
       <div
@@ -37,7 +37,42 @@
               >Collection
             </span>
           </a>
-          <a mat-list-item>
+          <a
+            mat-list-item
+            routerLink="/deck/{{ deck.id }}"
+            routerLinkActive="true"
+            *ngFor="let deck of decks"
+            (click)="selectedDeck = deck"
+          >
+            <mat-icon
+              svgIcon="window-closed"
+              *ngIf="selectedDeck !== deck"
+            ></mat-icon>
+            <mat-icon
+              svgIcon="window-open"
+              *ngIf="selectedDeck === deck"
+            ></mat-icon>
+            <span
+              [@animateText]="linkText ? 'show' : 'hide'"
+              class="sidenav-span"
+            >
+              <mat-form-field>
+                <input
+                  matInput
+                  [value]="deck.name"
+                  (input)="onDeckNameChange($event, deck)"
+                />
+              </mat-form-field>
+              <button
+                mat-icon-button
+                color="warn"
+                (click)="removeDeck(deck, $event)"
+              >
+                <mat-icon>delete</mat-icon>
+              </button>
+            </span>
+          </a>
+          <a mat-list-item (click)="addDeck()">
             <mat-icon>add_circle</mat-icon>
             <span
               [@animateText]="linkText ? 'show' : 'hide'"

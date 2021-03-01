@@ -10,6 +10,7 @@ import * as LocalStorage from 'lowdb/adapters/LocalStorage';
 import * as lowdb from 'lowdb';
 import { UserStore } from '../stores/user.store';
 import { CardsStore } from '../stores/cards.store';
+import { DecksStore } from '../stores/decks.store';
 
 export interface Networth {
   value: number;
@@ -34,7 +35,11 @@ export class DBService {
   private db!: lowdb.LowdbSync<DB>;
   private adapter = new LocalStorage(JSON.stringify(db));
 
-  constructor(private userStore: UserStore, private cardsStore: CardsStore) {
+  constructor(
+    private userStore: UserStore,
+    private cardsStore: CardsStore,
+    private decksStore: DecksStore
+  ) {
     this.db = lowdb(this.adapter);
     this.db.defaults(defaultDB).write();
     this.initStores();
@@ -45,7 +50,7 @@ export class DBService {
     this.cardsStore.collection = this.getCards(LISTTYPES.COLLECTION);
     this.cardsStore.wishlist = this.getCards(LISTTYPES.WISHLIST);
     this.cardsStore.networth = this.getNetworth();
-    // store.commit('setDecks', { decks: this.getDecks() });
+    this.decksStore.decks = this.getDecks();
   }
 
   setDB(input: DB) {
@@ -129,24 +134,24 @@ export class DBService {
     this.db!.set('networth.currency', currency).write();
   }
 
-  updateCardValue() {
-    // const currentValue = store.getters.getCollectionValue;
-    // this.db!.set('networth.value', currentValue).write();
-    this.db!.set('networth.lastSync', new Date().getTime()).write();
-    //UPDATE VALUE OF EACH CARD
-    const identifiers: Array<CardIdentifier> = [];
-    const cards = this.getCollection();
-    cards.forEach((c) => {
-      identifiers.push({ id: c.id });
-    });
-    Cards.collection(...identifiers).on(
-      'data',
-      (data) => (cards.find((c) => c.id === data.id)!.prices = data.prices)
-    );
-    // store.commit('setCardsOfCollection', {
-    //   networth: this.getCards(LISTTYPES.COLLECTION),
-    // });
-  }
+  // updateCardValue() {
+  //   // const currentValue = store.getters.getCollectionValue;
+  //   // this.db!.set('networth.value', currentValue).write();
+  //   this.db!.set('networth.lastSync', new Date().getTime()).write();
+  //   //UPDATE VALUE OF EACH CARD
+  //   const identifiers: Array<CardIdentifier> = [];
+  //   const cards = this.getCollection();
+  //   cards.forEach((c) => {
+  //     identifiers.push({ id: c.id });
+  //   });
+  //   Cards.collection(...identifiers).on(
+  //     'data',
+  //     (data) => (cards.find((c) => c.id === data.id)!.prices = data.prices)
+  //   );
+  //   // store.commit('setCardsOfCollection', {
+  //   //   networth: this.getCards(LISTTYPES.COLLECTION),
+  //   // });
+  // }
 
   addCard(card: CardAdapter, listType: number): CardAdapter | undefined {
     if (
