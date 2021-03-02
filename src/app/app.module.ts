@@ -17,6 +17,7 @@ import { WishlistComponent } from './components/wishlist/wishlist.component';
 import { ManaComponent } from './utils/mana/mana.component';
 import { SetComponent } from './utils/set/set.component';
 import { DeckComponent } from './components/deck/deck.component';
+import { AddCardDialogComponent } from './components/dialogs/add-card-dialog/add-card-dialog.component';
 
 @NgModule({
   declarations: [
@@ -32,6 +33,7 @@ import { DeckComponent } from './components/deck/deck.component';
     ManaComponent,
     SetComponent,
     DeckComponent,
+    AddCardDialogComponent,
   ],
   imports: [
     BrowserModule,

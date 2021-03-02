@@ -10,6 +10,8 @@ export class SetComponent {
   @Input()
   set: string = '';
   @Input()
+  set_name: string = '';
+  @Input()
   size: string = '';
   @Input()
   fixed: boolean = false;
@@ -60,9 +62,7 @@ export class SetComponent {
     classes += this.foil ? 'ss-foil ' : '';
 
     return `<i 
-    title="${this.sets[this.sets.indexOf(this.set) - 1]}"
-    alt="${
-      this.sets[this.sets.indexOf(this.set) - 1]
-    }" aria-hidden class="${classes}"></i>`;
+    title="${this.set_name}"
+    alt="${this.set_name}" aria-hidden class="${classes}"></i>`;
   }
 }

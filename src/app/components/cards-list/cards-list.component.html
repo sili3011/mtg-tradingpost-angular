@@ -21,7 +21,12 @@
       ></mat-icon>
     </mat-form-field>
     <span class="spacer"></span>
-    <button mat-button color="primary" style="margin-right: 3%">
+    <button
+      mat-button
+      color="primary"
+      style="margin-right: 3%"
+      (click)="openAddCardDialog()"
+    >
       <mat-icon color="primary"> add_circle </mat-icon>
       ADD CARD
     </button>
@@ -50,6 +55,7 @@
       <td mat-cell *matCellDef="let row">
         <mtg-set
           [set]="row.set"
+          [set_name]="row.set_name"
           [rarity]="row.rarity"
           [fixed]="true"
           size="2x"

@@ -1,13 +1,15 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { IReactionDisposer, autorun } from 'mobx';
-import { Card, Prices } from 'scryfall-sdk';
+import { Prices } from 'scryfall-sdk';
 import { CardAdapter } from 'src/app/models/card-adapter';
 import { CURRENCY, LISTTYPES } from 'src/app/models/enums';
 import { DBService } from 'src/app/services/db.service';
 import { CardsStore } from 'src/app/stores/cards.store';
+import { AddCardDialogComponent } from '../dialogs/add-card-dialog/add-card-dialog.component';
 
 @Component({
   selector: 'mtg-cards-list',
@@ -37,7 +39,11 @@ export class CardsListComponent implements OnInit {
 
   disposer!: IReactionDisposer;
 
-  constructor(private cardsStore: CardsStore, private dbService: DBService) {
+  constructor(
+    private cardsStore: CardsStore,
+    private dbService: DBService,
+    private dialog: MatDialog
+  ) {
     this.dataSource = new MatTableDataSource();
   }
 
@@ -106,5 +112,11 @@ export class CardsListComponent implements OnInit {
     if (!this.dbService.decrement(card, this.listType)) {
       this.dataSource = new MatTableDataSource(this.cardsList);
     }
+  }
+
+  openAddCardDialog() {
+    this.dialog.open(AddCardDialogComponent, {
+      width: '50%',
+    });
   }
 }
