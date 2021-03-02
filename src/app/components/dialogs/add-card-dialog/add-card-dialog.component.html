@@ -1,65 +1,77 @@
-<div style="overflow: hidden">
-  <mat-form-field style="width: 100%">
-    <input
-      matInput
-      [formControl]="searchControl"
-      [matAutocomplete]="auto"
-      (keyup.enter)="onEnter()"
-    />
-    <mat-placeholder
-      class="placeholder"
-      *ngIf="input === undefined || input === ''"
-      >Search</mat-placeholder
-    >
-    <mat-icon
-      svgIcon="magnify"
-      class="input"
-      color="primary"
-      matSuffix
-    ></mat-icon>
-    <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-      <mat-option
-        *ngFor="let option of autoCompleteCatalogue"
-        [value]="option"
-        (click)="onSelect(option)"
-      >
-        {{ option }}
-      </mat-option>
-    </mat-autocomplete>
-  </mat-form-field>
-  <div fxLayout="row">
-    <div style="min-width: 300px">
-      <div class="flip-card">
-        <div class="flip-card-inner">
-          <div class="flip-card-front">
-            <img src="assets/mtg-cardback.jpg" style="border-radius: 15px" />
+<div style="height: 100%; overflow: hidden">
+  <div mat-dialog-content>
+    <div style="overflow: hidden">
+      <mat-form-field style="width: 100%">
+        <input
+          matInput
+          [formControl]="searchControl"
+          [matAutocomplete]="auto"
+          (keyup.enter)="onEnter()"
+        />
+        <mat-placeholder
+          class="placeholder"
+          *ngIf="input === undefined || input === ''"
+          >Search</mat-placeholder
+        >
+        <mat-icon
+          svgIcon="magnify"
+          class="input"
+          color="primary"
+          matSuffix
+        ></mat-icon>
+        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+          <mat-option
+            *ngFor="let option of autoCompleteCatalogue"
+            [value]="option"
+            (click)="onSelect(option)"
+          >
+            {{ option }}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
+      <div fxLayout="row">
+        <div style="min-width: 300px">
+          <div class="flip-card">
+            <div class="flip-card-inner">
+              <div class="flip-card-front">
+                <img
+                  src="assets/mtg-cardback.jpg"
+                  style="border-radius: 15px"
+                />
+              </div>
+              <div class="flip-card-back">
+                <img
+                  [src]="getSelectedPrintPic()"
+                  :lazy-src="assets/mtg-cardback.jpg"
+                  style="border-radius: 15px; width: 280px"
+                />
+              </div>
+            </div>
           </div>
-          <div class="flip-card-back">
-            <img
-              [src]="getSelectedPrintPic()"
-              :lazy-src="assets/mtg-cardback.jpg"
-              style="border-radius: 15px; width: 280px"
-            />
+        </div>
+        <div style="max-height: 400px; width: 70%; overflow-y: auto">
+          <div *ngIf="loaded">
+            <button
+              mat-icon-button
+              *ngFor="let print of otherPrints"
+              (click)="printSelect(print)"
+            >
+              <mtg-set
+                [set]="print.set"
+                [set_name]="print.set_name"
+                [rarity]="print.rarity"
+                [fixed]="true"
+                size="2x"
+              ></mtg-set>
+            </button>
           </div>
         </div>
       </div>
     </div>
-    <div style="max-height: 400px; width: 70%; overflow-y: auto">
-      <div *ngIf="loaded">
-        <button
-          mat-icon-button
-          *ngFor="let print of otherPrints"
-          (click)="printSelect(print)"
-        >
-          <mtg-set
-            [set]="print.set"
-            [set_name]="print.set_name"
-            [rarity]="print.rarity"
-            [fixed]="true"
-            size="2x"
-          ></mtg-set>
-        </button>
-      </div>
-    </div>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button color="primary" (click)="close()">Close</button>
+    <div style="flex: 1 1 auto"></div>
+    <button mat-button color="primary" (click)="addCard()">Add</button>
   </div>
 </div>

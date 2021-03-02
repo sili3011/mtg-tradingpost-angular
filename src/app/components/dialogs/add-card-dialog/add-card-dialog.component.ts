@@ -1,8 +1,11 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { BehaviorSubject } from 'rxjs';
 import { Cards } from 'scryfall-sdk';
 import { CardAdapter } from 'src/app/models/card-adapter';
+import { LISTTYPES } from 'src/app/models/enums';
+import { DBService } from 'src/app/services/db.service';
 
 @Component({
   selector: 'mtg-add-card-dialog',
@@ -19,7 +22,11 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
 
   subscriptions: Array<any> = [];
 
-  constructor() {}
+  constructor(
+    private dialogRef: MatDialogRef<AddCardDialogComponent>,
+    private dbService: DBService,
+    @Inject(MAT_DIALOG_DATA) public listType: LISTTYPES
+  ) {}
 
   ngOnInit(): void {
     this.subscriptions.push(
@@ -47,7 +54,7 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
   }
 
   onSelect(option: string) {
-    this.selectedPrint = null;
+    this.selectedPrint = undefined;
     this.otherPrints = [];
     this.loaded.next(false);
     Cards.byName(option).then((_) => {
@@ -66,7 +73,11 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
 
   getSelectedPrintPic() {
     if (this.selectedPrint) {
-      this.lastPicLoaded = this.selectedPrint.image_uris!.normal;
+      if (this.selectedPrint.image_uris) {
+        this.lastPicLoaded = this.selectedPrint.image_uris.normal;
+      } else {
+        this.lastPicLoaded = this.selectedPrint.card_faces[0].image_uris.normal; // MULTI FACED CARDS | TODO: show both sides?
+      }
       return this.lastPicLoaded;
     }
     return this.lastPicLoaded;
@@ -80,5 +91,14 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
 
   get input() {
     return this.searchControl.value?.trim();
+  }
+
+  close() {
+    this.dialogRef.close();
+  }
+
+  addCard() {
+    this.dbService.addCard(this.selectedPrint!, this.listType);
+    this.close();
   }
 }

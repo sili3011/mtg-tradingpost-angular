@@ -32,101 +32,142 @@
     </button>
   </div>
 
-  <table
-    mat-table
-    [dataSource]="dataSource"
-    matSort
-    style="width: 100%"
-    *ngIf="this.dataSource.data.length > 0"
-  >
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
-      <td
-        mat-cell
-        *matCellDef="let row"
-        [matTooltip]="imageTooltip(row.image_uris.normal)"
-        matTooltipClass="fitToImage"
-      >
-        {{ row.name }}
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="set">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Set</th>
-      <td mat-cell *matCellDef="let row">
-        <mtg-set
-          [set]="row.set"
-          [set_name]="row.set_name"
-          [rarity]="row.rarity"
-          [fixed]="true"
-          size="2x"
-        ></mtg-set>
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="mana_cost">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Mana Cost</th>
-      <td mat-cell *matCellDef="let row">
-        <div fxLayout="row">
-          <mtg-mana
-            *ngFor="let manas of manas(row.mana_cost)"
-            [symbol]="manas"
-            [cost]="true"
-            [shadow]="true"
+  <div style="overflow-y: auto; max-height: 84%">
+    <table
+      mat-table
+      [dataSource]="dataSource"
+      matSort
+      style="width: 100%"
+      *ngIf="this.dataSource.data.length > 0"
+    >
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+        <td mat-cell *matCellDef="let row">
+          <span
+            [matTooltip]="imageTooltip(row.image_uris.normal)"
+            matTooltipClass="fitToImage"
+            *ngIf="!row.card_faces"
+            >{{ row.name }}</span
+          >
+          <span *ngIf="row.card_faces">
+            <span
+              [matTooltip]="imageTooltip(row.card_faces[0].image_uris.normal)"
+              matTooltipClass="fitToImage"
+              >{{ row.card_faces[0].name }}
+            </span>
+            |
+            <span
+              [matTooltip]="imageTooltip(row.card_faces[1].image_uris.normal)"
+              matTooltipClass="fitToImage"
+            >
+              {{ row.card_faces[1].name }}</span
+            >
+          </span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="set">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Set</th>
+        <td mat-cell *matCellDef="let row">
+          <mtg-set
+            [set]="row.set"
+            [set_name]="row.set_name"
+            [rarity]="row.rarity"
             [fixed]="true"
-          ></mtg-mana>
-        </div>
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="cmc">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>CMC</th>
-      <td mat-cell *matCellDef="let row">{{ row.cmc }}</td>
-    </ng-container>
-    <ng-container matColumnDef="prices.eur">
-      <th mat-header-cell *matHeaderCellDef mat-sort-header>Value</th>
-      <td mat-cell *matCellDef="let row">
-        {{ getPriceByCurrency(row.prices) }}
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="amount">
-      <th
-        mat-header-cell
-        *matHeaderCellDef
-        mat-sort-header
-        style="justify-content: center"
-      >
-        Amount
-      </th>
-      <td mat-cell *matCellDef="let row">
-        <div fxLayout="row" style="justify-content: center">
-          <button
-            mat-icon-button
-            color="primary"
-            style="margin-right: 10px"
-            (click)="decrement(row)"
+            size="2x"
+          ></mtg-set>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="mana_cost">
+        <th mat-header-cell *matHeaderCellDef>Mana Cost</th>
+        <td mat-cell *matCellDef="let row">
+          <div fxLayout="row" *ngIf="!row.card_faces">
+            <mtg-mana
+              *ngFor="let manas of manas(row.mana_cost)"
+              [symbol]="manas"
+              [cost]="true"
+              [shadow]="true"
+              [fixed]="true"
+            ></mtg-mana>
+          </div>
+          <div fxLayout="row" *ngIf="row.card_faces">
+            <mtg-mana
+              *ngFor="let manas of manas(row.card_faces[0].mana_cost)"
+              [symbol]="manas"
+              [cost]="true"
+              [shadow]="true"
+              [fixed]="true"
+            ></mtg-mana>
+          </div>
+          <div fxLayout="row" *ngIf="row.card_faces">
+            <mtg-mana
+              *ngFor="let manas of manas(row.card_faces[1].mana_cost)"
+              [symbol]="manas"
+              [cost]="true"
+              [shadow]="true"
+              [fixed]="true"
+            ></mtg-mana>
+          </div>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="cmc">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>CMC</th>
+        <td mat-cell *matCellDef="let row">
+          <span>{{ row.cmc }}</span>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="value">
+        <th mat-header-cell *matHeaderCellDef mat-sort-header>Value</th>
+        <td mat-cell *matCellDef="let row">
+          <span *ngIf="selectedCurrency === Currencies.EUR"
+            >{{ row.prices.eur }}€</span
           >
-            <mat-icon color="primary"> remove </mat-icon>
-          </button>
-          <span style="margin-top: 1em; margin-bottom: 1em">{{
-            row.amount
-          }}</span>
-          <button
-            mat-icon-button
-            color="primary"
-            style="margin-left: 10px"
-            (click)="increment(row)"
+          <span *ngIf="selectedCurrency === Currencies.USD"
+            >{{ row.prices.usd }}$</span
           >
-            <mat-icon color="primary"> add </mat-icon>
-          </button>
-        </div>
-      </td>
-    </ng-container>
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-    <tr class="mat-row" *matNoDataRow>
-      <td class="mat-cell" colspan="10">
-        No data matching the filter "{{ input.value }}"
-      </td>
-    </tr>
-  </table>
+        </td>
+      </ng-container>
+      <ng-container matColumnDef="amount">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+          style="justify-content: center"
+        >
+          Amount
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <div fxLayout="row" style="justify-content: center">
+            <button
+              mat-icon-button
+              color="primary"
+              style="margin-right: 10px"
+              (click)="decrement(row)"
+            >
+              <mat-icon color="primary"> remove </mat-icon>
+            </button>
+            <span style="margin-top: 1em; margin-bottom: 1em">{{
+              row.amount
+            }}</span>
+            <button
+              mat-icon-button
+              color="primary"
+              style="margin-left: 10px"
+              (click)="increment(row)"
+            >
+              <mat-icon color="primary"> add </mat-icon>
+            </button>
+          </div>
+        </td>
+      </ng-container>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+      <tr class="mat-row" *matNoDataRow>
+        <td class="mat-cell" colspan="10">
+          No data matching the filter "{{ input.value }}"
+        </td>
+      </tr>
+    </table>
+  </div>
 
   <mat-paginator
     [pageSizeOptions]="[10, 25, 100]"

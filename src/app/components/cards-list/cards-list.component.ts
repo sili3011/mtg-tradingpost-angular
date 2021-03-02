@@ -4,7 +4,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { IReactionDisposer, autorun } from 'mobx';
-import { Prices } from 'scryfall-sdk';
 import { CardAdapter } from 'src/app/models/card-adapter';
 import { CURRENCY, LISTTYPES } from 'src/app/models/enums';
 import { DBService } from 'src/app/services/db.service';
@@ -22,7 +21,7 @@ export class CardsListComponent implements OnInit {
     'set',
     'mana_cost',
     'cmc',
-    'prices.eur',
+    'value',
     'amount',
   ];
   dataSource: MatTableDataSource<CardAdapter>;
@@ -34,6 +33,7 @@ export class CardsListComponent implements OnInit {
   @ViewChild(MatSort) sort!: MatSort;
 
   selectedCurrency!: CURRENCY;
+  Currencies = CURRENCY;
 
   cardsList: Array<CardAdapter> = [];
 
@@ -64,6 +64,29 @@ export class CardsListComponent implements OnInit {
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+    this.dataSource.sortingDataAccessor = (card, sortHeaderId) => {
+      switch (sortHeaderId) {
+        case 'name':
+          return card.name;
+        case 'set':
+          return card.set;
+        case 'mana_cost':
+          return card.mana_cost!;
+        case 'cmc':
+          return card.cmc;
+        case 'value':
+          switch (this.selectedCurrency) {
+            case CURRENCY.EUR:
+              return parseFloat(card.prices.eur!);
+            case CURRENCY.USD:
+              return parseFloat(card.prices.usd!);
+          }
+        case 'amount':
+          return card.amount;
+        default:
+          return '';
+      }
+    };
     this.dataSource.sort = this.sort;
   }
 
@@ -94,16 +117,6 @@ export class CardsListComponent implements OnInit {
     return `<img src="${image}" style="border-radius: 25px;">`;
   }
 
-  getPriceByCurrency(prices: Prices): string {
-    switch (this.selectedCurrency) {
-      case CURRENCY.EUR:
-        return prices.eur + '€';
-      case CURRENCY.USD:
-        return prices.usd + '$';
-    }
-    return '';
-  }
-
   increment(card: CardAdapter) {
     this.dbService.increment(card, this.listType);
   }
@@ -115,8 +128,15 @@ export class CardsListComponent implements OnInit {
   }
 
   openAddCardDialog() {
-    this.dialog.open(AddCardDialogComponent, {
-      width: '50%',
-    });
+    const subscription = this.dialog
+      .open(AddCardDialogComponent, {
+        width: '50%',
+        data: this.listType,
+      })
+      .afterClosed()
+      .subscribe(() => {
+        this.dataSource = new MatTableDataSource(this.cardsList);
+        subscription.unsubscribe();
+      });
   }
 }

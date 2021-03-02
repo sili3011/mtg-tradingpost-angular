@@ -8,7 +8,8 @@
     </mat-card-header>
     <mat-card-content class="card-content">
       <mat-card-subtitle>Collection of {{ owner }}</mat-card-subtitle>
-      Total of {{ amountOfCards }} cards across 0 sets owned.
+      Total of {{ totalCardsCount }} cards owned. {{ uniqueCardsCount }} of them
+      unique, across {{ setCount }} sets.
     </mat-card-content>
   </mat-card>
   <mat-card class="card">
@@ -34,7 +35,7 @@
     </mat-card-header>
     <mat-card-content class="card-content">
       <mat-card-subtitle>Net worth of your collection</mat-card-subtitle>
-      Your cards have a total value of 0.00€.
+      Your cards have a total value of {{ networth }}.
     </mat-card-content>
   </mat-card>
   <mat-card class="card" (click)="goto('wishlist')">

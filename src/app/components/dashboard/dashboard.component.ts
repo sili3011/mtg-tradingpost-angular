@@ -15,8 +15,11 @@ export class DashboardComponent implements OnInit {
   disposer!: IReactionDisposer;
 
   owner: string = '';
-  networth: Networth = defaultNetworth;
-  amountOfCards: number = 0;
+  totalCardsCount: number = 0;
+  uniqueCardsCount: number = 0;
+  setCount: number = 0;
+
+  networth: string = '';
 
   constructor(
     private router: Router,
@@ -27,8 +30,10 @@ export class DashboardComponent implements OnInit {
   ngOnInit(): void {
     this.disposer = autorun(() => {
       this.owner = this.userStore.owner;
-      this.networth = this.cardsStore.networth;
-      this.amountOfCards = this.cardsStore.collection.length;
+      this.totalCardsCount = this.cardsStore.totalCardsCount;
+      this.uniqueCardsCount = this.cardsStore.uniqueCardsCount;
+      this.setCount = this.cardsStore.setCount;
+      this.networth = this.cardsStore.networthWithCurrency;
     });
   }
 
