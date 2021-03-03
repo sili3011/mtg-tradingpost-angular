@@ -113,12 +113,19 @@ export class DBService {
     }
   }
 
-  getCollectionChainCards(listType: LISTTYPES): CollectionChain<CardAdapter> {
+  getCollectionChainCards(
+    listType: LISTTYPES,
+    deckId?: string
+  ): CollectionChain<CardAdapter> {
     switch (listType) {
       case LISTTYPES.COLLECTION:
         return this.db!.get('collection');
       case LISTTYPES.WISHLIST:
         return this.db!.get('wishlist');
+      case LISTTYPES.DECK:
+        return this.db!.get('decks')
+          .find((d: Deck) => d.id === deckId)
+          .get('cards');
     }
   }
 
@@ -153,36 +160,40 @@ export class DBService {
   //   // });
   // }
 
-  addCard(card: CardAdapter, listType: number): CardAdapter | undefined {
+  addCard(
+    card: CardAdapter,
+    listType: number,
+    deckId?: string
+  ): CardAdapter | undefined {
     if (
-      this.getCollectionChainCards(listType)!
+      this.getCollectionChainCards(listType, deckId)!
         .find((c: CardAdapter) => c.id === card.id)
         .value()
     ) {
       return undefined;
     }
     card.amount = 1;
-    this.getCollectionChainCards(listType)!.push(card).write();
-    return this.getCollectionChainCards(listType)!
+    this.getCollectionChainCards(listType, deckId)!.push(card).write();
+    return this.getCollectionChainCards(listType, deckId)!
       .find((c: CardAdapter) => c.id === card.id)
       .value();
   }
 
-  increment(card: CardAdapter, listType: number) {
-    const inDB = this.getCollectionChainCards(listType)!.find(
+  increment(card: CardAdapter, listType: number, deckId?: string) {
+    const inDB = this.getCollectionChainCards(listType, deckId)!.find(
       (c: CardAdapter) => c.id === card.id
     );
     const currentAmount = inDB.value().amount;
     inDB.assign({ amount: currentAmount + 1 }).write();
   }
 
-  decrement(card: CardAdapter, listType: number): boolean {
-    const inDB = this.getCollectionChainCards(listType)!.find(
+  decrement(card: CardAdapter, listType: number, deckId?: string): boolean {
+    const inDB = this.getCollectionChainCards(listType, deckId)!.find(
       (c: CardAdapter) => c.id === card.id
     );
     const currentAmount = inDB.value().amount;
     if (currentAmount - 1 === 0) {
-      this.getCollectionChainCards(listType)!
+      this.getCollectionChainCards(listType, deckId)!
         .remove((c: CardAdapter) => c === inDB.value())
         .write();
       return false;

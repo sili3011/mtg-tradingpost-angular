@@ -40,36 +40,66 @@
       style="width: 100%"
       *ngIf="this.dataSource.data.length > 0"
       cdkDropList
+      id="cards"
+      [cdkDropListConnectedTo]="decks"
     >
       <ng-container matColumnDef="name">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
         <td mat-cell *matCellDef="let row">
-          <span
-            [matTooltip]="imageTooltip(row.image_uris.normal)"
-            matTooltipClass="fitToImage"
-            *ngIf="!row.card_faces"
-            cdkDrag
-            >{{ row.name }}
-            <img *cdkDragPreview [src]="row.image_uris.normal" [alt]="row.name"
-          /></span>
-          <span *ngIf="row.card_faces" cdkDrag>
+          <span *ngIf="listType === ListTypes.COLLECTION">
             <span
-              [matTooltip]="imageTooltip(row.card_faces[0].image_uris.normal)"
+              [matTooltip]="imageTooltip(row.image_uris.normal)"
               matTooltipClass="fitToImage"
-              >{{ row.card_faces[0].name }}
+              *ngIf="!row.card_faces"
+              cdkDrag
+              [cdkDragData]="row"
+              >{{ row.name }}
+              <img
+                *cdkDragPreview
+                [src]="row.image_uris.normal"
+                [alt]="row.name"
+            /></span>
+            <span *ngIf="row.card_faces" cdkDrag [cdkDragData]="row">
+              <span
+                [matTooltip]="imageTooltip(row.card_faces[0].image_uris.normal)"
+                matTooltipClass="fitToImage"
+                >{{ row.card_faces[0].name }}
+              </span>
+              |
+              <span
+                [matTooltip]="imageTooltip(row.card_faces[1].image_uris.normal)"
+                matTooltipClass="fitToImage"
+              >
+                {{ row.card_faces[1].name }}</span
+              >
+              <img
+                *cdkDragPreview
+                [src]="row.card_faces[0].image_uris.normal"
+                [alt]="row.name"
+              />
             </span>
-            |
+          </span>
+          <span *ngIf="listType !== ListTypes.COLLECTION">
             <span
-              [matTooltip]="imageTooltip(row.card_faces[1].image_uris.normal)"
+              [matTooltip]="imageTooltip(row.image_uris.normal)"
               matTooltipClass="fitToImage"
-            >
-              {{ row.card_faces[1].name }}</span
-            >
-            <img
-              *cdkDragPreview
-              [src]="row.card_faces[0].image_uris.normal"
-              [alt]="row.name"
-            />
+              *ngIf="!row.card_faces"
+              >{{ row.name }}
+            </span>
+            <span *ngIf="row.card_faces">
+              <span
+                [matTooltip]="imageTooltip(row.card_faces[0].image_uris.normal)"
+                matTooltipClass="fitToImage"
+                >{{ row.card_faces[0].name }}
+              </span>
+              |
+              <span
+                [matTooltip]="imageTooltip(row.card_faces[1].image_uris.normal)"
+                matTooltipClass="fitToImage"
+              >
+                {{ row.card_faces[1].name }}</span
+              >
+            </span>
           </span>
         </td>
       </ng-container>

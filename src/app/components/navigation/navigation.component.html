@@ -43,6 +43,10 @@
             routerLinkActive="true"
             *ngFor="let deck of decks"
             (click)="selectedDeck = deck"
+            cdkDropList
+            id="{{ deck.id }}"
+            cdkDropListConnectedTo="cards"
+            (cdkDropListDropped)="dropCardOnDeck($event, deck)"
           >
             <mat-icon
               svgIcon="window-closed"

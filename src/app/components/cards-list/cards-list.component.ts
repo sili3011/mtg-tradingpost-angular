@@ -1,13 +1,23 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  Input,
+  OnChanges,
+  OnInit,
+  SimpleChange,
+  SimpleChanges,
+  ViewChild,
+} from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { IReactionDisposer, autorun } from 'mobx';
 import { CardAdapter } from 'src/app/models/card-adapter';
+import { Deck } from 'src/app/models/deck';
 import { CURRENCY, LISTTYPES } from 'src/app/models/enums';
 import { DBService } from 'src/app/services/db.service';
 import { CardsStore } from 'src/app/stores/cards.store';
+import { DecksStore } from 'src/app/stores/decks.store';
 import { AddCardDialogComponent } from '../dialogs/add-card-dialog/add-card-dialog.component';
 
 @Component({
@@ -15,7 +25,7 @@ import { AddCardDialogComponent } from '../dialogs/add-card-dialog/add-card-dial
   templateUrl: './cards-list.component.html',
   styleUrls: ['./cards-list.component.scss'],
 })
-export class CardsListComponent implements OnInit {
+export class CardsListComponent implements OnInit, OnChanges {
   displayedColumns: string[] = [
     'name',
     'set',
@@ -29,6 +39,13 @@ export class CardsListComponent implements OnInit {
   @Input()
   listType!: LISTTYPES;
 
+  ListTypes = LISTTYPES;
+
+  @Input()
+  deck: Deck | undefined;
+
+  decks: Array<string> = [];
+
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
@@ -41,6 +58,7 @@ export class CardsListComponent implements OnInit {
 
   constructor(
     private cardsStore: CardsStore,
+    private decksStore: DecksStore,
     private dbService: DBService,
     private dialog: MatDialog
   ) {
@@ -59,10 +77,11 @@ export class CardsListComponent implements OnInit {
       }
       this.dataSource = new MatTableDataSource(this.cardsList);
       this.selectedCurrency = this.cardsStore.networth.currency;
+      this.decks = this.decksStore.decks.map((d) => d.id);
     });
   }
 
-  ngAfterViewInit() {
+  ngAfterViewInit(): void {
     this.dataSource.paginator = this.paginator;
     this.dataSource.sortingDataAccessor = (card, sortHeaderId) => {
       switch (sortHeaderId) {
@@ -90,7 +109,14 @@ export class CardsListComponent implements OnInit {
     this.dataSource.sort = this.sort;
   }
 
-  ngOnDestroy() {
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes.deck) {
+      this.cardsList = this.deck?.cards!;
+      this.dataSource = new MatTableDataSource(this.cardsList);
+    }
+  }
+
+  ngOnDestroy(): void {
     this.disposer();
   }
 

@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Deck } from 'src/app/models/deck';
+import { LISTTYPES } from 'src/app/models/enums';
 import { DecksStore } from 'src/app/stores/decks.store';
 
 @Component({
@@ -9,6 +10,8 @@ import { DecksStore } from 'src/app/stores/decks.store';
   styleUrls: ['./deck.component.scss'],
 })
 export class DeckComponent implements OnInit, OnDestroy {
+  ListTypes = LISTTYPES;
+
   deckId: string = '';
   deck: Deck | undefined;
 

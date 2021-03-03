@@ -1,10 +1,12 @@
+import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { autorun, IReactionDisposer } from 'mobx';
 import { Subject } from 'rxjs';
 import { onSideNavChange, animateText } from 'src/app/animations/animations';
+import { CardAdapter } from 'src/app/models/card-adapter';
 import { Deck } from 'src/app/models/deck';
-import { DECKTYPES } from 'src/app/models/enums';
+import { DECKTYPES, LISTTYPES } from 'src/app/models/enums';
 import { DBService } from 'src/app/services/db.service';
 import { DecksStore } from 'src/app/stores/decks.store';
 import { v4 as uuidv4 } from 'uuid';
@@ -74,5 +76,10 @@ export class NavigationComponent implements OnInit, OnDestroy {
   onDeckNameChange($event: any, deck: Deck) {
     deck.name = $event.target.value;
     this.dbService.nameDeck(deck);
+  }
+
+  dropCardOnDeck($event: any, deck: Deck) {
+    // add dialog for amount to be added
+    this.dbService.addCard($event.item.data, LISTTYPES.DECK, deck.id);
   }
 }
