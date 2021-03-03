@@ -144,11 +144,11 @@ export class CardsListComponent implements OnInit, OnChanges {
   }
 
   increment(card: CardAdapter) {
-    this.dbService.increment(card, this.listType);
+    this.dbService.increment(card, this.listType, this.deck?.id);
   }
 
   decrement(card: CardAdapter) {
-    if (!this.dbService.decrement(card, this.listType)) {
+    if (!this.dbService.decrement(card, this.listType, this.deck?.id)) {
       this.dataSource = new MatTableDataSource(this.cardsList);
     }
   }
