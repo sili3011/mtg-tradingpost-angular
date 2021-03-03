@@ -1,15 +1,14 @@
-import { CdkDragDrop } from '@angular/cdk/drag-drop';
 import { Component, OnDestroy, OnInit } from '@angular/core';
-import { FormControl } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { autorun, IReactionDisposer } from 'mobx';
 import { Subject } from 'rxjs';
 import { onSideNavChange, animateText } from 'src/app/animations/animations';
-import { CardAdapter } from 'src/app/models/card-adapter';
 import { Deck } from 'src/app/models/deck';
 import { DECKTYPES, LISTTYPES } from 'src/app/models/enums';
 import { DBService } from 'src/app/services/db.service';
 import { DecksStore } from 'src/app/stores/decks.store';
 import { v4 as uuidv4 } from 'uuid';
+import { AddCardAmountToDeckDialogComponent } from '../dialogs/add-card-amount-to-deck-dialog/add-card-amount-to-deck-dialog.component';
 
 @Component({
   selector: 'mtg-navigation',
@@ -29,7 +28,11 @@ export class NavigationComponent implements OnInit, OnDestroy {
   subscriptions: Array<any> = [];
   disposer!: IReactionDisposer;
 
-  constructor(private decksStore: DecksStore, private dbService: DBService) {
+  constructor(
+    private decksStore: DecksStore,
+    private dbService: DBService,
+    private dialog: MatDialog
+  ) {
     this.subscriptions.push(
       this.sideNavState$.subscribe((res) => {
         this.onSideNavChange = res;
@@ -79,7 +82,20 @@ export class NavigationComponent implements OnInit, OnDestroy {
   }
 
   dropCardOnDeck($event: any, deck: Deck) {
-    // add dialog for amount to be added
-    this.dbService.addCard($event.item.data, LISTTYPES.DECK, deck.id);
+    const card = $event.item.data;
+    const ref = this.dialog.open(AddCardAmountToDeckDialogComponent, {
+      data: { name: card.name, amount: card.amount },
+    });
+    const sub = ref.afterClosed().subscribe(() => {
+      if (ref.componentInstance.confirmed) {
+        this.dbService.addCard(
+          card,
+          LISTTYPES.DECK,
+          deck.id,
+          ref.componentInstance.amount
+        );
+      }
+      sub.unsubscribe();
+    });
   }
 }

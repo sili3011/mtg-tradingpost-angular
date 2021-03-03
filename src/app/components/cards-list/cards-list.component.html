@@ -54,6 +54,7 @@
               cdkDrag
               [cdkDragData]="row"
               >{{ row.name }}
+              <div *cdkDragPlaceholder></div>
               <img
                 *cdkDragPreview
                 [src]="row.image_uris.normal"
@@ -72,6 +73,7 @@
               >
                 {{ row.card_faces[1].name }}</span
               >
+              <div *cdkDragPlaceholder></div>
               <img
                 *cdkDragPreview
                 [src]="row.card_faces[0].image_uris.normal"

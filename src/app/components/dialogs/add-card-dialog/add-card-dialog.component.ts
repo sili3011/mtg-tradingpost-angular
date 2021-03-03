@@ -20,6 +20,8 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
   loaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   lastPicLoaded = 'assets/mtg-cardback.jpg';
 
+  amount: number = 1;
+
   subscriptions: Array<any> = [];
 
   constructor(
@@ -98,7 +100,22 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
   }
 
   addCard() {
-    this.dbService.addCard(this.selectedPrint!, this.listType);
+    this.dbService.addCard(
+      this.selectedPrint!,
+      this.listType,
+      undefined,
+      this.amount
+    );
     this.close();
+  }
+
+  increment() {
+    ++this.amount;
+  }
+
+  decrement() {
+    if (this.amount > 1) {
+      --this.amount;
+    }
   }
 }

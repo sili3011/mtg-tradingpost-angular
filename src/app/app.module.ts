@@ -18,6 +18,7 @@ import { ManaComponent } from './utils/mana/mana.component';
 import { SetComponent } from './utils/set/set.component';
 import { DeckComponent } from './components/deck/deck.component';
 import { AddCardDialogComponent } from './components/dialogs/add-card-dialog/add-card-dialog.component';
+import { AddCardAmountToDeckDialogComponent } from './components/dialogs/add-card-amount-to-deck-dialog/add-card-amount-to-deck-dialog.component';
 
 @NgModule({
   declarations: [
@@ -34,6 +35,7 @@ import { AddCardDialogComponent } from './components/dialogs/add-card-dialog/add
     SetComponent,
     DeckComponent,
     AddCardDialogComponent,
+    AddCardAmountToDeckDialogComponent,
   ],
   imports: [
     BrowserModule,

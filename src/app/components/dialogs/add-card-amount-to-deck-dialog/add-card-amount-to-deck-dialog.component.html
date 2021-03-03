@@ -1,0 +1,36 @@
+<div mat-dialog-content style="width: 100%; text-align: -webkit-center">
+  <p>Add how many of {{ name }}?</p>
+  <div>
+    <button
+      mat-icon-button
+      color="primary"
+      style="margin-right: 10px"
+      (click)="decrement()"
+      [disabled]="amount <= 1"
+    >
+      <mat-icon
+        color="primary"
+        [ngStyle]="{ color: amount <= 1 ? 'grey' : '' }"
+      >
+        remove
+      </mat-icon>
+    </button>
+    <span style="margin-top: 1em; margin-bottom: 1em">{{ amount }}</span>
+    <button
+      mat-icon-button
+      color="primary"
+      style="margin-left: 10px"
+      (click)="increment()"
+    >
+      <mat-icon color="primary"> add </mat-icon>
+    </button>
+  </div>
+  <button mat-button color="primary" (click)="setAmount()">
+    Available amount
+  </button>
+</div>
+<div mat-dialog-actions style="padding: 0">
+  <button mat-button color="primary" (click)="close()">Close</button>
+  <div style="flex: 1 1 auto"></div>
+  <button mat-button color="primary" (click)="confirm()">Confirm</button>
+</div>

@@ -3,7 +3,6 @@ import {
   Input,
   OnChanges,
   OnInit,
-  SimpleChange,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
@@ -112,7 +111,7 @@ export class CardsListComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.deck) {
       this.cardsList = this.deck?.cards!;
-      this.dataSource = new MatTableDataSource(this.cardsList);
+      this.reapplyDatasource();
     }
   }
 
@@ -149,7 +148,7 @@ export class CardsListComponent implements OnInit, OnChanges {
 
   decrement(card: CardAdapter) {
     if (!this.dbService.decrement(card, this.listType, this.deck?.id)) {
-      this.dataSource = new MatTableDataSource(this.cardsList);
+      this.reapplyDatasource();
     }
   }
 
@@ -161,8 +160,13 @@ export class CardsListComponent implements OnInit, OnChanges {
       })
       .afterClosed()
       .subscribe(() => {
-        this.dataSource = new MatTableDataSource(this.cardsList);
+        this.reapplyDatasource();
         subscription.unsubscribe();
       });
+  }
+
+  private reapplyDatasource() {
+    this.dataSource = new MatTableDataSource(this.cardsList);
+    this.dataSource.paginator = this.paginator;
   }
 }

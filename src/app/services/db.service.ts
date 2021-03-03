@@ -163,28 +163,32 @@ export class DBService {
   addCard(
     card: CardAdapter,
     listType: number,
-    deckId?: string
-  ): CardAdapter | undefined {
+    deckId?: string,
+    amount?: number
+  ) {
     if (
       this.getCollectionChainCards(listType, deckId)!
         .find((c: CardAdapter) => c.id === card.id)
         .value()
     ) {
-      return undefined;
+      this.increment(card, listType, deckId, amount);
+      return;
     }
-    card.amount = 1;
+    card.amount = amount ? amount : 1;
     this.getCollectionChainCards(listType, deckId)!.push(card).write();
-    return this.getCollectionChainCards(listType, deckId)!
-      .find((c: CardAdapter) => c.id === card.id)
-      .value();
   }
 
-  increment(card: CardAdapter, listType: number, deckId?: string) {
+  increment(
+    card: CardAdapter,
+    listType: number,
+    deckId?: string,
+    amount?: number
+  ) {
     const inDB = this.getCollectionChainCards(listType, deckId)!.find(
       (c: CardAdapter) => c.id === card.id
     );
     const currentAmount = inDB.value().amount;
-    inDB.assign({ amount: currentAmount + 1 }).write();
+    inDB.assign({ amount: currentAmount + (amount ? amount : 1) }).write();
   }
 
   decrement(card: CardAdapter, listType: number, deckId?: string): boolean {
