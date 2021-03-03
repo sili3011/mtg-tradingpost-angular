@@ -3,6 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { autorun, IReactionDisposer } from 'mobx';
 import { Subject } from 'rxjs';
 import { onSideNavChange, animateText } from 'src/app/animations/animations';
+import { defaultDeck } from 'src/app/defaults/database.defaults';
 import { Deck } from 'src/app/models/deck';
 import { DECKTYPES, LISTTYPES } from 'src/app/models/enums';
 import { DBService } from 'src/app/services/db.service';
@@ -59,13 +60,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
   }
 
   addDeck() {
-    this.dbService.addDeck({
-      id: uuidv4(),
-      name: '',
-      cards: [],
-      type: DECKTYPES.NONE,
-      playable: false,
-    });
+    this.dbService.addDeck(defaultDeck);
   }
 
   removeDeck(deck: Deck, $event: any) {

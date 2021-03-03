@@ -1,1 +1,46 @@
-<mtg-cards-list [listType]="ListTypes.DECK" [deck]="deck"></mtg-cards-list>
+<div style="margin: 2%; height: 16%">
+  <span fxLayout="row">
+    <h1>{{ deck!.name }}</h1>
+    <mtg-mana
+      *ngIf="deck!.colors && deck!.colors !== ''"
+      [symbol]="deck!.colors"
+      [cost]="false"
+      [shadow]="true"
+      [fixed]="true"
+    ></mtg-mana>
+    <mat-icon
+      style="color: gray; padding-top: 8px"
+      *ngIf="!settingsExpanded"
+      (click)="toggleExpanded()"
+      >expand_more</mat-icon
+    >
+    <mat-icon
+      style="color: gray; padding-top: 8px"
+      *ngIf="settingsExpanded"
+      (click)="toggleExpanded()"
+      >chevron_right</mat-icon
+    >
+    <form
+      *ngIf="settingsExpanded"
+      fxLayout="row"
+      style="padding-top: 8px; width: 100%"
+    >
+      <mat-select style="width: 10%">
+        <mat-option *ngFor="let format of formatArray" [value]="format">{{
+          format
+        }}</mat-option>
+      </mat-select>
+      <mat-select style="width: 10%">
+        <mat-option *ngFor="let color of colorsArray" [value]="color">{{
+          color
+        }}</mat-option>
+      </mat-select>
+      <mat-checkbox style="width: 10%">Is active</mat-checkbox>
+    </form>
+  </span>
+</div>
+<mtg-cards-list
+  [listType]="ListTypes.DECK"
+  [deck]="deck"
+  style="height: 80%"
+></mtg-cards-list>

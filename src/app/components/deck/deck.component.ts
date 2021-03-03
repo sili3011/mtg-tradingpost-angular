@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Deck } from 'src/app/models/deck';
-import { LISTTYPES } from 'src/app/models/enums';
+import { COLORS, FORMATS, LISTTYPES } from 'src/app/models/enums';
 import { DecksStore } from 'src/app/stores/decks.store';
 
 @Component({
@@ -12,8 +12,16 @@ import { DecksStore } from 'src/app/stores/decks.store';
 export class DeckComponent implements OnInit, OnDestroy {
   ListTypes = LISTTYPES;
 
+  formatArray = Object.keys(FORMATS)
+    .map((key) => FORMATS[parseInt(key)])
+    .filter((map) => map !== '' && map !== undefined);
+
+  colorsArray = Object.keys(COLORS);
+
   deckId: string = '';
-  deck: Deck | undefined;
+  deck!: Deck | undefined;
+
+  settingsExpanded: boolean = false;
 
   subscriptions: Array<any> = [];
 
@@ -30,5 +38,9 @@ export class DeckComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscriptions.forEach((sub) => sub.unsubscribe());
+  }
+
+  toggleExpanded() {
+    this.settingsExpanded = !this.settingsExpanded;
   }
 }

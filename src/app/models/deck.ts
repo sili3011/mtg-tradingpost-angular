@@ -7,4 +7,6 @@ export interface Deck {
   cards: Array<CardAdapter>;
   type: DECKTYPES;
   playable: boolean;
+  active: boolean;
+  colors: string;
 }
