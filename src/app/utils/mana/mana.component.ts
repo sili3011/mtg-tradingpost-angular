@@ -1,17 +1,20 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
+import { COLORS, FORMATS } from 'src/app/models/enums';
 
 @Component({
   selector: 'mtg-mana',
   templateUrl: './mana.component.html',
   styleUrls: ['./mana.component.scss'],
 })
-export class ManaComponent {
+export class ManaComponent implements OnChanges {
   @Input()
   symbol: string = '';
   @Input()
   size: string = '';
   @Input()
   cost: boolean = false;
+  @Input()
+  colorIndicator: boolean = false;
   @Input()
   shadow: boolean = false;
   @Input()
@@ -28,16 +31,28 @@ export class ManaComponent {
 
   sizes = [`2x`, `3x`, `4x`, `5x`, `6x`];
 
-  constructor() {}
+  ngOnChanges(changes: SimpleChanges): void {
+    const index = Object.keys(COLORS).indexOf(changes.symbol.currentValue);
+
+    if (index >= 0) {
+      this.symbol = Object.values(COLORS)[index];
+    }
+
+    this.render();
+  }
 
   render() {
     let classes = 'ms ';
 
-    classes += Object.keys(this.icons).includes(this.symbol)
-      ? [`ms-${this.symbol}`] + ' '
-      : '';
+    classes +=
+      !this.colorIndicator && Object.keys(this.icons).includes(this.symbol)
+        ? [`ms-${this.symbol}`] + ' '
+        : '';
     classes += this.sizes.includes(this.size) ? [`ms-${this.size}`] + ' ' : '';
-    classes += this.half || this.shadow || this.cost ? 'ms-cost' + ' ' : '';
+    classes += this.cost ? 'ms-cost' + ' ' : '';
+    classes += this.colorIndicator
+      ? 'ms-ci' + ' ' + 'ms-ci-' + this.symbol + ' '
+      : '';
     classes += this.shadow ? 'ms-shadow' + ' ' : '';
     classes += this.half ? 'ms-half' + ' ' : '';
     classes += this.fixed ? 'ms-fw' + ' ' : '';

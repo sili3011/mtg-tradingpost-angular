@@ -1,7 +1,7 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, Subscription } from 'rxjs';
 import { Cards } from 'scryfall-sdk';
 import { CardAdapter } from 'src/app/models/card-adapter';
 import { LISTTYPES } from 'src/app/models/enums';
@@ -22,7 +22,7 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
 
   amount: number = 1;
 
-  subscriptions: Array<any> = [];
+  subscriptions: Subscription = new Subscription();
 
   constructor(
     private dialogRef: MatDialogRef<AddCardDialogComponent>,
@@ -31,13 +31,13 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.subscriptions.push(
+    this.subscriptions.add(
       this.searchControl.valueChanges.subscribe(async () => {
         this.loaded.next(false);
         this.autoCompleteCatalogue = await Cards.autoCompleteName(this.input);
       })
     );
-    this.subscriptions.push(
+    this.subscriptions.add(
       this.loaded.subscribe((loaded) => {
         const flip = document.body.getElementsByClassName('flip-card-inner')[0];
         loaded
@@ -48,7 +48,7 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach((sub) => sub.unsubscribe);
+    this.subscriptions.unsubscribe();
   }
 
   onEnter() {

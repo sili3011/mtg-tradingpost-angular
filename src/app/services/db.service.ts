@@ -3,7 +3,7 @@ import { CardIdentifier, Cards } from 'scryfall-sdk';
 import { defaultDB, defaultNetworth } from '../defaults/database.defaults';
 import { CardAdapter } from '../models/card-adapter';
 import { Deck } from '../models/deck';
-import { CURRENCY, LISTTYPES } from '../models/enums';
+import { CURRENCIES, LISTTYPES } from '../models/enums';
 import { CollectionChain } from 'lodash';
 import * as db from '../../assets/db.json';
 import * as LocalStorage from 'lowdb/adapters/LocalStorage';
@@ -14,7 +14,7 @@ import { DecksStore } from '../stores/decks.store';
 
 export interface Networth {
   value: number;
-  currency: CURRENCY;
+  currency: CURRENCIES;
   lastSync: number;
 }
 
@@ -137,7 +137,7 @@ export class DBService {
     return this.db!.get('networth').value();
   }
 
-  setCurrency(currency: CURRENCY) {
+  setCurrency(currency: CURRENCIES) {
     this.db!.set('networth.currency', currency).write();
   }
 
@@ -224,6 +224,11 @@ export class DBService {
     decks.splice(index, 1);
     this.setDecks(decks);
     return this.db!.get('decks').value();
+  }
+
+  setDeck(deck: Deck) {
+    const inDB = this.db!.get('decks').find((d: Deck) => d.id === deck.id);
+    inDB.assign(deck).write();
   }
 
   nameDeck(deck: Deck) {

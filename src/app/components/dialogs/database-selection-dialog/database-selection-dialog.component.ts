@@ -7,6 +7,7 @@ import { saveAs } from 'file-saver';
 import { OverwriteDatabaseConfirmationDialogComponent } from '../overwrite-database-confirmation-dialog/overwrite-database-confirmation-dialog.component';
 import { CardsStore } from 'src/app/stores/cards.store';
 import { UserStore } from 'src/app/stores/user.store';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'mtg-database-selection-dialog',
@@ -20,7 +21,7 @@ export class DatabaseSelectionDialogComponent implements OnInit, OnDestroy {
   backupped: boolean = false;
   createNew: boolean = false;
 
-  subscriptions: Array<any> = [];
+  subscriptions: Subscription = new Subscription();
 
   constructor(
     private dbService: DBService,
@@ -38,7 +39,7 @@ export class DatabaseSelectionDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.subscriptions.push(
+    this.subscriptions.add(
       this.dbGroup.get('file')!.valueChanges.subscribe((fileInput) => {
         if (fileInput.files) {
           fileInput = fileInput.files[0];
@@ -59,7 +60,7 @@ export class DatabaseSelectionDialogComponent implements OnInit, OnDestroy {
       })
     );
 
-    this.subscriptions.push(
+    this.subscriptions.add(
       this.dbGroup.get('name')!.valueChanges.subscribe((name) => {
         if (!this.inputJSON) {
           this.setDummyFileToShow();
@@ -69,7 +70,7 @@ export class DatabaseSelectionDialogComponent implements OnInit, OnDestroy {
       })
     );
 
-    this.subscriptions.push(
+    this.subscriptions.add(
       this.dbGroup.get('owner')!.valueChanges.subscribe((owner) => {
         if (!this.inputJSON) {
           this.setDummyFileToShow();
@@ -103,7 +104,7 @@ export class DatabaseSelectionDialogComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach((sub) => sub.unsubscribe());
+    this.subscriptions.unsubscribe();
   }
 
   setDummyFileToShow() {

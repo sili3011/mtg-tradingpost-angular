@@ -1,42 +1,55 @@
 <div style="margin: 2%; height: 16%">
   <span fxLayout="row">
-    <h1>{{ deck!.name }}</h1>
     <mtg-mana
-      *ngIf="deck!.colors && deck!.colors !== ''"
+      *ngIf="deck!.colors !== Colors.NONE"
       [symbol]="deck!.colors"
-      [cost]="false"
-      [shadow]="true"
-      [fixed]="true"
+      [colorIndicator]="true"
+      [size]="'2x'"
+      style="padding-top: 4px; padding-right: 8px"
     ></mtg-mana>
-    <mat-icon
-      style="color: gray; padding-top: 8px"
-      *ngIf="!settingsExpanded"
-      (click)="toggleExpanded()"
-      >expand_more</mat-icon
+    <h1>{{ deck!.name }}</h1>
+    <mat-icon style="color: gray; padding-top: 8px" (click)="toggleExpanded()">
+      {{ settingsExpanded ? "chevron_right" : "expand_more" }}</mat-icon
     >
-    <mat-icon
-      style="color: gray; padding-top: 8px"
-      *ngIf="settingsExpanded"
-      (click)="toggleExpanded()"
-      >chevron_right</mat-icon
-    >
-    <form
-      *ngIf="settingsExpanded"
-      fxLayout="row"
-      style="padding-top: 8px; width: 100%"
-    >
-      <mat-select style="width: 10%">
-        <mat-option *ngFor="let format of formatArray" [value]="format">{{
-          format
-        }}</mat-option>
-      </mat-select>
-      <mat-select style="width: 10%">
-        <mat-option *ngFor="let color of colorsArray" [value]="color">{{
-          color
-        }}</mat-option>
-      </mat-select>
-      <mat-checkbox style="width: 10%">Is active</mat-checkbox>
-    </form>
+    <span *ngIf="settingsExpanded" fxLayout="row">
+      <form [formGroup]="settingsGroup">
+        <mat-form-field style="padding-left: 10px">
+          <mat-select matSelect formControlName="format">
+            <mat-option *ngFor="let format of formatArray" [value]="format">{{
+              format
+            }}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field style="padding-left: 10px">
+          <mat-select matSelect formControlName="colors">
+            <mat-option *ngFor="let color of colorsArray" [value]="color">
+              <span fxLayout="row"
+                ><mtg-mana
+                  [symbol]="color"
+                  [colorIndicator]="true"
+                  style="padding-right: 10px"
+                ></mtg-mana
+                >{{ color }}</span
+              ></mat-option
+            >
+          </mat-select>
+        </mat-form-field>
+        <mat-checkbox
+          matCheckbox
+          style="padding-left: 10px"
+          formControlName="isActive"
+          >Is active</mat-checkbox
+        >
+      </form>
+      <button
+        mat-icon-button
+        color="warn"
+        (click)="removeDeck()"
+        style="padding-top: 5px"
+      >
+        <mat-icon>delete</mat-icon>
+      </button>
+    </span>
   </span>
 </div>
 <mtg-cards-list

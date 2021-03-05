@@ -1,12 +1,12 @@
 import { CardAdapter } from './card-adapter';
-import { DECKTYPES } from './enums';
+import { COLORS, FORMATS } from './enums';
 
 export interface Deck {
   id: string;
   name: string;
   cards: Array<CardAdapter>;
-  type: DECKTYPES;
+  format: FORMATS;
   playable: boolean;
   active: boolean;
-  colors: string;
+  colors: COLORS;
 }

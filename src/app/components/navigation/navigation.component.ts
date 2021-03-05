@@ -1,14 +1,13 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { autorun, IReactionDisposer } from 'mobx';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { onSideNavChange, animateText } from 'src/app/animations/animations';
 import { defaultDeck } from 'src/app/defaults/database.defaults';
 import { Deck } from 'src/app/models/deck';
-import { DECKTYPES, LISTTYPES } from 'src/app/models/enums';
+import { LISTTYPES } from 'src/app/models/enums';
 import { DBService } from 'src/app/services/db.service';
 import { DecksStore } from 'src/app/stores/decks.store';
-import { v4 as uuidv4 } from 'uuid';
 import { AddCardAmountToDeckDialogComponent } from '../dialogs/add-card-amount-to-deck-dialog/add-card-amount-to-deck-dialog.component';
 
 @Component({
@@ -26,7 +25,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
   decks: Array<Deck> = [];
   selectedDeck: Deck | undefined;
 
-  subscriptions: Array<any> = [];
+  subscriptions: Subscription = new Subscription();
   disposer!: IReactionDisposer;
 
   constructor(
@@ -34,7 +33,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
     private dbService: DBService,
     private dialog: MatDialog
   ) {
-    this.subscriptions.push(
+    this.subscriptions.add(
       this.sideNavState$.subscribe((res) => {
         this.onSideNavChange = res;
       })
@@ -46,7 +45,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach((sub) => sub.unsubscribe());
+    this.subscriptions.unsubscribe();
     this.disposer();
   }
 

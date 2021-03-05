@@ -49,12 +49,9 @@
             (cdkDropListDropped)="dropCardOnDeck($event, deck)"
           >
             <mat-icon
-              svgIcon="window-closed"
-              *ngIf="selectedDeck !== deck"
-            ></mat-icon>
-            <mat-icon
-              svgIcon="window-open"
-              *ngIf="selectedDeck === deck"
+              [svgIcon]="
+                selectedDeck === deck ? 'window-open' : 'window-closed'
+              "
             ></mat-icon>
             <span
               [@animateText]="linkText ? 'show' : 'hide'"

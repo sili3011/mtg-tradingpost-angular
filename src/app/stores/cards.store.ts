@@ -3,7 +3,7 @@ import { computed, observable } from 'mobx';
 import { CardAdapter } from '../models/card-adapter';
 import { Networth } from '../services/db.service';
 import { defaultNetworth } from '../defaults/database.defaults';
-import { CURRENCY } from '../models/enums';
+import { CURRENCIES } from '../models/enums';
 
 @Injectable({
   providedIn: 'root',
@@ -36,20 +36,20 @@ export class CardsStore {
     this.networth.value = 0;
     this.collection.forEach((card) => {
       switch (this.networth.currency) {
-        case CURRENCY.EUR:
+        case CURRENCIES.EUR:
           this.networth.value +=
             parseFloat(card.prices.eur as string) * card.amount;
           break;
-        case CURRENCY.USD:
+        case CURRENCIES.USD:
           this.networth.value +=
             parseFloat(card.prices.usd as string) * card.amount;
           break;
       }
     });
     switch (this.networth.currency) {
-      case CURRENCY.EUR:
+      case CURRENCIES.EUR:
         return this.networth.value.toFixed(2) + '€';
-      case CURRENCY.USD:
+      case CURRENCIES.USD:
         return this.networth.value.toFixed(2) + '$';
     }
     return '';

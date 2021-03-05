@@ -2,7 +2,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { autorun, IReactionDisposer } from 'mobx';
-import { CURRENCY } from 'src/app/models/enums';
+import { Subscription } from 'rxjs';
+import { CURRENCIES } from 'src/app/models/enums';
 import { DBService } from 'src/app/services/db.service';
 import { CardsStore } from 'src/app/stores/cards.store';
 import { DatabaseSelectionDialogComponent } from '../dialogs/database-selection-dialog/database-selection-dialog.component';
@@ -15,11 +16,11 @@ import { DatabaseSelectionDialogComponent } from '../dialogs/database-selection-
 export class SettingsComponent implements OnInit, OnDestroy {
   disposer!: IReactionDisposer;
 
-  selectedCurrency: CURRENCY = CURRENCY.EUR;
-  currencies = CURRENCY;
+  selectedCurrency: CURRENCIES = CURRENCIES.EUR;
+  currencies = CURRENCIES;
   currencyControl = new FormControl();
 
-  subscriptions: Array<any> = [];
+  subscriptions: Subscription = new Subscription();
 
   constructor(
     private dialog: MatDialog,
@@ -33,7 +34,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
       this.currencyControl.setValue(this.selectedCurrency);
     });
 
-    this.subscriptions.push(
+    this.subscriptions.add(
       this.currencyControl.valueChanges.subscribe((currency) =>
         this.dbService.setCurrency(currency)
       )
@@ -41,7 +42,7 @@ export class SettingsComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach((sub) => sub.unsubscribe());
+    this.subscriptions.unsubscribe();
     this.disposer();
   }
 

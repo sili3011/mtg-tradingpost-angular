@@ -13,7 +13,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { IReactionDisposer, autorun } from 'mobx';
 import { CardAdapter } from 'src/app/models/card-adapter';
 import { Deck } from 'src/app/models/deck';
-import { CURRENCY, LISTTYPES } from 'src/app/models/enums';
+import { CURRENCIES, LISTTYPES } from 'src/app/models/enums';
 import { DBService } from 'src/app/services/db.service';
 import { CardsStore } from 'src/app/stores/cards.store';
 import { DecksStore } from 'src/app/stores/decks.store';
@@ -48,8 +48,8 @@ export class CardsListComponent implements OnInit, OnChanges {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  selectedCurrency!: CURRENCY;
-  Currencies = CURRENCY;
+  selectedCurrency!: CURRENCIES;
+  Currencies = CURRENCIES;
 
   cardsList: Array<CardAdapter> = [];
 
@@ -94,9 +94,9 @@ export class CardsListComponent implements OnInit, OnChanges {
           return card.cmc;
         case 'value':
           switch (this.selectedCurrency) {
-            case CURRENCY.EUR:
+            case CURRENCIES.EUR:
               return parseFloat(card.prices.eur!);
-            case CURRENCY.USD:
+            case CURRENCIES.USD:
               return parseFloat(card.prices.usd!);
           }
         case 'amount':
