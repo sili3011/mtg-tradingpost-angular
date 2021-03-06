@@ -8,7 +8,18 @@ export function deckToCurve(deck: Deck): Array<any> {
         .split(' ')
         .find((t) => t.toLocaleLowerCase() === 'land') === undefined
     ) {
+      let searchingFor = '';
+      if (!card.color_identity[0]) {
+        searchingFor = 'Colorless';
+      } else if (card.color_identity.length > 1) {
+        searchingFor = 'Multi';
+      } else {
+        searchingFor = card.color_identity[0];
+      }
       let found = ret.find((r) => {
+        if (r.name === searchingFor) {
+          return true;
+        }
         if (r.name.length !== card.color_identity.length) {
           return false;
         }
@@ -21,12 +32,7 @@ export function deckToCurve(deck: Deck): Array<any> {
       });
       if (!found) {
         found = {
-          name:
-            card.color_identity.length > 1
-              ? 'Multi'
-              : !card.color_identity[0]
-              ? 'Colorless'
-              : card.color_identity,
+          name: searchingFor,
           data: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
           color: curveColor(card.color_identity),
         };
@@ -48,15 +54,15 @@ function curveColor(color: Array<string>): string {
   }
   switch (color[0]) {
     case 'G':
-      return '#7E956D';
+      return '#3d684b';
     case 'R':
-      return '#DB8664';
+      return '#c6553e';
     case 'B':
-      return '#ACA29A';
+      return '#383431';
     case 'W':
-      return '#F0F2C0';
+      return '#ffffff';
     case 'U':
-      return '#B5CDE3';
+      return '#3b6ba0';
     default:
       return '#BEB9B2';
   }

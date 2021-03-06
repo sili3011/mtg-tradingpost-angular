@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
@@ -18,6 +18,7 @@ import { COLORS, FORMATS, LISTTYPES } from 'src/app/models/enums';
 import { DBService } from 'src/app/services/db.service';
 import { DecksStore } from 'src/app/stores/decks.store';
 import { deckToCurve } from 'src/app/utils/utils';
+import { CardsListComponent } from '../cards-list/cards-list.component';
 import { ConfirmDialogComponent } from '../dialogs/confirm-dialog/confirm-dialog.component';
 
 @Component({
@@ -44,33 +45,38 @@ export class DeckComponent implements OnInit, OnDestroy {
     toolbar: { show: false },
     zoom: { enabled: false },
   };
-
   curveSeries: ApexAxisChartSeries = [];
-
   curveLegend: ApexLegend = { labels: { colors: 'white' } };
-
-  curveLabels: ApexDataLabels = { style: { colors: ['#424242'] } };
-
-  curveGrid: ApexGrid = { show: false };
-
-  curveTooltip: ApexTooltip = { enabled: false };
-
+  curveLabels: ApexDataLabels = { enabled: false };
+  curveGrid: ApexGrid = {
+    borderColor: 'gray',
+    strokeDashArray: 5,
+  };
+  curveTooltip: ApexTooltip = {
+    theme: 'dark',
+    x: {
+      show: true,
+      formatter: (val) => (val === 10 ? val - 1 + '+ CMC' : val - 1 + ' CMC'),
+    },
+  };
   curveXaxis: ApexXAxis = {
+    type: 'category',
+    categories: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
     labels: {
-      style: { colors: 'white' },
+      style: { colors: 'gray' },
       formatter: (val: string, timestamp?: number, opts?: any) => {
-        return parseInt(val) - 1 === 9
+        return parseInt(val) === 10
           ? `${parseInt(val) - 1}+`
           : `${parseInt(val) - 1}`;
       },
     },
     axisBorder: { show: false },
+    axisTicks: { show: false },
   };
-
-  curveYaxis: ApexYAxis = { labels: { style: { colors: 'white' } } };
+  curveYaxis: ApexYAxis = { labels: { style: { colors: 'gray' } } };
   // CURVE END
 
-  listFocused: boolean = false;
+  listExpanded: boolean = false;
 
   deckId: string = '';
   deck!: Deck | undefined;
@@ -78,6 +84,8 @@ export class DeckComponent implements OnInit, OnDestroy {
   settingsGroup: FormGroup;
 
   settingsExpanded: boolean = false;
+
+  @ViewChild(CardsListComponent) cardsList!: CardsListComponent;
 
   subscriptions: Subscription = new Subscription();
 
@@ -123,8 +131,15 @@ export class DeckComponent implements OnInit, OnDestroy {
     this.subscriptions.unsubscribe();
   }
 
-  toggleExpanded() {
+  toggleSettingsExpanded() {
     this.settingsExpanded = !this.settingsExpanded;
+  }
+
+  toggleListExpanded() {
+    this.listExpanded = !this.listExpanded;
+    this.listExpanded
+      ? this.cardsList.setPageSize(10)
+      : this.cardsList.setPageSize(5);
   }
 
   removeDeck() {

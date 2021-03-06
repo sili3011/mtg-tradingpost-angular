@@ -176,4 +176,8 @@ export class CardsListComponent implements OnInit, OnChanges {
     this.dataSource.paginator = this.paginator;
     this.rerender.emit(true);
   }
+
+  setPageSize(size: number) {
+    this.dataSource.paginator?._changePageSize(size);
+  }
 }
