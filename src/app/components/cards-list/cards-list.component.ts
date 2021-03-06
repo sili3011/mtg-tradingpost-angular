@@ -1,8 +1,10 @@
 import {
   Component,
+  EventEmitter,
   Input,
   OnChanges,
   OnInit,
+  Output,
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
@@ -52,6 +54,8 @@ export class CardsListComponent implements OnInit, OnChanges {
   Currencies = CURRENCIES;
 
   cardsList: Array<CardAdapter> = [];
+
+  @Output() rerender: EventEmitter<boolean> = new EventEmitter();
 
   disposer!: IReactionDisposer;
 
@@ -138,25 +142,27 @@ export class CardsListComponent implements OnInit, OnChanges {
     return filtered;
   }
 
-  imageTooltip(image: string): string {
-    return `<img src="${image}" style="border-radius: 25px;">`;
+  imageTooltip(image: any): string {
+    return `<img src="${image.normal}" style="border-radius: 25px;">`;
   }
 
   increment(card: CardAdapter) {
     this.dbService.increment(card, this.listType, this.deck?.id);
+    this.rerender.emit(true);
   }
 
   decrement(card: CardAdapter) {
     if (!this.dbService.decrement(card, this.listType, this.deck?.id)) {
       this.reapplyDatasource();
     }
+    this.rerender.emit(true);
   }
 
   openAddCardDialog() {
     const subscription = this.dialog
       .open(AddCardDialogComponent, {
         width: '50%',
-        data: this.listType,
+        data: { listType: this.listType, deckId: this.deck?.id },
       })
       .afterClosed()
       .subscribe(() => {
@@ -168,5 +174,6 @@ export class CardsListComponent implements OnInit, OnChanges {
   private reapplyDatasource() {
     this.dataSource = new MatTableDataSource(this.cardsList);
     this.dataSource.paginator = this.paginator;
+    this.rerender.emit(true);
   }
 }

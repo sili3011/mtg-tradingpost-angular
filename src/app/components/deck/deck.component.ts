@@ -2,11 +2,22 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import {
+  ApexAxisChartSeries,
+  ApexChart,
+  ApexDataLabels,
+  ApexGrid,
+  ApexLegend,
+  ApexTooltip,
+  ApexXAxis,
+  ApexYAxis,
+} from 'ng-apexcharts';
 import { Subscription } from 'rxjs';
 import { Deck } from 'src/app/models/deck';
 import { COLORS, FORMATS, LISTTYPES } from 'src/app/models/enums';
 import { DBService } from 'src/app/services/db.service';
 import { DecksStore } from 'src/app/stores/decks.store';
+import { deckToCurve } from 'src/app/utils/utils';
 import { ConfirmDialogComponent } from '../dialogs/confirm-dialog/confirm-dialog.component';
 
 @Component({
@@ -18,11 +29,48 @@ export class DeckComponent implements OnInit, OnDestroy {
   ListTypes = LISTTYPES;
   Colors = COLORS;
 
+  colorsArray = Object.keys(COLORS);
+
   formatArray = Object.keys(FORMATS)
     .map((key) => FORMATS[parseInt(key)])
     .filter((map) => map !== '' && map !== undefined);
 
-  colorsArray = Object.keys(COLORS);
+  // CURVE
+  curveChart: ApexChart = {
+    height: 250,
+    type: 'bar',
+    stacked: true,
+    fontFamily: 'Roboto, "Helvetica Neue", sans-serif',
+    toolbar: { show: false },
+    zoom: { enabled: false },
+  };
+
+  curveSeries: ApexAxisChartSeries = [];
+
+  curveLegend: ApexLegend = { labels: { colors: 'white' } };
+
+  curveLabels: ApexDataLabels = { style: { colors: ['#424242'] } };
+
+  curveGrid: ApexGrid = { show: false };
+
+  curveTooltip: ApexTooltip = { enabled: false };
+
+  curveXaxis: ApexXAxis = {
+    labels: {
+      style: { colors: 'white' },
+      formatter: (val: string, timestamp?: number, opts?: any) => {
+        return parseInt(val) - 1 === 9
+          ? `${parseInt(val) - 1}+`
+          : `${parseInt(val) - 1}`;
+      },
+    },
+    axisBorder: { show: false },
+  };
+
+  curveYaxis: ApexYAxis = { labels: { style: { colors: 'white' } } };
+  // CURVE END
+
+  listFocused: boolean = false;
 
   deckId: string = '';
   deck!: Deck | undefined;
@@ -57,6 +105,7 @@ export class DeckComponent implements OnInit, OnDestroy {
           colors: this.deck!.colors ? this.deck!.colors : COLORS.NONE,
           isActive: this.deck!.active ? this.deck!.active : false,
         });
+        this.curveSeries = deckToCurve(this.deck!);
       })
     );
 
@@ -89,5 +138,10 @@ export class DeckComponent implements OnInit, OnDestroy {
         }
       })
     );
+  }
+
+  rerender() {
+    this.deck = this.decksStore.decks.find((d) => d.id === this.deckId);
+    this.curveSeries = deckToCurve(this.deck!);
   }
 }

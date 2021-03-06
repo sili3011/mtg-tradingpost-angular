@@ -1,5 +1,8 @@
-<div style="margin: 2%; height: 16%">
-  <span fxLayout="row">
+<div
+  style="margin: 2em 2em 0 2em"
+  [ngStyle]="{ height: listFocused ? '14%' : '47%' }"
+>
+  <span fxLayout="row" style="height: 60px">
     <mtg-mana
       *ngIf="deck!.colors !== Colors.NONE"
       [symbol]="deck!.colors"
@@ -35,6 +38,7 @@
           </mat-select>
         </mat-form-field>
         <mat-checkbox
+          color="primary"
           matCheckbox
           style="padding-left: 10px"
           formControlName="isActive"
@@ -50,10 +54,83 @@
         <mat-icon>delete</mat-icon>
       </button>
     </span>
+    <span class="flex"></span>
+    <mat-chip-list style="position: absolute; right: 2em">
+      <mat-chip
+        [disableRipple]="true"
+        style="
+          background-color: #173b30;
+          color: #1baf44;
+          border-style: solid;
+          border-width: 1px;
+        "
+        *ngIf="deck!.playable"
+        >Playable</mat-chip
+      >
+      <mat-chip
+        [disableRipple]="true"
+        style="
+          background-color: #392029;
+          color: #eb8776;
+          border-style: solid;
+          border-width: 1px;
+        "
+        *ngIf="!deck!.playable"
+        >Needs fixing</mat-chip
+      >
+    </mat-chip-list>
   </span>
+  <mat-card
+    fxLayout="row"
+    style="height: calc(100% - 60px); overflow-y: hidden; padding: 0"
+  >
+    <div class="detail">{{ deck!.cards.length }} / {{ "X" }}</div>
+    <div class="detail">Problems (X)</div>
+    <div class="detail">
+      Curve (123123)
+      <apx-chart
+        [series]="curveSeries"
+        [chart]="curveChart"
+        [legend]="curveLegend"
+        [dataLabels]="curveLabels"
+        [grid]="curveGrid"
+        [tooltip]="curveTooltip"
+        [xaxis]="curveXaxis"
+        [yaxis]="curveYaxis"
+      ></apx-chart>
+    </div>
+    <div class="detail">Distribution (13-10-5 | 10-10)</div>
+  </mat-card>
+</div>
+<div fxLayout="row" style="height: 40px; min-height: 40px">
+  <button
+    mat-icon-button
+    color="primary"
+    (click)="listFocused = !listFocused"
+    style="margin-left: 2em"
+  >
+    <mat-icon>{{ !listFocused ? "expand_less" : "expand_more" }}</mat-icon>
+  </button>
+  <div style="position: absolute; right: 2em">
+    <mat-button-toggle-group
+      name="listStyle"
+      aria-label="List style"
+      style="border: none"
+    >
+      <mat-button-toggle value="list" style="background-color: transparent"
+        ><mat-icon color="primary"
+          >format_align_justify</mat-icon
+        ></mat-button-toggle
+      >
+      <mat-button-toggle value="detail" style="background-color: transparent"
+        ><mat-icon color="primary"> view_module </mat-icon></mat-button-toggle
+      >
+    </mat-button-toggle-group>
+  </div>
 </div>
 <mtg-cards-list
   [listType]="ListTypes.DECK"
   [deck]="deck"
-  style="height: 80%"
+  [ngStyle]="{ height: listFocused ? '83%' : '50%' }"
+  (rerender)="rerender()"
 ></mtg-cards-list>

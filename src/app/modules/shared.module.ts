@@ -17,12 +17,16 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatSelectModule } from '@angular/material/select';
+import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatChipsModule } from '@angular/material/chips';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FlexModule } from '@angular/flex-layout/flex';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
+import { BrowserModule } from '@angular/platform-browser';
+import { NgApexchartsModule } from 'ng-apexcharts';
 
 @NgModule({
   declarations: [],
@@ -48,6 +52,8 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
     MatTooltipModule,
     MatSelectModule,
     MatAutocompleteModule,
+    MatChipsModule,
+    MatButtonToggleModule,
     DragDropModule,
     // AngularForms
     ReactiveFormsModule,
@@ -56,6 +62,10 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
     FlexLayoutModule,
     // Third Party
     MaterialFileInputModule,
+    BrowserModule,
+    FormsModule,
+    ReactiveFormsModule,
+    NgApexchartsModule,
   ],
 })
 export class SharedModule {}

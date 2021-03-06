@@ -27,7 +27,7 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
   constructor(
     private dialogRef: MatDialogRef<AddCardDialogComponent>,
     private dbService: DBService,
-    @Inject(MAT_DIALOG_DATA) public listType: LISTTYPES
+    @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
   ngOnInit(): void {
@@ -102,8 +102,8 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
   addCard() {
     this.dbService.addCard(
       this.selectedPrint!,
-      this.listType,
-      undefined,
+      this.data.listType,
+      this.data.deckId,
       this.amount
     );
     this.close();
