@@ -57,6 +57,9 @@ export class CardsListComponent implements OnInit, OnChanges {
 
   @Output() rerender: EventEmitter<boolean> = new EventEmitter();
 
+  @Input()
+  expanded: boolean = false;
+
   disposer!: IReactionDisposer;
 
   constructor(

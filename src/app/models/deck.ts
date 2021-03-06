@@ -1,5 +1,5 @@
 import { CardAdapter } from './card-adapter';
-import { COLORS, FORMATS } from './enums';
+import { MANACOLORS, FORMATS } from './enums';
 
 export interface Deck {
   id: string;
@@ -8,5 +8,5 @@ export interface Deck {
   format: FORMATS;
   playable: boolean;
   active: boolean;
-  colors: COLORS;
+  colors: MANACOLORS;
 }

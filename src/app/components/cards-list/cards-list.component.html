@@ -35,7 +35,10 @@
     </button>
   </div>
 
-  <div style="overflow-y: auto; max-height: 84%">
+  <div
+    style="overflow-y: auto"
+    [ngStyle]="{ 'max-height': !expanded ? '74%' : '84%' }"
+  >
     <table
       mat-table
       [dataSource]="dataSource"

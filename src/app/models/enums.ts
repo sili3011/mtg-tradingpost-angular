@@ -9,7 +9,7 @@ export enum CURRENCIES {
   USD = 'usd',
 }
 
-export enum COLORS {
+export enum MANACOLORS {
   NONE = '',
   BLUE = 'u',
   WHITE = 'w',
@@ -55,4 +55,24 @@ export enum FORMATS {
   GIANT,
   BLOCK,
   PIONEER,
+}
+
+export enum COLORS {
+  GREEN = 'Green',
+  RED = 'Red',
+  BLACK = 'Black',
+  BLUE = 'Blue',
+  WHITE = 'White',
+  MULTI = 'Multi color',
+  COLORLESS = 'Colorless',
+}
+
+export enum CARDTYPES {
+  CREATURE = 'Creature',
+  INSTANT = 'Instant',
+  SORCERY = 'Sorcery',
+  ENCHANTMENT = 'Enchantment',
+  ARTIFACT = 'Artifact',
+  LAND = 'Land',
+  PLANESWALKER = 'Planeswalker',
 }

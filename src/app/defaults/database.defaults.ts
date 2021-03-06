@@ -1,4 +1,4 @@
-import { COLORS, CURRENCIES, FORMATS } from '../models/enums';
+import { MANACOLORS, CURRENCIES, FORMATS } from '../models/enums';
 import { v4 as uuidv4 } from 'uuid';
 
 export const defaultDB = {
@@ -28,5 +28,5 @@ export const defaultDeck = {
   format: FORMATS.NONE,
   playable: false,
   active: true,
-  colors: COLORS.NONE,
+  colors: MANACOLORS.NONE,
 };

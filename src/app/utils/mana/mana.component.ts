@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
-import { COLORS, FORMATS } from 'src/app/models/enums';
+import { MANACOLORS, FORMATS } from 'src/app/models/enums';
 
 @Component({
   selector: 'mtg-mana',
@@ -32,10 +32,10 @@ export class ManaComponent implements OnChanges {
   sizes = [`2x`, `3x`, `4x`, `5x`, `6x`];
 
   ngOnChanges(changes: SimpleChanges): void {
-    const index = Object.keys(COLORS).indexOf(changes.symbol.currentValue);
+    const index = Object.keys(MANACOLORS).indexOf(changes.symbol.currentValue);
 
     if (index >= 0) {
-      this.symbol = Object.values(COLORS)[index];
+      this.symbol = Object.values(MANACOLORS)[index];
     }
 
     this.render();

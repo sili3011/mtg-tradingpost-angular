@@ -1,4 +1,5 @@
 import { Deck } from '../models/deck';
+import { COLORS } from '../models/enums';
 
 export function deckToCurve(deck: Deck): Array<any> {
   const ret: any[] = [];
@@ -66,4 +67,63 @@ function curveColor(color: Array<string>): string {
     default:
       return '#BEB9B2';
   }
+}
+
+export enum PIECHART {
+  TYPES,
+  COLORS,
+}
+
+export function deckToPie(
+  deck: Deck,
+  labels: Array<string>,
+  type: PIECHART
+): Array<number> {
+  const ret: Array<number> = [];
+  labels.forEach((label) => {
+    if (type === PIECHART.TYPES) {
+      ret.push(
+        deck.cards.filter((card) =>
+          card.type_line.toLowerCase().split(' ').includes(label.toLowerCase())
+        ).length
+      );
+    }
+    if (type === PIECHART.COLORS) {
+      let amount = 0;
+      if (label === COLORS.COLORLESS) {
+        amount = deck.cards.filter(
+          (card) => card.color_identity.join().toLowerCase() === ''
+        ).length;
+      } else if (label === COLORS.MULTI) {
+        amount = deck.cards.filter((card) => card.color_identity.length > 1)
+          .length;
+      } else {
+        let mana = '';
+        switch (label) {
+          case COLORS.GREEN:
+            mana = 'g';
+            break;
+          case COLORS.RED:
+            mana = 'r';
+            break;
+          case COLORS.BLACK:
+            mana = 'b';
+            break;
+          case COLORS.BLUE:
+            mana = 'u';
+            break;
+          case COLORS.WHITE:
+            mana = 'w';
+            break;
+        }
+        amount = deck.cards.filter(
+          (card) =>
+            card.color_identity.length === 1 &&
+            card.color_identity.join().toLowerCase().includes(mana)
+        ).length;
+      }
+      ret.push(amount);
+    }
+  });
+  return ret;
 }
