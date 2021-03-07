@@ -90,7 +90,7 @@
     <div class="detail">{{ deck!.cards.length }} / {{ "X" }}</div>
     <div class="detail">Problems (X)</div>
     <div class="detail">
-      Curve ({{ parseCurveData() }})
+      Curve ( {{ parseCurveData() }} )
       <apx-chart
         [series]="curveSeries"
         [chart]="curveChart"
@@ -103,7 +103,7 @@
       ></apx-chart>
     </div>
     <div class="detail">
-      Distribution (13-10-5 | 10-10)
+      Distribution ( {{ parseColorPieData() }} )
       <div style="padding-top: 10px">
         <apx-chart
           [series]="distSeries"
@@ -113,25 +113,26 @@
           [stroke]="distStroke"
           [labels]="distLabels"
           [fill]="distFill"
+          [tooltip]="distTooltip"
         ></apx-chart>
       </div>
       <div fxLayout="row" style="justify-content: center; margin-top: 5%">
         <button
-          mat-raised-button
-          color="primary"
-          (click)="setCurrentDist(Pies.TYPES)"
-          [disabled]="distType === Pies.TYPES"
-        >
-          Types
-        </button>
-        <span style="width: 2%"></span>
-        <button
-          mat-raised-button
+          mat-button
           color="primary"
           (click)="setCurrentDist(Pies.COLORS)"
           [disabled]="distType === Pies.COLORS"
         >
           Colors
+        </button>
+        <span style="width: 2%"></span>
+        <button
+          mat-button
+          color="primary"
+          (click)="setCurrentDist(Pies.TYPES)"
+          [disabled]="distType === Pies.TYPES"
+        >
+          Types
         </button>
       </div>
     </div>

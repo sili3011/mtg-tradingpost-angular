@@ -23,7 +23,8 @@
     </mat-card-header>
     <mat-card-content class="card-content">
       <mat-card-subtitle>Your assembled decks</mat-card-subtitle>
-      You have 0 decks prepared.
+      You have {{ decks.length }} decks prepared. {{ playableAmount }} ready to
+      play, {{ unplayableAmount }} need your attention.
     </mat-card-content>
   </mat-card>
   <mat-card matRipple class="card">
@@ -35,7 +36,7 @@
     </mat-card-header>
     <mat-card-content class="card-content">
       <mat-card-subtitle>Net worth of your collection</mat-card-subtitle>
-      Your cards have a total value of {{ networth }}.
+      Your cards collection has a total value of {{ networth }}.
     </mat-card-content>
   </mat-card>
   <mat-card matRipple class="card" (click)="goto('wishlist')">

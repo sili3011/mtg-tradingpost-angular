@@ -22,6 +22,7 @@ import {
   LISTTYPES,
   COLORS,
   CARDTYPES,
+  COLORHEXES,
 } from 'src/app/models/enums';
 import { DBService } from 'src/app/services/db.service';
 import { DecksStore } from 'src/app/stores/decks.store';
@@ -86,7 +87,7 @@ export class DeckComponent implements OnInit, OnDestroy {
   // CURVE END
 
   // DISTRIBUTION
-  distType: PIECHART = PIECHART.TYPES;
+  distType: PIECHART = PIECHART.COLORS;
   distChart: ApexChart = {
     height: 250,
     type: 'donut',
@@ -97,17 +98,10 @@ export class DeckComponent implements OnInit, OnDestroy {
   };
   distSeries: Array<number> = [];
   distLegend: ApexLegend = {
+    position: 'bottom',
     labels: { colors: 'white' },
     markers: {
-      fillColors: [
-        '#3d684b',
-        '#c6553e',
-        '#383431',
-        '#3b6ba0',
-        '#ffffff',
-        '#C9B47D',
-        '#BEB9B2',
-      ],
+      fillColors: [...Object.values(COLORHEXES)],
     },
   };
   distDataLabels: ApexDataLabels = { enabled: false };
@@ -118,15 +112,14 @@ export class DeckComponent implements OnInit, OnDestroy {
   ];
   distLabels: Array<string> = [];
   distFill: ApexFill = {
-    colors: [
-      '#3d684b',
-      '#c6553e',
-      '#383431',
-      '#3b6ba0',
-      '#ffffff',
-      '#C9B47D',
-      '#BEB9B2',
-    ],
+    colors: [...Object.values(COLORHEXES)],
+  };
+  distTooltip: ApexTooltip = {
+    theme: 'dark',
+    fillSeriesColor: false,
+    marker: {
+      show: false,
+    },
   };
   // DISTRINUTION END
 
@@ -236,6 +229,111 @@ export class DeckComponent implements OnInit, OnDestroy {
       }
     });
     return ret.join('-');
+  }
+
+  parseColorPieData(): string {
+    let green = 0,
+      red = 0,
+      black = 0,
+      blue = 0,
+      white = 0,
+      multi = 0,
+      coloreless = 0,
+      landG = 0,
+      landR = 0,
+      landB = 0,
+      landU = 0,
+      landW = 0,
+      landM = 0,
+      landC = 0;
+    this.deck?.cards.forEach((card) => {
+      if (card.type_line.toLowerCase().split(' ').includes('land')) {
+        if (card.color_identity.length > 1) {
+          ++landM;
+        } else {
+          if (!card.color_identity[0]) {
+            ++landC;
+            return;
+          }
+          const mana = card.color_identity[0].toLowerCase();
+          switch (mana) {
+            case 'g':
+              ++landG;
+              break;
+            case 'r':
+              ++landR;
+              break;
+            case 'B':
+              ++landB;
+              break;
+            case 'u':
+              ++landU;
+              break;
+            case 'W':
+              ++landW;
+              break;
+            case '':
+              ++landC;
+              break;
+          }
+        }
+      } else {
+        if (card.color_identity.length > 1) {
+          ++multi;
+        } else {
+          if (!card.color_identity[0]) {
+            ++landC;
+            return;
+          }
+          const mana = card.color_identity[0].toLowerCase();
+          switch (mana) {
+            case 'g':
+              ++green;
+              break;
+            case 'r':
+              ++red;
+              break;
+            case 'B':
+              ++black;
+              break;
+            case 'u':
+              ++blue;
+              break;
+            case 'W':
+              ++white;
+              break;
+            case '':
+              ++coloreless;
+              break;
+          }
+        }
+      }
+    });
+    let nonLands =
+      `${green > 0 ? green + '-' : ''}` +
+      `${red > 0 ? red + '-' : ''}` +
+      `${black > 0 ? black + '-' : ''}` +
+      `${blue > 0 ? blue + '-' : ''}` +
+      `${white > 0 ? white + '-' : ''}` +
+      `${multi > 0 ? multi + '-' : ''}` +
+      `${coloreless > 0 ? coloreless : ''}`;
+    let lands =
+      `${landG > 0 ? landG + '-' : ''}` +
+      `${landR > 0 ? landR + '-' : ''}` +
+      `${landB > 0 ? landB + '-' : ''}` +
+      `${landU > 0 ? landU + '-' : ''}` +
+      `${landW > 0 ? landW + '-' : ''}` +
+      `${landM > 0 ? landM + '-' : ''}` +
+      `${landC > 0 ? landC : ''}`;
+    nonLands =
+      nonLands[nonLands.length - 1] === '-'
+        ? nonLands.substr(0, nonLands.length - 1)
+        : nonLands;
+    lands =
+      lands[lands.length - 1] === '-'
+        ? lands.substr(0, lands.length - 1)
+        : lands;
+    return nonLands + ' | ' + lands;
   }
 
   setCurrentDist(dt: PIECHART) {

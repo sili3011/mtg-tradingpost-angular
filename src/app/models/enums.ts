@@ -76,3 +76,13 @@ export enum CARDTYPES {
   LAND = 'Land',
   PLANESWALKER = 'Planeswalker',
 }
+
+export enum COLORHEXES {
+  GREEN = '#3d684b',
+  RED = '#c6553e',
+  BLACK = '#383431',
+  BLUE = '#3b6ba0',
+  WHITE = '#ffffff',
+  MULTI = '#C9B47D',
+  COLORLESS = '#BEB9B2',
+}
