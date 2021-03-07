@@ -114,10 +114,16 @@
           <div style="padding-top: 10px">
             Commander: {{ this.deck!.commander?.name }}
           </div>
-          <img
-            [src]="this.deck!.commander?.image_uris?.small"
-            style="border-radius: 6px"
-          />
+          <div
+            [matTooltip]="imageTooltip(this.deck!.commander)"
+            matTooltipClass="fitToImage"
+            style="padding-top: 10px"
+          >
+            <img
+              [src]="this.deck!.commander?.image_uris?.small"
+              style="border-radius: 6px"
+            />
+          </div>
         </div>
       </div>
     </div>

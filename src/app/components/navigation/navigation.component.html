@@ -47,11 +47,10 @@
             id="{{ deck.id }}"
             cdkDropListConnectedTo="cards"
             (cdkDropListDropped)="dropCardOnDeck($event, deck)"
+            #rla="routerLinkActive"
           >
             <mat-icon
-              [svgIcon]="
-                selectedDeck === deck ? 'window-open' : 'window-closed'
-              "
+              [svgIcon]="rla.isActive ? 'window-open' : 'window-closed'"
             ></mat-icon>
             <span
               [@animateText]="linkText ? 'show' : 'hide'"

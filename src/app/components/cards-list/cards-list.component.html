@@ -205,7 +205,7 @@
           </div>
         </td>
       </ng-container>
-      <ng-container matColumnDef="actions">
+      <ng-container matColumnDef="actions" *ngIf="deck">
         <th mat-header-cell *matHeaderCellDef style="text-align: center">
           Actions
         </th>
@@ -213,32 +213,36 @@
           <div fxLayout="row" style="justify-content: center">
             <button
               mat-icon-button
-              color="primary"
               *ngIf="isCommander()"
               (click)="assignAsCommander(row)"
               [disabled]="!canBeCommander(row)"
+              matTooltip="Assign as commander"
+              matTooltipPosition="left"
             >
-              <mat-icon svgIcon="account-check" color="primary"></mat-icon>
+              <mat-icon
+                svgIcon="account-check"
+                [ngStyle]="{ color: canBeCommander(row) ? 'orange' : 'gray' }"
+              ></mat-icon>
             </button>
             <button
               mat-icon-button
-              color="primary"
               matTooltip="Move to sideboard"
+              matTooltipPosition="right"
               *ngIf="!showSideboard"
               (click)="moveToSideboard(row)"
               [disabled]="true"
             >
-              <mat-icon color="primary"> menu_open </mat-icon>
+              <mat-icon style="color: gray"> menu_open </mat-icon>
             </button>
             <button
               mat-icon-button
-              color="primary"
               matTooltip="Move to main deck"
+              matTooltipPosition="right"
               *ngIf="showSideboard"
               (click)="moveToMainDeck(row)"
               [disabled]="true"
             >
-              <mat-icon color="primary"> menu_open </mat-icon>
+              <mat-icon style="color: gray"> menu_open </mat-icon>
             </button>
           </div>
         </td>

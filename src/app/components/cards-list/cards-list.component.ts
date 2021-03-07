@@ -35,7 +35,6 @@ export class CardsListComponent implements OnInit, OnChanges {
     'cmc',
     'value',
     'amount',
-    'actions',
   ];
   dataSource: MatTableDataSource<CardAdapter>;
 
@@ -89,6 +88,9 @@ export class CardsListComponent implements OnInit, OnChanges {
       this.dataSource = new MatTableDataSource(this.cardsList);
       this.selectedCurrency = this.cardsStore.networth.currency;
       this.decks = this.decksStore.decks.map((d) => d.id);
+      if (this.deck) {
+        this.displayedColumns.push('actions');
+      }
     });
   }
 
@@ -190,10 +192,11 @@ export class CardsListComponent implements OnInit, OnChanges {
   }
 
   canBeCommander(card: CardAdapter): boolean {
-    return card.type_line
-      .toLowerCase()
-      .split(' ')
-      .includes('legendary' && ('creature' || 'planeswalker'));
+    const cardTypes = card.type_line.toLowerCase().split(' ');
+    return (
+      cardTypes.includes('legendary') &&
+      (cardTypes.includes('creature') || cardTypes.includes('planeswalker'))
+    );
   }
 
   assignAsCommander(card: CardAdapter) {

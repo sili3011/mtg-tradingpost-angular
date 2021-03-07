@@ -15,6 +15,7 @@ import {
   ApexYAxis,
 } from 'ng-apexcharts';
 import { Subscription } from 'rxjs';
+import { CardAdapter } from 'src/app/models/card-adapter';
 import { Format, Formats } from 'src/app/models/constants';
 import { Deck } from 'src/app/models/deck';
 import {
@@ -360,7 +361,13 @@ export class DeckComponent implements OnInit, OnDestroy {
     );
   }
 
-  imageTooltip(card: any): string {
-    return imageTooltip(card);
+  imageTooltip(card: CardAdapter | undefined): string {
+    if (card) {
+      if (card.card_faces) {
+        return imageTooltip(card.card_faces[0].image_uris);
+      }
+      return imageTooltip(card.image_uris);
+    }
+    return '';
   }
 }
