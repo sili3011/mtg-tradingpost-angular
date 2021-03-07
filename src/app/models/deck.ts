@@ -9,4 +9,6 @@ export interface Deck {
   playable: boolean;
   active: boolean;
   colors: MANACOLORS;
+  sideboard: Array<CardAdapter>;
+  commander?: CardAdapter;
 }

@@ -87,24 +87,62 @@
     fxLayout="row"
     style="height: calc(100% - 60px); overflow-y: hidden; padding: 0"
   >
-    <div class="detail">{{ deck!.cards.length }} / {{ "X" }}</div>
-    <div class="detail">Problems (X)</div>
+    <div class="detail">
+      Cards (
+      <span
+        [ngStyle]="{
+          color:
+            deck!.cards.length < currentFormat.minCardAmount
+              ? '#f44336'
+              : 'white'
+        }"
+        >{{ deck!.cards.length }}</span
+      >
+      / {{ currentFormat.minCardAmount }} )
+      <div *ngIf="!listExpanded">
+        <div style="padding-top: 10px">
+          Sideboard (
+          <span
+            [ngStyle]="{
+              color: deck!.sideboard.length > 15 ? '#f44336' : 'white'
+            }"
+            >{{ deck!.sideboard.length }}</span
+          >
+          / {{ currentFormat.sideboardMaxCardAmount }} )
+        </div>
+        <div *ngIf="currentFormat.hasCommander">
+          <div style="padding-top: 10px">
+            Commander: {{ this.deck!.commander?.name }}
+          </div>
+          <img
+            [src]="this.deck!.commander?.image_uris?.small"
+            style="border-radius: 6px"
+          />
+        </div>
+      </div>
+    </div>
+    <div class="detail">
+      Problems (X)
+      <div *ngIf="!listExpanded"></div>
+    </div>
     <div class="detail">
       Curve ( {{ parseCurveData() }} )
-      <apx-chart
-        [series]="curveSeries"
-        [chart]="curveChart"
-        [legend]="curveLegend"
-        [dataLabels]="curveLabels"
-        [grid]="curveGrid"
-        [tooltip]="curveTooltip"
-        [xaxis]="curveXaxis"
-        [yaxis]="curveYaxis"
-      ></apx-chart>
+      <div *ngIf="!listExpanded">
+        <apx-chart
+          [series]="curveSeries"
+          [chart]="curveChart"
+          [legend]="curveLegend"
+          [dataLabels]="curveLabels"
+          [grid]="curveGrid"
+          [tooltip]="curveTooltip"
+          [xaxis]="curveXaxis"
+          [yaxis]="curveYaxis"
+        ></apx-chart>
+      </div>
     </div>
     <div class="detail">
       Distribution ( {{ parseColorPieData() }} )
-      <div style="padding-top: 10px">
+      <div style="padding-top: 10px" *ngIf="!listExpanded">
         <apx-chart
           [series]="distSeries"
           [chart]="distChart"

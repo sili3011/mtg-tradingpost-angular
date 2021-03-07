@@ -52,7 +52,7 @@ export enum FORMATS {
   LEGACY,
   VINTAGE,
   BRAWL,
-  GIANT,
+  // GIANT,
   BLOCK,
   PIONEER,
 }

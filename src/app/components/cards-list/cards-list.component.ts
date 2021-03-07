@@ -15,10 +15,11 @@ import { MatTableDataSource } from '@angular/material/table';
 import { IReactionDisposer, autorun } from 'mobx';
 import { CardAdapter } from 'src/app/models/card-adapter';
 import { Deck } from 'src/app/models/deck';
-import { CURRENCIES, LISTTYPES } from 'src/app/models/enums';
+import { CURRENCIES, FORMATS, LISTTYPES } from 'src/app/models/enums';
 import { DBService } from 'src/app/services/db.service';
 import { CardsStore } from 'src/app/stores/cards.store';
 import { DecksStore } from 'src/app/stores/decks.store';
+import { imageTooltip } from 'src/app/utils/utils';
 import { AddCardDialogComponent } from '../dialogs/add-card-dialog/add-card-dialog.component';
 
 @Component({
@@ -34,6 +35,7 @@ export class CardsListComponent implements OnInit, OnChanges {
     'cmc',
     'value',
     'amount',
+    'actions',
   ];
   dataSource: MatTableDataSource<CardAdapter>;
 
@@ -41,6 +43,7 @@ export class CardsListComponent implements OnInit, OnChanges {
   listType!: LISTTYPES;
 
   ListTypes = LISTTYPES;
+  Formats = FORMATS;
 
   @Input()
   deck: Deck | undefined;
@@ -59,6 +62,8 @@ export class CardsListComponent implements OnInit, OnChanges {
 
   @Input()
   expanded: boolean = false;
+
+  showSideboard: boolean = false;
 
   disposer!: IReactionDisposer;
 
@@ -145,10 +150,6 @@ export class CardsListComponent implements OnInit, OnChanges {
     return filtered;
   }
 
-  imageTooltip(image: any): string {
-    return `<img src="${image.normal}" style="border-radius: 25px;">`;
-  }
-
   increment(card: CardAdapter) {
     this.dbService.increment(card, this.listType, this.deck?.id);
     this.rerender.emit(true);
@@ -182,5 +183,30 @@ export class CardsListComponent implements OnInit, OnChanges {
 
   setPageSize(size: number) {
     this.dataSource.paginator?._changePageSize(size);
+  }
+
+  isCommander(): boolean {
+    return this.deck!.format === Object.values(FORMATS)[FORMATS.COMMANDER];
+  }
+
+  canBeCommander(card: CardAdapter): boolean {
+    return card.type_line
+      .toLowerCase()
+      .split(' ')
+      .includes('legendary' && ('creature' || 'planeswalker'));
+  }
+
+  assignAsCommander(card: CardAdapter) {
+    this.deck!.commander = card;
+    this.dbService.setDeck(this.deck!);
+  }
+
+  // TODO
+  moveToSideboard(card: CardAdapter) {}
+
+  moveToMainDeck(card: CardAdapter) {}
+
+  imageTooltip(card: any): string {
+    return imageTooltip(card);
   }
 }

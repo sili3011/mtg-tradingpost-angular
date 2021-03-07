@@ -15,6 +15,7 @@ import {
   ApexYAxis,
 } from 'ng-apexcharts';
 import { Subscription } from 'rxjs';
+import { Format, Formats } from 'src/app/models/constants';
 import { Deck } from 'src/app/models/deck';
 import {
   MANACOLORS,
@@ -26,7 +27,12 @@ import {
 } from 'src/app/models/enums';
 import { DBService } from 'src/app/services/db.service';
 import { DecksStore } from 'src/app/stores/decks.store';
-import { deckToCurve, deckToPie, PIECHART } from 'src/app/utils/utils';
+import {
+  deckToCurve,
+  deckToPie,
+  imageTooltip,
+  PIECHART,
+} from 'src/app/utils/utils';
 import { CardsListComponent } from '../cards-list/cards-list.component';
 import { ConfirmDialogComponent } from '../dialogs/confirm-dialog/confirm-dialog.component';
 
@@ -45,6 +51,8 @@ export class DeckComponent implements OnInit, OnDestroy {
   formatArray = Object.keys(FORMATS)
     .map((key) => FORMATS[parseInt(key)])
     .filter((map) => map !== '' && map !== undefined);
+
+  currentFormat: Format = Formats.find((f) => f.format === FORMATS.STANDARD)!;
 
   // CURVE
   curveChart: ApexChart = {
@@ -162,6 +170,9 @@ export class DeckComponent implements OnInit, OnDestroy {
           colors: this.deck!.colors ? this.deck!.colors : MANACOLORS.NONE,
           isActive: this.deck!.active ? this.deck!.active : false,
         });
+        this.currentFormat = Formats.find(
+          (f) => Object.values(FORMATS)[f.format] === this.deck!.format
+        )!;
         this.curveSeries = deckToCurve(this.deck!);
         this.distLabels = this.distTypeLabelConsts[this.distType];
         this.distSeries = deckToPie(
@@ -175,6 +186,9 @@ export class DeckComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       this.settingsGroup.valueChanges.subscribe((value) => {
         this.deck!.format = value.format;
+        this.currentFormat = Formats.find(
+          (f) => Object.values(FORMATS)[f.format] === this.deck!.format
+        )!;
         this.deck!.colors = value.colors;
         this.deck!.active = value.isActive;
         this.dbService.setDeck(this.deck!);
@@ -344,5 +358,9 @@ export class DeckComponent implements OnInit, OnDestroy {
       this.distTypeLabelConsts[this.distType],
       this.distType
     );
+  }
+
+  imageTooltip(card: any): string {
+    return imageTooltip(card);
   }
 }

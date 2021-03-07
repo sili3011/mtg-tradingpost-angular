@@ -1,6 +1,10 @@
 import { Deck } from '../models/deck';
 import { COLORS } from '../models/enums';
 
+export function imageTooltip(image: any): string {
+  return `<img src="${image.normal}" style="border-radius: 25px;">`;
+}
+
 export function deckToCurve(deck: Deck): Array<any> {
   const ret: any[] = [];
   deck.cards.forEach((card) => {

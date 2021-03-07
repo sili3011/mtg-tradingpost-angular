@@ -29,4 +29,5 @@ export const defaultDeck = {
   playable: false,
   active: true,
   colors: MANACOLORS.NONE,
+  sideboard: [],
 };
