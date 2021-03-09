@@ -92,13 +92,14 @@
       <span
         [ngStyle]="{
           color:
-            deck!.cards.length < currentFormat.minCardAmount
+            deck!.cards.length <
+            (currentFormat ? currentFormat.minCardAmount : 60)
               ? '#f44336'
               : 'white'
         }"
         >{{ deck!.cards.length }}</span
       >
-      / {{ currentFormat.minCardAmount }} )
+      / {{ currentFormat ? currentFormat.minCardAmount : 60 }} )
       <div *ngIf="!listExpanded">
         <div style="padding-top: 10px">
           Sideboard (
@@ -108,12 +109,10 @@
             }"
             >{{ deck!.sideboard.length }}</span
           >
-          / {{ currentFormat.sideboardMaxCardAmount }} )
+          / {{ currentFormat ? currentFormat.sideboardMaxCardAmount : 15 }} )
         </div>
-        <div *ngIf="currentFormat.hasCommander">
-          <div style="padding-top: 10px">
-            Commander: {{ this.deck!.commander?.name }}
-          </div>
+        <div *ngIf="currentFormat?.hasCommander">
+          <div style="padding-top: 10px">Commander:</div>
           <div
             [matTooltip]="imageTooltip(this.deck!.commander)"
             matTooltipClass="fitToImage"
