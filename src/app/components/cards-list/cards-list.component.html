@@ -55,7 +55,10 @@
           *matHeaderCellDef
           mat-sort-header
           [ngStyle]="{
-            color: !deckValidation?.hasNoIllegalCards ? '#f44336' : 'white'
+            color:
+              listType === ListTypes.DECK && !deckValidation?.hasNoIllegalCards
+                ? '#f44336'
+                : 'white'
           }"
         >
           Name
@@ -140,9 +143,11 @@
           mat-header-cell
           *matHeaderCellDef
           [ngStyle]="{
-            color: !deckValidation?.hasNoIllegalColorIdentities
-              ? '#f44336'
-              : 'white'
+            color:
+              listType === ListTypes.DECK &&
+              !deckValidation?.hasNoIllegalColorIdentities
+                ? '#f44336'
+                : 'white'
           }"
         >
           Mana Cost
@@ -215,9 +220,11 @@
           mat-sort-header
           style="justify-content: center"
           [ngStyle]="{
-            color: !deckValidation?.hasLegalAmountOfCopiesOfCards
-              ? '#f44336'
-              : 'white'
+            color:
+              listType === ListTypes.DECK &&
+              !deckValidation?.hasLegalAmountOfCopiesOfCards
+                ? '#f44336'
+                : 'white'
           }"
         >
           Amount
