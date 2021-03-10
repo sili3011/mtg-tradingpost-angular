@@ -45,16 +45,22 @@ export enum MANACOLORS {
 }
 
 export enum FORMATS {
-  NONE,
-  STANDARD,
-  MODERN,
-  COMMANDER,
-  LEGACY,
-  VINTAGE,
   BRAWL,
-  // GIANT,
-  BLOCK,
+  COMMANDER,
+  DUEL,
+  FUTURE,
+  GLADIATOR,
+  HISTORIC,
+  LEGACY,
+  MODERN,
+  OLDSCHOOL,
+  PAUPER,
+  PENNY,
   PIONEER,
+  PREMODERN,
+  STANDARD,
+  VINTAGE,
+  NONE,
 }
 
 export enum COLORS {

@@ -1,5 +1,7 @@
+import { CardAdapter } from '../models/card-adapter';
+import { Format } from '../models/constants';
 import { Deck } from '../models/deck';
-import { COLORS } from '../models/enums';
+import { COLORS, FORMATS } from '../models/enums';
 
 export function imageTooltip(image: any): string {
   return `<img src="${image.normal}" style="border-radius: 25px;">`;
@@ -129,5 +131,130 @@ export function deckToPie(
       ret.push(amount);
     }
   });
+  return ret;
+}
+
+export interface DeckValidation {
+  hasLegalAmountOfCards: boolean;
+  hasNotMoreThanMaximumOfSideboardCards: boolean;
+  hasNoIllegalCards: boolean;
+  illegalCards: Array<CardAdapter>;
+}
+
+export function validateDeck(deck: Deck, format: Format): DeckValidation {
+  let ret: DeckValidation = {
+    hasLegalAmountOfCards: false,
+    hasNotMoreThanMaximumOfSideboardCards: false,
+    hasNoIllegalCards: false,
+    illegalCards: [],
+  };
+  if (
+    (format.format !== FORMATS.COMMANDER &&
+      deck.cards.length > format.minCardAmount) ||
+    (format.format === FORMATS.COMMANDER &&
+      deck.cards.length === format.minCardAmount)
+  ) {
+    ret.hasLegalAmountOfCards = true;
+  }
+  if (deck.sideboard.length <= format.minCardAmount) {
+    ret.hasNotMoreThanMaximumOfSideboardCards = true;
+  }
+  deck.cards.forEach((card) => {
+    let legality = 'not_legal';
+    switch (format.format) {
+      case FORMATS.COMMANDER:
+        legality = card.legalities['commander'];
+        break;
+      case FORMATS.DUEL:
+        legality = card.legalities['duel'];
+        break;
+      case FORMATS.FUTURE:
+        legality = card.legalities['future'];
+        break;
+      case FORMATS.HISTORIC:
+        legality = card.legalities['historic'];
+        break;
+      case FORMATS.LEGACY:
+        legality = card.legalities['legacy'];
+        break;
+      case FORMATS.MODERN:
+        legality = card.legalities['modern'];
+        break;
+      case FORMATS.OLDSCHOOL:
+        legality = card.legalities['oldschool'];
+        break;
+      case FORMATS.PAUPER:
+        legality = card.legalities['pauper'];
+        break;
+      case FORMATS.PENNY:
+        legality = card.legalities['penny'];
+        break;
+      case FORMATS.PIONEER:
+        legality = card.legalities['pioneer'];
+        break;
+      case FORMATS.STANDARD:
+        legality = card.legalities['standard'];
+        break;
+      case FORMATS.VINTAGE:
+        legality = card.legalities['vintage'];
+        break;
+      default:
+        legality = 'legal';
+        break;
+    }
+    if (legality === 'not_legal') {
+      ret.illegalCards.push(card);
+    }
+  });
+  deck.sideboard.forEach((card) => {
+    let legality = 'not_legal';
+    switch (format.format) {
+      case FORMATS.COMMANDER:
+        legality = card.legalities['commander'];
+        break;
+      case FORMATS.DUEL:
+        legality = card.legalities['duel'];
+        break;
+      case FORMATS.FUTURE:
+        legality = card.legalities['future'];
+        break;
+      case FORMATS.HISTORIC:
+        legality = card.legalities['historic'];
+        break;
+      case FORMATS.LEGACY:
+        legality = card.legalities['legacy'];
+        break;
+      case FORMATS.MODERN:
+        legality = card.legalities['modern'];
+        break;
+      case FORMATS.OLDSCHOOL:
+        legality = card.legalities['oldschool'];
+        break;
+      case FORMATS.PAUPER:
+        legality = card.legalities['pauper'];
+        break;
+      case FORMATS.PENNY:
+        legality = card.legalities['penny'];
+        break;
+      case FORMATS.PIONEER:
+        legality = card.legalities['pioneer'];
+        break;
+      case FORMATS.STANDARD:
+        legality = card.legalities['standard'];
+        break;
+      case FORMATS.VINTAGE:
+        legality = card.legalities['vintage'];
+        break;
+      default:
+        legality = 'legal';
+        break;
+    }
+    if (legality === 'not_legal') {
+      ret.illegalCards.push(card);
+    }
+  });
+  if (ret.illegalCards.length === 0) {
+    ret.hasNoIllegalCards = true;
+  }
   return ret;
 }

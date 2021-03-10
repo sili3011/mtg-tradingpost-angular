@@ -127,8 +127,54 @@
       </div>
     </div>
     <div class="detail">
-      Problems (X)
-      <div *ngIf="!listExpanded"></div>
+      Problems (
+      <span
+        [ngStyle]="{
+          color: countProblems() > 0 ? '#f44336' : '#1baf44'
+        }"
+        >{{ countProblems() }}
+      </span>
+      )
+      <div *ngIf="!listExpanded">
+        <div
+          style="padding-top: 10px"
+          *ngIf="deckValidation.hasLegalAmountOfCards"
+        >
+          Has valid amount of cards.
+        </div>
+        <div
+          style="padding-top: 10px"
+          *ngIf="!deckValidation.hasLegalAmountOfCards"
+        >
+          {{ deck!.cards.length }} is not a valid amount of cards in
+          {{ formatArray[currentFormat.format] }}.
+        </div>
+        <div
+          style="padding-top: 10px"
+          *ngIf="deckValidation.hasNotMoreThanMaximumOfSideboardCards"
+        >
+          Has valid amount of cards in sideboard.
+        </div>
+        <div
+          style="padding-top: 10px"
+          *ngIf="!deckValidation.hasNotMoreThanMaximumOfSideboardCards"
+        >
+          {{ deck!.sideboard.length }} is not a valid amount of cards for a
+          sideboard in {{ formatArray[currentFormat.format] }}.
+        </div>
+        <div style="padding-top: 10px" *ngIf="deckValidation.hasNoIllegalCards">
+          Every card in the deck is legal in
+          {{ formatArray[currentFormat.format] }}.
+        </div>
+        <div
+          style="padding-top: 10px"
+          *ngIf="!deckValidation.hasNoIllegalCards"
+          [matTooltip]="illegalCardsList()"
+        >
+          {{ deckValidation.illegalCards.length }} of these cards are illegal in
+          {{ formatArray[currentFormat.format] }}.
+        </div>
+      </div>
     </div>
     <div class="detail">
       Curve ( {{ parseCurveData() }} )

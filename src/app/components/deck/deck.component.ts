@@ -1,9 +1,8 @@
 import {
+  AfterViewChecked,
   Component,
-  OnChanges,
   OnDestroy,
   OnInit,
-  SimpleChanges,
   ViewChild,
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
@@ -38,8 +37,10 @@ import { DecksStore } from 'src/app/stores/decks.store';
 import {
   deckToCurve,
   deckToPie,
+  DeckValidation,
   imageTooltip,
   PIECHART,
+  validateDeck,
 } from 'src/app/utils/utils';
 import { CardsListComponent } from '../cards-list/cards-list.component';
 import { ConfirmDialogComponent } from '../dialogs/confirm-dialog/confirm-dialog.component';
@@ -137,12 +138,18 @@ export class DeckComponent implements OnInit, OnDestroy {
       show: false,
     },
   };
-  // DISTRINUTION END
+  // DISTRIBUTION END
 
   listExpanded: boolean = false;
 
   deckId: string = '';
   deck!: Deck | undefined;
+  deckValidation: DeckValidation = {
+    hasLegalAmountOfCards: false,
+    hasNotMoreThanMaximumOfSideboardCards: false,
+    hasNoIllegalCards: false,
+    illegalCards: [],
+  };
 
   settingsGroup: FormGroup;
 
@@ -181,13 +188,6 @@ export class DeckComponent implements OnInit, OnDestroy {
         this.currentFormat = Formats.find(
           (f) => Object.values(FORMATS)[f.format] === this.deck!.format
         )!;
-        this.curveSeries = deckToCurve(this.deck!);
-        this.distLabels = this.distTypeLabelConsts[this.distType];
-        this.distSeries = deckToPie(
-          this.deck!,
-          this.distTypeLabelConsts[this.distType],
-          this.distType
-        );
       })
     );
 
@@ -241,6 +241,17 @@ export class DeckComponent implements OnInit, OnDestroy {
       this.distTypeLabelConsts[this.distType],
       this.distType
     );
+    if (this.deck!.active) {
+      this.deckValidation = validateDeck(this.deck!, this.currentFormat);
+      const problemsCount = this.countProblems();
+      if (
+        (problemsCount > 0 && this.deck?.playable) ||
+        (problemsCount === 0 && !this.deck?.playable)
+      ) {
+        this.deck!.playable = !this.deck!.playable;
+        this.dbService.setDeck(this.deck!);
+      }
+    }
   }
 
   parseCurveData(): string {
@@ -376,5 +387,27 @@ export class DeckComponent implements OnInit, OnDestroy {
       return imageTooltip(card.image_uris);
     }
     return '';
+  }
+
+  countProblems(): number {
+    let problems = 0;
+    if (!this.deckValidation.hasLegalAmountOfCards) {
+      ++problems;
+    }
+    if (!this.deckValidation.hasNotMoreThanMaximumOfSideboardCards) {
+      ++problems;
+    }
+    if (!this.deckValidation.hasNoIllegalCards) {
+      ++problems;
+    }
+    return problems;
+  }
+
+  illegalCardsList() {
+    let ret = '';
+    this.deckValidation.illegalCards.forEach(
+      (card) => (ret += `<div>${card.name}</div>`)
+    );
+    return ret;
   }
 }

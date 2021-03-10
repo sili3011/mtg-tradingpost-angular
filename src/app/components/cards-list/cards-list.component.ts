@@ -1,4 +1,5 @@
 import {
+  AfterViewInit,
   Component,
   EventEmitter,
   Input,
@@ -27,7 +28,7 @@ import { AddCardDialogComponent } from '../dialogs/add-card-dialog/add-card-dial
   templateUrl: './cards-list.component.html',
   styleUrls: ['./cards-list.component.scss'],
 })
-export class CardsListComponent implements OnInit, OnChanges {
+export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
   displayedColumns: string[] = [
     'name',
     'set',
