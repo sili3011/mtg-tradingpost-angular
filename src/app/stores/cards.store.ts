@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { computed, observable } from 'mobx';
 import { CardAdapter } from '../models/card-adapter';
 import { Networth } from '../services/db.service';
-import { defaultNetworth } from '../defaults/database.defaults';
+import { defaultNetworth } from '../models/defaults';
 import { CURRENCIES } from '../models/enums';
 
 @Injectable({
@@ -37,12 +37,16 @@ export class CardsStore {
     this.collection.forEach((card) => {
       switch (this.networth.currency) {
         case CURRENCIES.EUR:
-          this.networth.value +=
-            parseFloat(card.prices.eur as string) * card.amount;
+          if (card.prices.eur) {
+            this.networth.value +=
+              parseFloat(card.prices.eur as string) * card.amount;
+          }
           break;
         case CURRENCIES.USD:
-          this.networth.value +=
-            parseFloat(card.prices.usd as string) * card.amount;
+          if (card.prices.usd) {
+            this.networth.value +=
+              parseFloat(card.prices.usd as string) * card.amount;
+          }
           break;
       }
     });

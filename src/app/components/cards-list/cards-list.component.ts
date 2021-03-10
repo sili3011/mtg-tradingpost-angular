@@ -1,3 +1,4 @@
+import { CdkVirtualForOf } from '@angular/cdk/scrolling';
 import {
   AfterViewInit,
   Component,
@@ -9,18 +10,20 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
+import { CanDisableCtor } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { IReactionDisposer, autorun } from 'mobx';
 import { CardAdapter } from 'src/app/models/card-adapter';
+import { Format } from 'src/app/models/constants';
 import { Deck } from 'src/app/models/deck';
 import { CURRENCIES, FORMATS, LISTTYPES } from 'src/app/models/enums';
 import { DBService } from 'src/app/services/db.service';
 import { CardsStore } from 'src/app/stores/cards.store';
 import { DecksStore } from 'src/app/stores/decks.store';
-import { imageTooltip } from 'src/app/utils/utils';
+import { DeckValidation, imageTooltip } from 'src/app/utils/utils';
 import { AddCardDialogComponent } from '../dialogs/add-card-dialog/add-card-dialog.component';
 
 @Component({
@@ -49,6 +52,12 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
   deck: Deck | undefined;
 
   decks: Array<string> = [];
+
+  @Input()
+  format: Format | undefined;
+
+  @Input()
+  deckValidation: DeckValidation | undefined;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -212,5 +221,20 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
 
   imageTooltip(card: any): string {
     return imageTooltip(card);
+  }
+
+  isCardIllegal(card: CardAdapter): boolean {
+    return (
+      this.deckValidation?.illegalCards.find((c) => c.id === card.id) !==
+      undefined
+    );
+  }
+
+  isCardIllegalColors(card: CardAdapter): boolean {
+    return (
+      this.deckValidation?.illegalColorIdentities.find(
+        (c) => c.id === card.id
+      ) !== undefined
+    );
   }
 }

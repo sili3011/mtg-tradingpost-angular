@@ -92,12 +92,12 @@
       <span
         [ngStyle]="{
           color:
-            deck!.cards.length <
+            amountOfCardsInDeck(deck!) <
             (currentFormat ? currentFormat.minCardAmount : 60)
               ? '#f44336'
               : 'white'
         }"
-        >{{ deck!.cards.length }}</span
+        >{{ amountOfCardsInDeck(deck!) }}</span
       >
       / {{ currentFormat ? currentFormat.minCardAmount : 60 }} )
       <div *ngIf="!listExpanded">
@@ -130,49 +130,113 @@
       Problems (
       <span
         [ngStyle]="{
-          color: countProblems() > 0 ? '#f44336' : '#1baf44'
+          color: deckValidation.amountOfProblems > 0 ? '#f44336' : '#1baf44'
         }"
-        >{{ countProblems() }}
+        >{{ deckValidation.amountOfProblems }}
       </span>
       )
-      <div *ngIf="!listExpanded">
+      <div *ngIf="!listExpanded && currentFormat">
         <div
           style="padding-top: 10px"
           *ngIf="deckValidation.hasLegalAmountOfCards"
         >
-          Has valid amount of cards.
+          <mat-icon style="color: #1baf44">check</mat-icon>
+          <span class="problem-span"> Has valid amount of cards.</span>
         </div>
         <div
           style="padding-top: 10px"
           *ngIf="!deckValidation.hasLegalAmountOfCards"
         >
-          {{ deck!.cards.length }} is not a valid amount of cards in
-          {{ formatArray[currentFormat.format] }}.
+          <mat-icon style="color: #f44336">clear</mat-icon>
+          <span class="problem-span">
+            {{ amountOfCardsInDeck(deck!) }} is not a valid amount of cards in
+            {{ currentFormat ? formatArray[currentFormat.format] : 0 }}.</span
+          >
+        </div>
+        <div
+          style="padding-top: 10px"
+          *ngIf="deckValidation.hasLegalAmountOfCopiesOfCards"
+        >
+          <mat-icon style="color: #1baf44">check</mat-icon>
+          <span class="problem-span">
+            Has valid amount of copies of cards.</span
+          >
+        </div>
+        <div
+          style="padding-top: 10px"
+          *ngIf="!deckValidation.hasLegalAmountOfCopiesOfCards"
+        >
+          <mat-icon style="color: #f44336">clear</mat-icon>
+          <span class="problem-span">
+            Some cards exceed the copy limit of
+            {{ currentFormat ? currentFormat.maxCopiesOfCards : 0 }} of
+            {{ currentFormat ? formatArray[currentFormat.format] : 0 }}.</span
+          >
         </div>
         <div
           style="padding-top: 10px"
           *ngIf="deckValidation.hasNotMoreThanMaximumOfSideboardCards"
         >
-          Has valid amount of cards in sideboard.
+          <mat-icon style="color: #1baf44">check</mat-icon>
+          <span class="problem-span">
+            Has valid amount of cards in sideboard.</span
+          >
         </div>
         <div
           style="padding-top: 10px"
           *ngIf="!deckValidation.hasNotMoreThanMaximumOfSideboardCards"
         >
-          {{ deck!.sideboard.length }} is not a valid amount of cards for a
-          sideboard in {{ formatArray[currentFormat.format] }}.
+          <mat-icon style="color: #f44336">clear</mat-icon>
+          <span class="problem-span">
+            {{ deck!.sideboard.length }} is not a valid amount of cards for a
+            sideboard in
+            {{ currentFormat ? formatArray[currentFormat.format] : 0 }}.</span
+          >
         </div>
         <div style="padding-top: 10px" *ngIf="deckValidation.hasNoIllegalCards">
-          Every card in the deck is legal in
-          {{ formatArray[currentFormat.format] }}.
+          <mat-icon style="color: #1baf44">check</mat-icon>
+          <span class="problem-span">
+            Every card in the deck is legal in
+            {{ currentFormat ? formatArray[currentFormat.format] : 0 }}.</span
+          >
         </div>
         <div
           style="padding-top: 10px"
           *ngIf="!deckValidation.hasNoIllegalCards"
-          [matTooltip]="illegalCardsList()"
+          [matTooltip]="illegalCardsList(deckValidation.illegalCards)"
         >
-          {{ deckValidation.illegalCards.length }} of these cards are illegal in
-          {{ formatArray[currentFormat.format] }}.
+          <mat-icon style="color: #f44336">clear</mat-icon>
+          <span class="problem-span">
+            {{ deckValidation.illegalCards.length }} of these cards are illegal
+            in {{ formatArray[currentFormat.format] }}.
+          </span>
+        </div>
+        <div
+          style="padding-top: 10px"
+          *ngIf="
+            currentFormat?.mustComplyToColorIdentity &&
+            deckValidation.hasNoIllegalColorIdentities
+          "
+        >
+          <mat-icon style="color: #1baf44">check</mat-icon>
+          <span class="problem-span">
+            Every card in the deck complies to the color rules of
+            {{ formatArray[currentFormat.format] }}.</span
+          >
+        </div>
+        <div
+          style="padding-top: 10px"
+          *ngIf="
+            currentFormat?.mustComplyToColorIdentity &&
+            !deckValidation.hasNoIllegalColorIdentities
+          "
+          [matTooltip]="illegalCardsList(deckValidation.illegalColorIdentities)"
+        >
+          <mat-icon style="color: #f44336">clear</mat-icon>
+          <span class="problem-span">
+            {{ deckValidation.illegalColorIdentities.length }} of these cards
+            are illegal in {{ deck!.colors }}.
+          </span>
         </div>
       </div>
     </div>
@@ -256,6 +320,8 @@
 <mtg-cards-list
   [listType]="ListTypes.DECK"
   [deck]="deck"
+  [format]="currentFormat"
+  [deckValidation]="deckValidation"
   [ngStyle]="{ height: listExpanded ? '83%' : '50%' }"
   (rerender)="rerender()"
   [expanded]="listExpanded"

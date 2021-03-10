@@ -50,7 +50,16 @@
       [cdkDropListConnectedTo]="decks"
     >
       <ng-container matColumnDef="name">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Name</th>
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          mat-sort-header
+          [ngStyle]="{
+            color: !deckValidation?.hasNoIllegalCards ? '#f44336' : 'white'
+          }"
+        >
+          Name
+        </th>
         <td mat-cell *matCellDef="let row">
           <span *ngIf="listType === ListTypes.COLLECTION">
             <span
@@ -92,6 +101,9 @@
               [matTooltip]="imageTooltip(row.image_uris)"
               matTooltipClass="fitToImage"
               *ngIf="!row.card_faces"
+              [ngStyle]="{
+                color: isCardIllegal(row) ? '#f44336' : 'white'
+              }"
               >{{ row.name }}
             </span>
             <span *ngIf="row.card_faces">
@@ -124,35 +136,59 @@
         </td>
       </ng-container>
       <ng-container matColumnDef="mana_cost">
-        <th mat-header-cell *matHeaderCellDef>Mana Cost</th>
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          [ngStyle]="{
+            color: !deckValidation?.hasNoIllegalColorIdentities
+              ? '#f44336'
+              : 'white'
+          }"
+        >
+          Mana Cost
+        </th>
         <td mat-cell *matCellDef="let row">
-          <div fxLayout="row" *ngIf="!row.card_faces">
-            <mtg-mana
-              *ngFor="let mana of manas(row.mana_cost)"
-              [symbol]="mana"
-              [cost]="true"
-              [shadow]="true"
-              [fixed]="true"
-            ></mtg-mana>
-          </div>
-          <div fxLayout="row" *ngIf="row.card_faces">
-            <mtg-mana
-              *ngFor="let mana of manas(row.card_faces[0].mana_cost)"
-              [symbol]="mana"
-              [cost]="true"
-              [shadow]="true"
-              [fixed]="true"
-            ></mtg-mana>
-          </div>
-          <div fxLayout="row" *ngIf="row.card_faces">
-            <mtg-mana
-              *ngFor="let mana of manas(row.card_faces[1].mana_cost)"
-              [symbol]="mana"
-              [cost]="true"
-              [shadow]="true"
-              [fixed]="true"
-            ></mtg-mana>
-          </div>
+          <span fxLayout="row">
+            <div>
+              <div fxLayout="row" *ngIf="!row.card_faces">
+                <mtg-mana
+                  *ngFor="let mana of manas(row.mana_cost)"
+                  [symbol]="mana"
+                  [cost]="true"
+                  [shadow]="true"
+                  [fixed]="true"
+                ></mtg-mana>
+              </div>
+              <div fxLayout="row" *ngIf="row.card_faces">
+                <mtg-mana
+                  *ngFor="let mana of manas(row.card_faces[0].mana_cost)"
+                  [symbol]="mana"
+                  [cost]="true"
+                  [shadow]="true"
+                  [fixed]="true"
+                ></mtg-mana>
+              </div>
+              <div fxLayout="row" *ngIf="row.card_faces">
+                <mtg-mana
+                  *ngFor="let mana of manas(row.card_faces[1].mana_cost)"
+                  [symbol]="mana"
+                  [cost]="true"
+                  [shadow]="true"
+                  [fixed]="true"
+                ></mtg-mana>
+              </div>
+            </div>
+            <div style="width: 100%" *ngIf="isCardIllegalColors(row)">
+              <mat-icon
+                style="color: #f44336; float: right; margin-right: 10px"
+                [ngStyle]="{
+                  'margin-top': row.card_faces?.length > 1 ? '8%' : ''
+                }"
+                matTooltip="This card does not match the decks color identity"
+                >report_problem</mat-icon
+              >
+            </div>
+          </span>
         </td>
       </ng-container>
       <ng-container matColumnDef="cmc">
@@ -178,6 +214,11 @@
           *matHeaderCellDef
           mat-sort-header
           style="justify-content: center"
+          [ngStyle]="{
+            color: !deckValidation?.hasLegalAmountOfCopiesOfCards
+              ? '#f44336'
+              : 'white'
+          }"
         >
           Amount
         </th>
@@ -191,9 +232,16 @@
             >
               <mat-icon color="primary"> remove </mat-icon>
             </button>
-            <span style="margin-top: 1em; margin-bottom: 1em">{{
-              row.amount
-            }}</span>
+            <span
+              style="margin-top: 1em; margin-bottom: 1em"
+              [ngStyle]="{
+                color:
+                  format && row.amount > format.maxCopiesOfCards
+                    ? '#f44336'
+                    : 'white'
+              }"
+              >{{ row.amount }}</span
+            >
             <button
               mat-icon-button
               color="primary"

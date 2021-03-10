@@ -1,10 +1,17 @@
 import { CardAdapter } from '../models/card-adapter';
 import { Format } from '../models/constants';
 import { Deck } from '../models/deck';
-import { COLORS, FORMATS } from '../models/enums';
+import { defaultDeckValidation } from '../models/defaults';
+import { COLORS, FORMATS, MANACOLORS } from '../models/enums';
 
 export function imageTooltip(image: any): string {
   return `<img src="${image.normal}" style="border-radius: 25px;">`;
+}
+
+export function amountOfCardsOfDeck(deck: Deck): number {
+  let cardsCount = 0;
+  deck.cards.forEach((card) => (cardsCount += card.amount));
+  return cardsCount;
 }
 
 export function deckToCurve(deck: Deck): Array<any> {
@@ -135,30 +142,47 @@ export function deckToPie(
 }
 
 export interface DeckValidation {
+  amountOfProblems: number;
   hasLegalAmountOfCards: boolean;
+  hasLegalAmountOfCopiesOfCards: boolean;
   hasNotMoreThanMaximumOfSideboardCards: boolean;
   hasNoIllegalCards: boolean;
   illegalCards: Array<CardAdapter>;
+  hasNoIllegalColorIdentities: boolean;
+  illegalColorIdentities: Array<CardAdapter>;
 }
 
 export function validateDeck(deck: Deck, format: Format): DeckValidation {
-  let ret: DeckValidation = {
-    hasLegalAmountOfCards: false,
-    hasNotMoreThanMaximumOfSideboardCards: false,
-    hasNoIllegalCards: false,
-    illegalCards: [],
-  };
+  let ret: DeckValidation = Object.assign({}, defaultDeckValidation);
+  // VALIDATE CARD AMOUNT
   if (
     (format.format !== FORMATS.COMMANDER &&
-      deck.cards.length > format.minCardAmount) ||
+      amountOfCardsOfDeck(deck) >= format.minCardAmount) ||
     (format.format === FORMATS.COMMANDER &&
       deck.cards.length === format.minCardAmount)
   ) {
     ret.hasLegalAmountOfCards = true;
+    --ret.amountOfProblems;
   }
+  // VALIDATE CARD COPIES
+  let foundTooMany = false;
+  deck.cards.forEach((c) => {
+    if (c.amount > format.maxCopiesOfCards) {
+      foundTooMany = true;
+      return;
+    }
+  });
+  if (!foundTooMany) {
+    ret.hasLegalAmountOfCopiesOfCards = true;
+    --ret.amountOfProblems;
+  }
+  // VALIDATE SIDEBOARD SIZE
   if (deck.sideboard.length <= format.minCardAmount) {
     ret.hasNotMoreThanMaximumOfSideboardCards = true;
+    --ret.amountOfProblems;
   }
+  // VALIDATE CARD LEGALITY
+  ret.illegalCards = [];
   deck.cards.forEach((card) => {
     let legality = 'not_legal';
     switch (format.format) {
@@ -202,7 +226,7 @@ export function validateDeck(deck: Deck, format: Format): DeckValidation {
         legality = 'legal';
         break;
     }
-    if (legality === 'not_legal') {
+    if (legality !== 'legal') {
       ret.illegalCards.push(card);
     }
   });
@@ -249,12 +273,33 @@ export function validateDeck(deck: Deck, format: Format): DeckValidation {
         legality = 'legal';
         break;
     }
-    if (legality === 'not_legal') {
+    if (legality !== 'legal') {
       ret.illegalCards.push(card);
     }
   });
   if (ret.illegalCards.length === 0) {
     ret.hasNoIllegalCards = true;
+    --ret.amountOfProblems;
+  }
+  // VALIDATE COLOR IDENTITIES
+  ret.illegalColorIdentities = [];
+  if (format.mustComplyToColorIdentity) {
+    deck.cards.forEach((card) => {
+      card.color_identity.forEach((color) => {
+        if (
+          !MANACOLORS[
+            (deck.colors as unknown) as keyof typeof MANACOLORS
+          ].includes(color.toLowerCase())
+        ) {
+          ret.illegalColorIdentities.push(card);
+          return;
+        }
+      });
+    });
+  }
+  if (ret.illegalColorIdentities.length === 0) {
+    ret.hasNoIllegalColorIdentities = true;
+    --ret.amountOfProblems;
   }
   return ret;
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { autorun, IReactionDisposer } from 'mobx';
-import { defaultNetworth } from 'src/app/defaults/database.defaults';
+import { defaultNetworth } from 'src/app/models/defaults';
 import { Deck } from 'src/app/models/deck';
 import { Networth } from 'src/app/services/db.service';
 import { CardsStore } from 'src/app/stores/cards.store';

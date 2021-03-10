@@ -3,7 +3,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { autorun, IReactionDisposer } from 'mobx';
 import { Subject, Subscription } from 'rxjs';
 import { onSideNavChange, animateText } from 'src/app/animations/animations';
-import { defaultDeck } from 'src/app/defaults/database.defaults';
+import { defaultDeck } from 'src/app/models/defaults';
 import { Deck } from 'src/app/models/deck';
 import { LISTTYPES } from 'src/app/models/enums';
 import { DBService } from 'src/app/services/db.service';

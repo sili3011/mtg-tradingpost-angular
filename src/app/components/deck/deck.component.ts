@@ -1,5 +1,5 @@
 import {
-  AfterViewChecked,
+  ChangeDetectorRef,
   Component,
   OnDestroy,
   OnInit,
@@ -24,6 +24,7 @@ import { Subscription } from 'rxjs';
 import { CardAdapter } from 'src/app/models/card-adapter';
 import { Format, Formats } from 'src/app/models/constants';
 import { Deck } from 'src/app/models/deck';
+import { defaultDeckValidation } from 'src/app/models/defaults';
 import {
   MANACOLORS,
   FORMATS,
@@ -35,6 +36,7 @@ import {
 import { DBService } from 'src/app/services/db.service';
 import { DecksStore } from 'src/app/stores/decks.store';
 import {
+  amountOfCardsOfDeck,
   deckToCurve,
   deckToPie,
   DeckValidation,
@@ -100,7 +102,14 @@ export class DeckComponent implements OnInit, OnDestroy {
     axisBorder: { show: false },
     axisTicks: { show: false },
   };
-  curveYaxis: ApexYAxis = { labels: { style: { colors: 'gray' } } };
+  curveYaxis: ApexYAxis = {
+    labels: {
+      style: { colors: 'gray' },
+      formatter: function (val) {
+        return val.toFixed(0);
+      },
+    },
+  };
   // CURVE END
 
   // DISTRIBUTION
@@ -144,12 +153,7 @@ export class DeckComponent implements OnInit, OnDestroy {
 
   deckId: string = '';
   deck!: Deck | undefined;
-  deckValidation: DeckValidation = {
-    hasLegalAmountOfCards: false,
-    hasNotMoreThanMaximumOfSideboardCards: false,
-    hasNoIllegalCards: false,
-    illegalCards: [],
-  };
+  deckValidation: DeckValidation = Object.assign({}, defaultDeckValidation);
 
   settingsGroup: FormGroup;
 
@@ -164,7 +168,8 @@ export class DeckComponent implements OnInit, OnDestroy {
     private decksStore: DecksStore,
     private dbService: DBService,
     private dialog: MatDialog,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private cd: ChangeDetectorRef
   ) {
     this.settingsGroup = this.fb.group({
       format: [this.deck && this.deck.format ? this.deck.format : FORMATS.NONE],
@@ -188,6 +193,7 @@ export class DeckComponent implements OnInit, OnDestroy {
         this.currentFormat = Formats.find(
           (f) => Object.values(FORMATS)[f.format] === this.deck!.format
         )!;
+        this.cd.detectChanges();
       })
     );
 
@@ -241,12 +247,11 @@ export class DeckComponent implements OnInit, OnDestroy {
       this.distTypeLabelConsts[this.distType],
       this.distType
     );
-    if (this.deck!.active) {
+    if (this.currentFormat) {
       this.deckValidation = validateDeck(this.deck!, this.currentFormat);
-      const problemsCount = this.countProblems();
       if (
-        (problemsCount > 0 && this.deck?.playable) ||
-        (problemsCount === 0 && !this.deck?.playable)
+        (this.deckValidation.amountOfProblems > 0 && this.deck?.playable) ||
+        (this.deckValidation.amountOfProblems === 0 && !this.deck?.playable)
       ) {
         this.deck!.playable = !this.deck!.playable;
         this.dbService.setDeck(this.deck!);
@@ -389,25 +394,13 @@ export class DeckComponent implements OnInit, OnDestroy {
     return '';
   }
 
-  countProblems(): number {
-    let problems = 0;
-    if (!this.deckValidation.hasLegalAmountOfCards) {
-      ++problems;
-    }
-    if (!this.deckValidation.hasNotMoreThanMaximumOfSideboardCards) {
-      ++problems;
-    }
-    if (!this.deckValidation.hasNoIllegalCards) {
-      ++problems;
-    }
-    return problems;
+  illegalCardsList(cards: Array<CardAdapter>) {
+    let ret = '';
+    cards.forEach((card) => (ret += `<div>${card.name}</div>`));
+    return ret;
   }
 
-  illegalCardsList() {
-    let ret = '';
-    this.deckValidation.illegalCards.forEach(
-      (card) => (ret += `<div>${card.name}</div>`)
-    );
-    return ret;
+  amountOfCardsInDeck(deck: Deck): number {
+    return amountOfCardsOfDeck(deck);
   }
 }

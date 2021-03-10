@@ -1,4 +1,4 @@
-import { MANACOLORS, CURRENCIES, FORMATS } from '../models/enums';
+import { MANACOLORS, CURRENCIES, FORMATS } from './enums';
 import { v4 as uuidv4 } from 'uuid';
 
 export const defaultDB = {
@@ -30,4 +30,15 @@ export const defaultDeck = {
   active: true,
   colors: MANACOLORS.NONE,
   sideboard: [],
+};
+
+export const defaultDeckValidation = {
+  amountOfProblems: 5,
+  hasLegalAmountOfCards: false,
+  hasLegalAmountOfCopiesOfCards: false,
+  hasNotMoreThanMaximumOfSideboardCards: false,
+  hasNoIllegalCards: false,
+  illegalCards: [],
+  hasNoIllegalColorIdentities: false,
+  illegalColorIdentities: [],
 };
