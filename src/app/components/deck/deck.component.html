@@ -310,6 +310,14 @@
           <mat-icon style="color: #f44336">clear</mat-icon>
           <span class="problem-span"> You need to assign a commander. </span>
         </div>
+        <div style="padding-top: 10px" *ngIf="deck!.companion">
+          <mat-icon style="color: #deda1b">priority_high</mat-icon>
+          <span class="problem-span">
+            A companion is assigned. While there is no automated validation for
+            their restrictions, please make sure you comply to their
+            rules.</span
+          >
+        </div>
       </div>
     </div>
     <div class="detail">
