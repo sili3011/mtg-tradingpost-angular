@@ -314,7 +314,7 @@
             </button>
             <button
               mat-icon-button
-              *ngIf="!canBeCommander(row)"
+              *ngIf="isCommander() && !canBeCommander(row)"
               [disabled]="true"
             ></button>
             <button
