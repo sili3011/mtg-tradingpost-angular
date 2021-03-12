@@ -203,7 +203,7 @@
         <div
           style="padding-top: 10px"
           *ngIf="!deckValidation.hasNoIllegalCards"
-          [matTooltip]="illegalCardsList(deckValidation.illegalCards)"
+          [matTooltip]="cardsListToHTMLList(deckValidation.illegalCards)"
         >
           <mat-icon style="color: #f44336">clear</mat-icon>
           <span class="problem-span">
@@ -230,12 +230,31 @@
             currentFormat?.mustComplyToColorIdentity &&
             !deckValidation.hasNoIllegalColorIdentities
           "
-          [matTooltip]="illegalCardsList(deckValidation.illegalColorIdentities)"
+          [matTooltip]="
+            cardsListToHTMLList(deckValidation.illegalColorIdentities)
+          "
         >
           <mat-icon style="color: #f44336">clear</mat-icon>
           <span class="problem-span">
             {{ deckValidation.illegalColorIdentities.length }} of these cards
             are illegal in {{ deck!.colors }}.
+          </span>
+        </div>
+        <div style="padding-top: 10px" *ngIf="missingCards.length === 0">
+          <mat-icon style="color: #1baf44">check</mat-icon>
+          <span class="problem-span">
+            You own enough copies of all of the cards in this deck.</span
+          >
+        </div>
+        <div
+          style="padding-top: 10px"
+          *ngIf="missingCards.length > 0"
+          [matTooltip]="cardsListToHTMLList(missingCards)"
+        >
+          <mat-icon style="color: #f44336">clear</mat-icon>
+          <span class="problem-span">
+            You dont own enough copies of {{ missingCards.length }} of the cards
+            included in this deck.
           </span>
         </div>
       </div>
@@ -322,6 +341,7 @@
   [deck]="deck"
   [format]="currentFormat"
   [deckValidation]="deckValidation"
+  [missingCards]="missingCards"
   [ngStyle]="{ height: listExpanded ? '83%' : '50%' }"
   (rerender)="rerender()"
   [expanded]="listExpanded"

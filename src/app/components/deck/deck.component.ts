@@ -34,6 +34,7 @@ import {
   COLORHEXES,
 } from 'src/app/models/enums';
 import { DBService } from 'src/app/services/db.service';
+import { CardsStore } from 'src/app/stores/cards.store';
 import { DecksStore } from 'src/app/stores/decks.store';
 import {
   amountOfCardsOfDeck,
@@ -155,6 +156,8 @@ export class DeckComponent implements OnInit, OnDestroy {
   deck!: Deck | undefined;
   deckValidation: DeckValidation = Object.assign({}, defaultDeckValidation);
 
+  missingCards: Array<CardAdapter> = [];
+
   settingsGroup: FormGroup;
 
   settingsExpanded: boolean = false;
@@ -165,6 +168,7 @@ export class DeckComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
+    private cardsStore: CardsStore,
     private decksStore: DecksStore,
     private dbService: DBService,
     private dialog: MatDialog,
@@ -256,6 +260,12 @@ export class DeckComponent implements OnInit, OnDestroy {
         this.deck!.playable = !this.deck!.playable;
         this.dbService.setDeck(this.deck!);
       }
+    }
+    this.missingCards = this.cardsStore.missingCards.filter((c) =>
+      this.deck!.cards.map((card) => card.id).includes(c.id)
+    );
+    if (this.missingCards.length > 0) {
+      ++this.deckValidation.amountOfProblems;
     }
   }
 
@@ -394,7 +404,7 @@ export class DeckComponent implements OnInit, OnDestroy {
     return '';
   }
 
-  illegalCardsList(cards: Array<CardAdapter>) {
+  cardsListToHTMLList(cards: Array<CardAdapter>) {
     let ret = '';
     cards.forEach((card) => (ret += `<div>${card.name}</div>`));
     return ret;

@@ -4,6 +4,7 @@ import { CardAdapter } from '../models/card-adapter';
 import { Networth } from '../services/db.service';
 import { defaultNetworth } from '../models/defaults';
 import { CURRENCIES } from '../models/enums';
+import { DecksStore } from './decks.store';
 
 @Injectable({
   providedIn: 'root',
@@ -12,6 +13,8 @@ export class CardsStore {
   @observable collection: Array<CardAdapter> = [];
   @observable wishlist: Array<CardAdapter> = [];
   @observable networth: Networth = defaultNetworth;
+
+  constructor(private decksStore: DecksStore) {}
 
   @computed get uniqueCardsCount() {
     return this.collection.length;
@@ -59,5 +62,30 @@ export class CardsStore {
     return '';
   }
 
-  constructor() {}
+  @computed get missingCards() {
+    const neededCards: Array<CardAdapter> = [];
+    this.decksStore.decks.forEach((deck) =>
+      deck.cards.forEach((card) => {
+        const found = neededCards.find((c) => c.id === card.id);
+        if (found) {
+          found.amount += card.amount;
+        } else {
+          neededCards.push(Object.assign({}, card));
+        }
+      })
+    );
+    const missingCards: Array<CardAdapter> = [];
+    neededCards.forEach((card) => {
+      const found = this.collection.find((c) => c.id === card.id);
+      if (found) {
+        if (card.amount - found.amount <= 0) {
+          return;
+        } else {
+          card.amount -= found.amount;
+        }
+      }
+      missingCards.push(card);
+    });
+    return missingCards;
+  }
 }

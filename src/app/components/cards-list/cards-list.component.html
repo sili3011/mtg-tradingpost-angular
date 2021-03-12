@@ -261,7 +261,17 @@
         </td>
       </ng-container>
       <ng-container matColumnDef="actions" *ngIf="deck">
-        <th mat-header-cell *matHeaderCellDef style="text-align: center">
+        <th
+          mat-header-cell
+          *matHeaderCellDef
+          style="text-align: center"
+          [ngStyle]="{
+            color:
+              listType === ListTypes.DECK && missingCards.length > 0
+                ? '#f44336'
+                : 'white'
+          }"
+        >
           Actions
         </th>
         <td mat-cell *matCellDef="let row">
@@ -272,7 +282,6 @@
               (click)="assignAsCommander(row)"
               [disabled]="!canBeCommander(row)"
               matTooltip="Assign as commander"
-              matTooltipPosition="left"
             >
               <mat-icon
                 svgIcon="account-check"
@@ -282,7 +291,6 @@
             <button
               mat-icon-button
               matTooltip="Move to sideboard"
-              matTooltipPosition="right"
               *ngIf="!showSideboard"
               (click)="moveToSideboard(row)"
               [disabled]="true"
@@ -292,12 +300,25 @@
             <button
               mat-icon-button
               matTooltip="Move to main deck"
-              matTooltipPosition="right"
               *ngIf="showSideboard"
               (click)="moveToMainDeck(row)"
               [disabled]="true"
             >
               <mat-icon style="color: gray"> menu_open </mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              matTooltip="Move to main deck"
+              (click)="moveToWishlist(row)"
+            >
+              <mat-icon
+                color="primary"
+                [ngStyle]="{
+                  color: !isCardInMissingCards(row) ? '' : '#f44336'
+                }"
+              >
+                post_add
+              </mat-icon>
             </button>
           </div>
         </td>

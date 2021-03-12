@@ -1,4 +1,3 @@
-import { CdkVirtualForOf } from '@angular/cdk/scrolling';
 import {
   AfterViewInit,
   Component,
@@ -10,7 +9,6 @@ import {
   SimpleChanges,
   ViewChild,
 } from '@angular/core';
-import { CanDisableCtor } from '@angular/material/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -58,6 +56,9 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
 
   @Input()
   deckValidation: DeckValidation | undefined;
+
+  @Input()
+  missingCards: Array<CardAdapter> = [];
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
@@ -219,6 +220,8 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
 
   moveToMainDeck(card: CardAdapter) {}
 
+  moveToWishlist(card: CardAdapter) {}
+
   imageTooltip(card: any): string {
     return imageTooltip(card);
   }
@@ -236,5 +239,9 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
         (c) => c.id === card.id
       ) !== undefined
     );
+  }
+
+  isCardInMissingCards(card: CardAdapter) {
+    return this.missingCards.map((card) => card.id).includes(card.id);
   }
 }
