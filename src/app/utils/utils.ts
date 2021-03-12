@@ -150,6 +150,7 @@ export interface DeckValidation {
   illegalCards: Array<CardAdapter>;
   hasNoIllegalColorIdentities: boolean;
   illegalColorIdentities: Array<CardAdapter>;
+  needsCommander: boolean;
 }
 
 export function validateDeck(deck: Deck, format: Format): DeckValidation {
@@ -300,6 +301,11 @@ export function validateDeck(deck: Deck, format: Format): DeckValidation {
   if (ret.illegalColorIdentities.length === 0) {
     ret.hasNoIllegalColorIdentities = true;
     --ret.amountOfProblems;
+  }
+  // VALIDATE COMMANDER
+  if (format.hasCommander && !deck.commander) {
+    ret.needsCommander = true;
+    ++ret.amountOfProblems;
   }
   return ret;
 }

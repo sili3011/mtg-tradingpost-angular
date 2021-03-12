@@ -215,6 +215,20 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
     this.dbService.setDeck(this.deck!);
   }
 
+  canBeCompanion(card: any): boolean {
+    return card.keywords.includes('Companion');
+  }
+
+  assignAsCompanion(card: CardAdapter) {
+    this.deck!.companion = card;
+    this.dbService.setDeck(this.deck!);
+  }
+
+  deassignAsCompanion() {
+    this.deck!.companion = undefined;
+    this.dbService.setDeck(this.deck!);
+  }
+
   // TODO
   moveToSideboard(card: CardAdapter) {}
 

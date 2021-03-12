@@ -164,6 +164,8 @@ export class DeckComponent implements OnInit, OnDestroy {
 
   @ViewChild(CardsListComponent) cardsList!: CardsListComponent;
 
+  hover: 'comm' | 'comp' = 'comm';
+
   subscriptions: Subscription = new Subscription();
 
   constructor(
@@ -412,5 +414,9 @@ export class DeckComponent implements OnInit, OnDestroy {
 
   amountOfCardsInDeck(deck: Deck): number {
     return amountOfCardsOfDeck(deck);
+  }
+
+  setHover(hovered: 'comm' | 'comp') {
+    this.hover = hovered;
   }
 }

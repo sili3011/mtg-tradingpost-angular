@@ -278,24 +278,55 @@
           <div fxLayout="row" style="justify-content: center">
             <button
               mat-icon-button
-              *ngIf="isCommander()"
-              (click)="assignAsCommander(row)"
-              [disabled]="!canBeCommander(row)"
-              matTooltip="Assign as commander"
-            >
-              <mat-icon
-                svgIcon="account-check"
-                [ngStyle]="{ color: canBeCommander(row) ? 'orange' : 'gray' }"
-              ></mat-icon>
-            </button>
-            <button
-              mat-icon-button
               matTooltip="Move to sideboard"
               *ngIf="!showSideboard"
               (click)="moveToSideboard(row)"
               [disabled]="true"
             >
               <mat-icon style="color: gray"> menu_open </mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              *ngIf="!canBeCompanion(row)"
+              [disabled]="true"
+            ></button>
+            <button
+              mat-icon-button
+              (click)="assignAsCompanion(row)"
+              *ngIf="canBeCompanion(row) && row.id !== deck.companion?.id"
+              matTooltip="Assign as companion"
+            >
+              <mat-icon
+                svgIcon="paw"
+                [ngStyle]="{ color: canBeCompanion(row) ? 'orange' : 'gray' }"
+              ></mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              (click)="deassignAsCompanion()"
+              *ngIf="canBeCompanion(row) && row.id === deck.companion?.id"
+              matTooltip="Assign as companion"
+            >
+              <mat-icon
+                svgIcon="paw-off"
+                [ngStyle]="{ color: canBeCompanion(row) ? 'orange' : 'gray' }"
+              ></mat-icon>
+            </button>
+            <button
+              mat-icon-button
+              *ngIf="!canBeCommander(row)"
+              [disabled]="true"
+            ></button>
+            <button
+              mat-icon-button
+              *ngIf="isCommander() && canBeCommander(row)"
+              (click)="assignAsCommander(row)"
+              matTooltip="Assign as commander"
+            >
+              <mat-icon
+                svgIcon="account-check"
+                [ngStyle]="{ color: canBeCommander(row) ? 'orange' : 'gray' }"
+              ></mat-icon>
             </button>
             <button
               mat-icon-button

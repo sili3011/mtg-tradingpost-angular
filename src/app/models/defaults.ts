@@ -41,4 +41,5 @@ export const defaultDeckValidation = {
   illegalCards: [],
   hasNoIllegalColorIdentities: false,
   illegalColorIdentities: [],
+  needsCommander: false,
 };

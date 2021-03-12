@@ -11,4 +11,5 @@ export interface Deck {
   colors: MANACOLORS;
   sideboard: Array<CardAdapter>;
   commander?: CardAdapter;
+  companion?: CardAdapter;
 }

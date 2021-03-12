@@ -111,17 +111,56 @@
           >
           / {{ currentFormat ? currentFormat.sideboardMaxCardAmount : 15 }} )
         </div>
-        <div *ngIf="currentFormat?.hasCommander">
-          <div style="padding-top: 10px">Commander:</div>
+        <div fxLayout="row">
           <div
-            [matTooltip]="imageTooltip(this.deck!.commander)"
-            matTooltipClass="fitToImage"
-            style="padding-top: 10px"
+            *ngIf="currentFormat?.hasCommander"
+            style="position: absolute"
+            [ngStyle]="{
+              'z-index': hover === 'comm' ? 99 : 0
+            }"
           >
-            <img
-              [src]="this.deck!.commander?.image_uris?.small"
-              style="border-radius: 6px"
-            />
+            <div style="padding-top: 10px">
+              Commander<span *ngIf="deck!.companion">/Companion</span>:
+            </div>
+            <div
+              [matTooltip]="imageTooltip(this.deck!.commander)"
+              [matTooltipShowDelay]="1000"
+              matTooltipClass="fitToImage"
+              style="padding-top: 10px"
+            >
+              <img
+                [src]="this.deck!.commander?.image_uris?.small"
+                style="border-radius: 6px"
+                (mouseenter)="setHover('comm')"
+              />
+            </div>
+          </div>
+          <div
+            *ngIf="deck!.companion"
+            style="position: absolute"
+            [ngStyle]="{
+              'margin-left': currentFormat?.hasCommander ? '35px' : '',
+              'z-index': hover === 'comp' ? 99 : 0
+            }"
+          >
+            <div style="padding-top: 10px">
+              <span *ngIf="currentFormat?.hasCommander">&nbsp;</span>
+              <span *ngIf="!currentFormat?.hasCommander && deck!.companion">
+                Companion:</span
+              >
+            </div>
+            <div
+              [matTooltip]="imageTooltip(this.deck!.companion)"
+              [matTooltipShowDelay]="1000"
+              matTooltipClass="fitToImage"
+              style="padding-top: 10px"
+            >
+              <img
+                src="https://c1.scryfall.com/file/scryfall-cards/small/front/5/a/5ad36fb2-c44e-4085-ba0d-54277841ad3a.jpg?1613387006"
+                style="border-radius: 6px"
+                (mouseenter)="setHover('comp')"
+              />
+            </div>
           </div>
         </div>
       </div>
@@ -256,6 +295,20 @@
             You dont own enough copies of {{ missingCards.length }} of the cards
             included in this deck.
           </span>
+        </div>
+        <div
+          style="padding-top: 10px"
+          *ngIf="currentFormat.hasCommander && !deckValidation.needsCommander"
+        >
+          <mat-icon style="color: #1baf44">check</mat-icon>
+          <span class="problem-span"> A commander is assigned.</span>
+        </div>
+        <div
+          style="padding-top: 10px"
+          *ngIf="currentFormat.hasCommander && deckValidation.needsCommander"
+        >
+          <mat-icon style="color: #f44336">clear</mat-icon>
+          <span class="problem-span"> You need to assign a commander. </span>
         </div>
       </div>
     </div>
