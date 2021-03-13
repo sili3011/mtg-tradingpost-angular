@@ -50,7 +50,37 @@
       <mat-card-subtitle>
         Manage a list of cards you want to buy in future
       </mat-card-subtitle>
-      Your most wanted:
+      <span *ngIf="!mostWanted"></span
+      ><span *ngIf="mostWanted"
+        >Your most wanted is
+        <span
+          *ngIf="!mostWanted.card_faces"
+          [matTooltip]="imageTooltip(mostWanted.image_uris)"
+          matTooltipClass="fitToImage"
+          >{{ mostWanted.name }}</span
+        >
+        <span *ngIf="mostWanted.card_faces">
+          <span
+            [matTooltip]="imageTooltip(mostWanted.card_faces[0].image_uris)"
+            matTooltipClass="fitToImage"
+            >{{ mostWanted.card_faces[0].name }}
+          </span>
+          |
+          <span
+            [matTooltip]="imageTooltip(mostWanted.card_faces[1].image_uris)"
+            matTooltipClass="fitToImage"
+          >
+            {{ mostWanted.card_faces[1].name }}</span
+          >
+        </span>
+        . It's currently at
+        <span *ngIf="selectedCurrency === Currencies.EUR"
+          >{{ mostWanted.prices.eur }}€</span
+        >
+        <span *ngIf="selectedCurrency === Currencies.USD"
+          >{{ mostWanted.prices.usd }}$</span
+        ></span
+      >
     </mat-card-content>
   </mat-card>
   <mat-card matRipple class="card">

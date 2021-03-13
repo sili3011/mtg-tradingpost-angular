@@ -48,6 +48,7 @@
       cdkDropList
       id="cards"
       [cdkDropListConnectedTo]="decks"
+      (cdkDropListDropped)="dropCard($event)"
     >
       <ng-container matColumnDef="name">
         <th
@@ -64,7 +65,13 @@
           Name
         </th>
         <td mat-cell *matCellDef="let row">
-          <span *ngIf="listType === ListTypes.COLLECTION">
+          <span
+            *ngIf="
+              listType === ListTypes.COLLECTION ||
+              listType === ListTypes.WISHLIST
+            "
+            style="cursor: grab"
+          >
             <span
               [matTooltip]="imageTooltip(row.image_uris)"
               matTooltipClass="fitToImage"
@@ -99,7 +106,12 @@
               />
             </span>
           </span>
-          <span *ngIf="listType !== ListTypes.COLLECTION">
+          <span
+            *ngIf="
+              listType !== ListTypes.COLLECTION &&
+              listType !== ListTypes.WISHLIST
+            "
+          >
             <span
               [matTooltip]="imageTooltip(row.image_uris)"
               matTooltipClass="fitToImage"

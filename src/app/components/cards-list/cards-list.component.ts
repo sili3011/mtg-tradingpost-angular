@@ -1,3 +1,4 @@
+import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import {
   AfterViewInit,
   Component,
@@ -90,6 +91,7 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
     this.disposer = autorun(() => {
       switch (this.listType) {
         case LISTTYPES.COLLECTION:
+          this.decks = this.decksStore.decks.map((d) => d.id);
           this.cardsList = this.cardsStore.collection;
           break;
         case LISTTYPES.WISHLIST:
@@ -98,7 +100,6 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
       }
       this.dataSource = new MatTableDataSource(this.cardsList);
       this.selectedCurrency = this.cardsStore.networth.currency;
-      this.decks = this.decksStore.decks.map((d) => d.id);
       if (this.deck) {
         this.displayedColumns.push('actions');
       }
@@ -257,5 +258,17 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
 
   isCardInMissingCards(card: CardAdapter) {
     return this.missingCards.map((card) => card.id).includes(card.id);
+  }
+
+  dropCard(event: CdkDragDrop<CardAdapter[]>) {
+    if (this.listType === LISTTYPES.WISHLIST) {
+      console.log(event.previousIndex, event.currentIndex);
+      moveItemInArray(
+        this.dataSource.data,
+        event.previousIndex,
+        event.currentIndex
+      );
+      this.reapplyDatasource();
+    }
   }
 }

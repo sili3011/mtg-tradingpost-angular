@@ -7,6 +7,9 @@ import { Networth } from 'src/app/services/db.service';
 import { CardsStore } from 'src/app/stores/cards.store';
 import { DecksStore } from 'src/app/stores/decks.store';
 import { UserStore } from 'src/app/stores/user.store';
+import { CardAdapter } from 'src/app/models/card-adapter';
+import { CURRENCIES } from 'src/app/models/enums';
+import { imageTooltip } from 'src/app/utils/utils';
 
 @Component({
   selector: 'mtg-dashboard',
@@ -24,6 +27,9 @@ export class DashboardComponent implements OnInit {
   decks: Array<Deck> = [];
   playableAmount: number = 0;
   unplayableAmount: number = 0;
+  mostWanted?: CardAdapter;
+  selectedCurrency!: CURRENCIES;
+  Currencies = CURRENCIES;
 
   disposer!: IReactionDisposer;
 
@@ -44,6 +50,8 @@ export class DashboardComponent implements OnInit {
       this.decks = this.decksStore.decks;
       this.playableAmount = this.decks.filter((d) => d.playable).length;
       this.unplayableAmount = this.decks.filter((d) => !d.playable).length;
+      this.mostWanted = this.cardsStore.wishlist[0];
+      this.selectedCurrency = this.cardsStore.networth.currency;
     });
   }
 
@@ -53,5 +61,9 @@ export class DashboardComponent implements OnInit {
 
   goto(name: string) {
     this.router.navigate([`/${name}`]);
+  }
+
+  imageTooltip(card: any): string {
+    return imageTooltip(card);
   }
 }
