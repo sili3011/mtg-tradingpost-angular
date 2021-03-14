@@ -179,12 +179,21 @@
       </div>
     </div>
     <div class="detail">
-      <mtg-problem-status
-        [deck]="deck!"
-        [deckValidation]="deckValidation"
-        [currentFormat]="currentFormat"
-        [missingCards]="missingCards"
-      ></mtg-problem-status>
+      <span
+        [matBadge]="getAmountOfProblems()"
+        matBadgeColor="warn"
+        style="padding-right: 10px"
+      >
+        Problems
+      </span>
+      <div style="height: 95%; overflow-y: auto" *ngIf="!listExpanded">
+        <mtg-problem-status
+          [deck]="deck!"
+          [deckValidation]="deckValidation"
+          [currentFormat]="currentFormat"
+          [missingCards]="missingCards"
+        ></mtg-problem-status>
+      </div>
     </div>
     <div class="detail">
       Curve ( {{ parseCurveData() }} )

@@ -421,4 +421,10 @@ export class DeckComponent implements OnInit, OnDestroy {
         : card.card_faces[0]!.image_uris!.art_crop
       : '';
   }
+
+  getAmountOfProblems() {
+    return this.missingCards.length > 0
+      ? this.deckValidation.amountOfProblems + 1
+      : this.deckValidation.amountOfProblems;
+  }
 }

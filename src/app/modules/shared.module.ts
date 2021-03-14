@@ -20,6 +20,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
+import { MatBadgeModule } from '@angular/material/badge';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FlexModule } from '@angular/flex-layout/flex';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -54,6 +55,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
     MatAutocompleteModule,
     MatChipsModule,
     MatButtonToggleModule,
+    MatBadgeModule,
     DragDropModule,
     // AngularForms
     ReactiveFormsModule,

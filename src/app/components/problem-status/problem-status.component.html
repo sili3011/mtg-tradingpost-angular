@@ -1,15 +1,13 @@
-<span [ngStyle]="{ color: showProblemsOnly ? 'rgb(0 0 0 / 36%)' : '' }">
-  <span style="text-shadow: 0px 0px 0px black">
-    Problems (
-    <span
-      [ngStyle]="{
-        color: getAmountOfProblems() > 0 ? '#f44336' : '#1baf44'
-      }"
-    >
-      {{ getAmountOfProblems() }}
-    </span>
-    )
+<span [ngStyle]="{ color: showProblemsOnly ? 'black' : '' }">
+  <span
+    *ngIf="showProblemsOnly"
+    [matBadge]="getAmountOfProblems()"
+    matBadgeColor="warn"
+    style="padding-right: 10px"
+  >
+    Problems
   </span>
+
   <div *ngIf="currentFormat">
     <div
       style="padding-top: 10px"
