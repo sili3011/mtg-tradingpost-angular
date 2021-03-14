@@ -12,4 +12,5 @@ export interface Deck {
   sideboard: Array<CardAdapter>;
   commander?: CardAdapter;
   companion?: CardAdapter;
+  boxArt?: string;
 }

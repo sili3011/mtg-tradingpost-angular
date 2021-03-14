@@ -1,0 +1,50 @@
+<div style="margin-left: 5%" fxLayout="row wrap">
+  <mat-card
+    matRipple
+    class="card"
+    *ngFor="let deck of decks"
+    [ngStyle]="{
+      background: deck.colors ? getColorHexes(deck.colors) : ''
+    }"
+    (click)="goto(deck)"
+  >
+    <mat-card-header
+      class="card-header"
+      [ngStyle]="{
+        'background-image': deck.boxArt ? 'url(' + deck.boxArt + ')' : ''
+      }"
+      style="
+        box-shadow: 0px 5px 1px -1px rgb(0 0 0 / 20%),
+          0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
+      "
+    >
+      <mat-card-title class="card-title">{{ deck.name }}</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="card-content">
+      <mat-card-subtitle></mat-card-subtitle>
+    </mat-card-content>
+  </mat-card>
+  <mat-card
+    matRipple
+    class="card"
+    style="background: transparent"
+    (click)="addDeck()"
+  >
+    <mat-icon
+      style="
+        font-size: 200px;
+        position: absolute;
+        left: 20%;
+        top: 20%;
+        color: #424242;
+      "
+      >add_circle</mat-icon
+    >
+    <mat-card-header class="card-header">
+      <mat-card-title class="card-title"></mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="card-content">
+      <mat-card-subtitle></mat-card-subtitle>
+    </mat-card-content>
+  </mat-card>
+</div>
