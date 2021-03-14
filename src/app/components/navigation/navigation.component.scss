@@ -6,3 +6,11 @@ span:focus {
 .sidenav-span {
   padding-left: 10px;
 }
+
+@media only screen {
+  .basic-vh { height: 80vh }
+}
+
+@media only screen and (min-width: 1025px) {
+  .basic-vh { height: 85vh }
+}
