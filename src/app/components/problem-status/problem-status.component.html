@@ -1,231 +1,277 @@
-<span style="text-shadow: 0px 0px 0px black">
-  Problems (
-  <span
-    [ngStyle]="{
-      color: getAmountOfProblems() > 0 ? '#f44336' : '#1baf44'
-    }"
-  >
-    {{ getAmountOfProblems() }}
+<span [ngStyle]="{ color: showProblemsOnly ? 'rgb(0 0 0 / 36%)' : '' }">
+  <span style="text-shadow: 0px 0px 0px black">
+    Problems (
+    <span
+      [ngStyle]="{
+        color: getAmountOfProblems() > 0 ? '#f44336' : '#1baf44'
+      }"
+    >
+      {{ getAmountOfProblems() }}
+    </span>
+    )
   </span>
-  )
+  <div *ngIf="currentFormat">
+    <div
+      style="padding-top: 10px"
+      *ngIf="deckValidation.hasLegalAmountOfCards && !showProblemsOnly"
+      fxLayout="row"
+    >
+      <mat-icon style="color: #1baf44">check</mat-icon>
+      <div class="problem-span" [ngClass]="{ 'span-80': showProblemsOnly }">
+        Has valid amount of cards.
+      </div>
+    </div>
+    <div
+      style="padding-top: 10px"
+      *ngIf="!deckValidation.hasLegalAmountOfCards"
+      fxLayout="row"
+    >
+      <mat-icon style="color: #f44336">clear</mat-icon>
+      <div
+        class="problem-span"
+        [ngClass]="{
+          'span-80': showProblemsOnly,
+          'span-20': !showProblemsOnly
+        }"
+      >
+        {{ amountOfCardsInDeck(deck!) }} is not a valid amount of cards in
+        {{ currentFormat ? formatArray[currentFormat.format] : 0 }}.
+      </div>
+    </div>
+    <div
+      style="padding-top: 10px"
+      *ngIf="deckValidation.hasLegalAmountOfCopiesOfCards && !showProblemsOnly"
+      fxLayout="row"
+    >
+      <mat-icon style="color: #1baf44">check</mat-icon>
+      <div
+        class="problem-span"
+        [ngClass]="{
+          'span-80': showProblemsOnly,
+          'span-20': !showProblemsOnly
+        }"
+      >
+        Has valid amount of copies of cards.
+      </div>
+    </div>
+    <div
+      style="padding-top: 10px"
+      *ngIf="!deckValidation.hasLegalAmountOfCopiesOfCards"
+      fxLayout="row"
+    >
+      <mat-icon style="color: #f44336">clear</mat-icon>
+      <div
+        class="problem-span"
+        [ngClass]="{
+          'span-80': showProblemsOnly,
+          'span-20': !showProblemsOnly
+        }"
+      >
+        Some cards exceed the copy limit of
+        {{ currentFormat ? currentFormat.maxCopiesOfCards : 0 }} in
+        {{ currentFormat ? formatArray[currentFormat.format] : 0 }}.
+      </div>
+    </div>
+    <div
+      style="padding-top: 10px"
+      *ngIf="
+        deckValidation.hasNotMoreThanMaximumOfSideboardCards &&
+        !showProblemsOnly
+      "
+      fxLayout="row"
+    >
+      <mat-icon style="color: #1baf44">check</mat-icon>
+      <div
+        class="problem-span"
+        [ngClass]="{
+          'span-80': showProblemsOnly,
+          'span-20': !showProblemsOnly
+        }"
+      >
+        Has valid amount of cards in sideboard.
+      </div>
+    </div>
+    <div
+      style="padding-top: 10px"
+      *ngIf="!deckValidation.hasNotMoreThanMaximumOfSideboardCards"
+      fxLayout="row"
+    >
+      <mat-icon style="color: #f44336">clear</mat-icon>
+      <div
+        class="problem-span"
+        [ngClass]="{
+          'span-80': showProblemsOnly,
+          'span-20': !showProblemsOnly
+        }"
+      >
+        {{ deck!.sideboard.length }} is not a valid amount of cards for a
+        sideboard in
+        {{ currentFormat ? formatArray[currentFormat.format] : 0 }}.
+      </div>
+    </div>
+    <div
+      style="padding-top: 10px"
+      *ngIf="deckValidation.hasNoIllegalCards && !showProblemsOnly"
+      fxLayout="row"
+    >
+      <mat-icon style="color: #1baf44">check</mat-icon>
+      <div
+        class="problem-span"
+        [ngClass]="{
+          'span-80': showProblemsOnly,
+          'span-20': !showProblemsOnly
+        }"
+      >
+        Every card in the deck is legal in
+        {{ currentFormat ? formatArray[currentFormat.format] : 0 }}.
+      </div>
+    </div>
+    <div
+      style="padding-top: 10px"
+      *ngIf="!deckValidation.hasNoIllegalCards"
+      [matTooltip]="cardsListToHTMLList(deckValidation.illegalCards)"
+      fxLayout="row"
+    >
+      <mat-icon style="color: #f44336">clear</mat-icon>
+      <div
+        class="problem-span"
+        [ngClass]="{
+          'span-80': showProblemsOnly,
+          'span-20': !showProblemsOnly
+        }"
+      >
+        {{ deckValidation.illegalCards.length }} of these cards are illegal in
+        {{ formatArray[currentFormat.format] }}.
+      </div>
+    </div>
+    <div
+      style="padding-top: 10px"
+      *ngIf="
+        currentFormat?.mustComplyToColorIdentity &&
+        deckValidation.hasNoIllegalColorIdentities &&
+        !showProblemsOnly
+      "
+      fxLayout="row"
+    >
+      <mat-icon style="color: #1baf44">check</mat-icon>
+      <div
+        class="problem-span"
+        [ngClass]="{
+          'span-80': showProblemsOnly,
+          'span-20': !showProblemsOnly
+        }"
+      >
+        Every card in the deck complies to the color rules of
+        {{ formatArray[currentFormat.format] }}.
+      </div>
+    </div>
+    <div
+      style="padding-top: 10px"
+      *ngIf="
+        currentFormat?.mustComplyToColorIdentity &&
+        !deckValidation.hasNoIllegalColorIdentities
+      "
+      [matTooltip]="cardsListToHTMLList(deckValidation.illegalColorIdentities)"
+      fxLayout="row"
+    >
+      <mat-icon style="color: #f44336">clear</mat-icon>
+      <div
+        class="problem-span"
+        [ngClass]="{
+          'span-80': showProblemsOnly,
+          'span-20': !showProblemsOnly
+        }"
+      >
+        {{ deckValidation.illegalColorIdentities.length }} of these cards are
+        illegal in {{ deck!.colors }}.
+      </div>
+    </div>
+    <div
+      style="padding-top: 10px"
+      *ngIf="missingCards.length === 0 && !showProblemsOnly"
+      fxLayout="row"
+    >
+      <mat-icon style="color: #1baf44">check</mat-icon>
+      <div
+        class="problem-span"
+        [ngClass]="{
+          'span-80': showProblemsOnly,
+          'span-20': !showProblemsOnly
+        }"
+      >
+        You own enough copies of all of the cards in this deck.
+      </div>
+    </div>
+    <div
+      style="padding-top: 10px"
+      *ngIf="missingCards.length > 0"
+      [matTooltip]="cardsListToHTMLList(missingCards)"
+      fxLayout="row"
+    >
+      <mat-icon style="color: #f44336">clear</mat-icon>
+      <div
+        class="problem-span"
+        [ngClass]="{
+          'span-80': showProblemsOnly,
+          'span-20': !showProblemsOnly
+        }"
+      >
+        You dont own enough copies of {{ missingCards.length }} of the cards
+        included in this deck.
+      </div>
+    </div>
+    <div
+      style="padding-top: 10px"
+      *ngIf="
+        currentFormat.hasCommander &&
+        !deckValidation.needsCommander &&
+        !showProblemsOnly
+      "
+      fxLayout="row"
+    >
+      <mat-icon style="color: #1baf44">check</mat-icon>
+      <div
+        class="problem-span"
+        [ngClass]="{
+          'span-80': showProblemsOnly,
+          'span-20': !showProblemsOnly
+        }"
+      >
+        A commander is assigned.
+      </div>
+    </div>
+    <div
+      style="padding-top: 10px"
+      *ngIf="currentFormat.hasCommander && deckValidation.needsCommander"
+      fxLayout="row"
+    >
+      <mat-icon style="color: #f44336">clear</mat-icon>
+      <div
+        class="problem-span"
+        [ngClass]="{
+          'span-80': showProblemsOnly,
+          'span-20': !showProblemsOnly
+        }"
+      >
+        You need to assign a commander.
+      </div>
+    </div>
+    <div
+      style="padding-top: 10px"
+      *ngIf="deck!.companion && !showProblemsOnly"
+      fxLayout="row"
+    >
+      <mat-icon style="color: #deda1b">priority_high</mat-icon>
+      <div
+        class="problem-span"
+        [ngClass]="{
+          'span-80': showProblemsOnly,
+          'span-20': !showProblemsOnly
+        }"
+      >
+        A companion is assigned. While there is no automated validation for
+        their restrictions, please make sure you comply to their rules.
+      </div>
+    </div>
+  </div>
 </span>
-<div *ngIf="currentFormat">
-  <div
-    style="padding-top: 10px"
-    *ngIf="deckValidation.hasLegalAmountOfCards && !showProblemsOnly"
-    fxLayout="row"
-  >
-    <mat-icon style="color: #1baf44">check</mat-icon>
-    <div class="problem-span" [ngClass]="{ 'span-80': showProblemsOnly }">
-      Has valid amount of cards.
-    </div>
-  </div>
-  <div
-    style="padding-top: 10px"
-    *ngIf="!deckValidation.hasLegalAmountOfCards"
-    fxLayout="row"
-  >
-    <mat-icon style="color: #f44336">clear</mat-icon>
-    <div
-      class="problem-span"
-      [ngClass]="{ 'span-80': showProblemsOnly, 'span-20': !showProblemsOnly }"
-    >
-      {{ amountOfCardsInDeck(deck!) }} is not a valid amount of cards in
-      {{ currentFormat ? formatArray[currentFormat.format] : 0 }}.
-    </div>
-  </div>
-  <div
-    style="padding-top: 10px"
-    *ngIf="deckValidation.hasLegalAmountOfCopiesOfCards && !showProblemsOnly"
-    fxLayout="row"
-  >
-    <mat-icon style="color: #1baf44">check</mat-icon>
-    <div
-      class="problem-span"
-      [ngClass]="{ 'span-80': showProblemsOnly, 'span-20': !showProblemsOnly }"
-    >
-      Has valid amount of copies of cards.
-    </div>
-  </div>
-  <div
-    style="padding-top: 10px"
-    *ngIf="!deckValidation.hasLegalAmountOfCopiesOfCards"
-    fxLayout="row"
-  >
-    <mat-icon style="color: #f44336">clear</mat-icon>
-    <div
-      class="problem-span"
-      [ngClass]="{ 'span-80': showProblemsOnly, 'span-20': !showProblemsOnly }"
-    >
-      Some cards exceed the copy limit of
-      {{ currentFormat ? currentFormat.maxCopiesOfCards : 0 }} in
-      {{ currentFormat ? formatArray[currentFormat.format] : 0 }}.
-    </div>
-  </div>
-  <div
-    style="padding-top: 10px"
-    *ngIf="
-      deckValidation.hasNotMoreThanMaximumOfSideboardCards && !showProblemsOnly
-    "
-    fxLayout="row"
-  >
-    <mat-icon style="color: #1baf44">check</mat-icon>
-    <div
-      class="problem-span"
-      [ngClass]="{ 'span-80': showProblemsOnly, 'span-20': !showProblemsOnly }"
-    >
-      Has valid amount of cards in sideboard.
-    </div>
-  </div>
-  <div
-    style="padding-top: 10px"
-    *ngIf="!deckValidation.hasNotMoreThanMaximumOfSideboardCards"
-    fxLayout="row"
-  >
-    <mat-icon style="color: #f44336">clear</mat-icon>
-    <div
-      class="problem-span"
-      [ngClass]="{ 'span-80': showProblemsOnly, 'span-20': !showProblemsOnly }"
-    >
-      {{ deck!.sideboard.length }} is not a valid amount of cards for a
-      sideboard in {{ currentFormat ? formatArray[currentFormat.format] : 0 }}.
-    </div>
-  </div>
-  <div
-    style="padding-top: 10px"
-    *ngIf="deckValidation.hasNoIllegalCards && !showProblemsOnly"
-    fxLayout="row"
-  >
-    <mat-icon style="color: #1baf44">check</mat-icon>
-    <div
-      class="problem-span"
-      [ngClass]="{ 'span-80': showProblemsOnly, 'span-20': !showProblemsOnly }"
-    >
-      Every card in the deck is legal in
-      {{ currentFormat ? formatArray[currentFormat.format] : 0 }}.
-    </div>
-  </div>
-  <div
-    style="padding-top: 10px"
-    *ngIf="!deckValidation.hasNoIllegalCards"
-    [matTooltip]="cardsListToHTMLList(deckValidation.illegalCards)"
-    fxLayout="row"
-  >
-    <mat-icon style="color: #f44336">clear</mat-icon>
-    <div
-      class="problem-span"
-      [ngClass]="{ 'span-80': showProblemsOnly, 'span-20': !showProblemsOnly }"
-    >
-      {{ deckValidation.illegalCards.length }} of these cards are illegal in
-      {{ formatArray[currentFormat.format] }}.
-    </div>
-  </div>
-  <div
-    style="padding-top: 10px"
-    *ngIf="
-      currentFormat?.mustComplyToColorIdentity &&
-      deckValidation.hasNoIllegalColorIdentities &&
-      !showProblemsOnly
-    "
-    fxLayout="row"
-  >
-    <mat-icon style="color: #1baf44">check</mat-icon>
-    <div
-      class="problem-span"
-      [ngClass]="{ 'span-80': showProblemsOnly, 'span-20': !showProblemsOnly }"
-    >
-      Every card in the deck complies to the color rules of
-      {{ formatArray[currentFormat.format] }}.
-    </div>
-  </div>
-  <div
-    style="padding-top: 10px"
-    *ngIf="
-      currentFormat?.mustComplyToColorIdentity &&
-      !deckValidation.hasNoIllegalColorIdentities
-    "
-    [matTooltip]="cardsListToHTMLList(deckValidation.illegalColorIdentities)"
-    fxLayout="row"
-  >
-    <mat-icon style="color: #f44336">clear</mat-icon>
-    <div
-      class="problem-span"
-      [ngClass]="{ 'span-80': showProblemsOnly, 'span-20': !showProblemsOnly }"
-    >
-      {{ deckValidation.illegalColorIdentities.length }} of these cards are
-      illegal in {{ deck!.colors }}.
-    </div>
-  </div>
-  <div
-    style="padding-top: 10px"
-    *ngIf="missingCards.length === 0 && !showProblemsOnly"
-    fxLayout="row"
-  >
-    <mat-icon style="color: #1baf44">check</mat-icon>
-    <div
-      class="problem-span"
-      [ngClass]="{ 'span-80': showProblemsOnly, 'span-20': !showProblemsOnly }"
-    >
-      You own enough copies of all of the cards in this deck.
-    </div>
-  </div>
-  <div
-    style="padding-top: 10px"
-    *ngIf="missingCards.length > 0"
-    [matTooltip]="cardsListToHTMLList(missingCards)"
-    fxLayout="row"
-  >
-    <mat-icon style="color: #f44336">clear</mat-icon>
-    <div
-      class="problem-span"
-      [ngClass]="{ 'span-80': showProblemsOnly, 'span-20': !showProblemsOnly }"
-    >
-      You dont own enough copies of {{ missingCards.length }} of the cards
-      included in this deck.
-    </div>
-  </div>
-  <div
-    style="padding-top: 10px"
-    *ngIf="
-      currentFormat.hasCommander &&
-      !deckValidation.needsCommander &&
-      !showProblemsOnly
-    "
-    fxLayout="row"
-  >
-    <mat-icon style="color: #1baf44">check</mat-icon>
-    <div
-      class="problem-span"
-      [ngClass]="{ 'span-80': showProblemsOnly, 'span-20': !showProblemsOnly }"
-    >
-      A commander is assigned.
-    </div>
-  </div>
-  <div
-    style="padding-top: 10px"
-    *ngIf="currentFormat.hasCommander && deckValidation.needsCommander"
-    fxLayout="row"
-  >
-    <mat-icon style="color: #f44336">clear</mat-icon>
-    <div
-      class="problem-span"
-      [ngClass]="{ 'span-80': showProblemsOnly, 'span-20': !showProblemsOnly }"
-    >
-      You need to assign a commander.
-    </div>
-  </div>
-  <div
-    style="padding-top: 10px"
-    *ngIf="deck!.companion && !showProblemsOnly"
-    fxLayout="row"
-  >
-    <mat-icon style="color: #deda1b">priority_high</mat-icon>
-    <div
-      class="problem-span"
-      [ngClass]="{ 'span-80': showProblemsOnly, 'span-20': !showProblemsOnly }"
-    >
-      A companion is assigned. While there is no automated validation for their
-      restrictions, please make sure you comply to their rules.
-    </div>
-  </div>
-</div>
