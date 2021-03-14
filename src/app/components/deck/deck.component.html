@@ -40,6 +40,19 @@
             >
           </mat-select>
         </mat-form-field>
+        <mat-form-field style="padding-left: 10px">
+          <mat-select matSelect formControlName="art">
+            <mat-option [value]="'None'"> <span>None</span></mat-option>
+            <mat-option
+              *ngFor="let card of deck!.cards"
+              [value]="getArt(card)"
+              [matTooltip]="imageTooltip(card, 'art')"
+              matTooltipClass="fitToImage"
+            >
+              <span>{{ card.name }}</span></mat-option
+            >
+          </mat-select>
+        </mat-form-field>
         <mat-checkbox
           color="primary"
           matCheckbox
@@ -123,7 +136,7 @@
               Commander<span *ngIf="deck!.companion">/Companion</span>:
             </div>
             <div
-              [matTooltip]="imageTooltip(this.deck!.commander)"
+              [matTooltip]="imageTooltip(this.deck!.commander, 'normal')"
               [matTooltipShowDelay]="1000"
               matTooltipClass="fitToImage"
               style="padding-top: 10px"
@@ -150,7 +163,7 @@
               >
             </div>
             <div
-              [matTooltip]="imageTooltip(this.deck!.companion)"
+              [matTooltip]="imageTooltip(this.deck!.companion, 'normal')"
               [matTooltipShowDelay]="1000"
               matTooltipClass="fitToImage"
               style="padding-top: 10px"
@@ -166,159 +179,12 @@
       </div>
     </div>
     <div class="detail">
-      Problems (
-      <span
-        [ngStyle]="{
-          color: deckValidation.amountOfProblems > 0 ? '#f44336' : '#1baf44'
-        }"
-        >{{ deckValidation.amountOfProblems }}
-      </span>
-      )
-      <div *ngIf="!listExpanded && currentFormat">
-        <div
-          style="padding-top: 10px"
-          *ngIf="deckValidation.hasLegalAmountOfCards"
-        >
-          <mat-icon style="color: #1baf44">check</mat-icon>
-          <span class="problem-span"> Has valid amount of cards.</span>
-        </div>
-        <div
-          style="padding-top: 10px"
-          *ngIf="!deckValidation.hasLegalAmountOfCards"
-        >
-          <mat-icon style="color: #f44336">clear</mat-icon>
-          <span class="problem-span">
-            {{ amountOfCardsInDeck(deck!) }} is not a valid amount of cards in
-            {{ currentFormat ? formatArray[currentFormat.format] : 0 }}.</span
-          >
-        </div>
-        <div
-          style="padding-top: 10px"
-          *ngIf="deckValidation.hasLegalAmountOfCopiesOfCards"
-        >
-          <mat-icon style="color: #1baf44">check</mat-icon>
-          <span class="problem-span">
-            Has valid amount of copies of cards.</span
-          >
-        </div>
-        <div
-          style="padding-top: 10px"
-          *ngIf="!deckValidation.hasLegalAmountOfCopiesOfCards"
-        >
-          <mat-icon style="color: #f44336">clear</mat-icon>
-          <span class="problem-span">
-            Some cards exceed the copy limit of
-            {{ currentFormat ? currentFormat.maxCopiesOfCards : 0 }} of
-            {{ currentFormat ? formatArray[currentFormat.format] : 0 }}.</span
-          >
-        </div>
-        <div
-          style="padding-top: 10px"
-          *ngIf="deckValidation.hasNotMoreThanMaximumOfSideboardCards"
-        >
-          <mat-icon style="color: #1baf44">check</mat-icon>
-          <span class="problem-span">
-            Has valid amount of cards in sideboard.</span
-          >
-        </div>
-        <div
-          style="padding-top: 10px"
-          *ngIf="!deckValidation.hasNotMoreThanMaximumOfSideboardCards"
-        >
-          <mat-icon style="color: #f44336">clear</mat-icon>
-          <span class="problem-span">
-            {{ deck!.sideboard.length }} is not a valid amount of cards for a
-            sideboard in
-            {{ currentFormat ? formatArray[currentFormat.format] : 0 }}.</span
-          >
-        </div>
-        <div style="padding-top: 10px" *ngIf="deckValidation.hasNoIllegalCards">
-          <mat-icon style="color: #1baf44">check</mat-icon>
-          <span class="problem-span">
-            Every card in the deck is legal in
-            {{ currentFormat ? formatArray[currentFormat.format] : 0 }}.</span
-          >
-        </div>
-        <div
-          style="padding-top: 10px"
-          *ngIf="!deckValidation.hasNoIllegalCards"
-          [matTooltip]="cardsListToHTMLList(deckValidation.illegalCards)"
-        >
-          <mat-icon style="color: #f44336">clear</mat-icon>
-          <span class="problem-span">
-            {{ deckValidation.illegalCards.length }} of these cards are illegal
-            in {{ formatArray[currentFormat.format] }}.
-          </span>
-        </div>
-        <div
-          style="padding-top: 10px"
-          *ngIf="
-            currentFormat?.mustComplyToColorIdentity &&
-            deckValidation.hasNoIllegalColorIdentities
-          "
-        >
-          <mat-icon style="color: #1baf44">check</mat-icon>
-          <span class="problem-span">
-            Every card in the deck complies to the color rules of
-            {{ formatArray[currentFormat.format] }}.</span
-          >
-        </div>
-        <div
-          style="padding-top: 10px"
-          *ngIf="
-            currentFormat?.mustComplyToColorIdentity &&
-            !deckValidation.hasNoIllegalColorIdentities
-          "
-          [matTooltip]="
-            cardsListToHTMLList(deckValidation.illegalColorIdentities)
-          "
-        >
-          <mat-icon style="color: #f44336">clear</mat-icon>
-          <span class="problem-span">
-            {{ deckValidation.illegalColorIdentities.length }} of these cards
-            are illegal in {{ deck!.colors }}.
-          </span>
-        </div>
-        <div style="padding-top: 10px" *ngIf="missingCards.length === 0">
-          <mat-icon style="color: #1baf44">check</mat-icon>
-          <span class="problem-span">
-            You own enough copies of all of the cards in this deck.</span
-          >
-        </div>
-        <div
-          style="padding-top: 10px"
-          *ngIf="missingCards.length > 0"
-          [matTooltip]="cardsListToHTMLList(missingCards)"
-        >
-          <mat-icon style="color: #f44336">clear</mat-icon>
-          <span class="problem-span">
-            You dont own enough copies of {{ missingCards.length }} of the cards
-            included in this deck.
-          </span>
-        </div>
-        <div
-          style="padding-top: 10px"
-          *ngIf="currentFormat.hasCommander && !deckValidation.needsCommander"
-        >
-          <mat-icon style="color: #1baf44">check</mat-icon>
-          <span class="problem-span"> A commander is assigned.</span>
-        </div>
-        <div
-          style="padding-top: 10px"
-          *ngIf="currentFormat.hasCommander && deckValidation.needsCommander"
-        >
-          <mat-icon style="color: #f44336">clear</mat-icon>
-          <span class="problem-span"> You need to assign a commander. </span>
-        </div>
-        <div style="padding-top: 10px" *ngIf="deck!.companion">
-          <mat-icon style="color: #deda1b">priority_high</mat-icon>
-          <span class="problem-span">
-            A companion is assigned. While there is no automated validation for
-            their restrictions, please make sure you comply to their
-            rules.</span
-          >
-        </div>
-      </div>
+      <mtg-problem-status
+        [deck]="deck!"
+        [deckValidation]="deckValidation"
+        [currentFormat]="currentFormat"
+        [missingCards]="missingCards"
+      ></mtg-problem-status>
     </div>
     <div class="detail">
       Curve ( {{ parseCurveData() }} )

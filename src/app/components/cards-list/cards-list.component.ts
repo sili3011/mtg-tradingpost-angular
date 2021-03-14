@@ -238,7 +238,7 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
   moveToWishlist(card: CardAdapter) {}
 
   imageTooltip(card: any): string {
-    return imageTooltip(card);
+    return imageTooltip(card, 'normal');
   }
 
   isCardIllegal(card: CardAdapter): boolean {

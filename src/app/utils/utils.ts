@@ -1,11 +1,17 @@
+import { ImageUris } from 'scryfall-sdk';
 import { CardAdapter } from '../models/card-adapter';
 import { Format } from '../models/constants';
 import { Deck } from '../models/deck';
 import { defaultDeckValidation } from '../models/defaults';
 import { COLORS, FORMATS, MANACOLORS } from '../models/enums';
 
-export function imageTooltip(image: any): string {
-  return `<img src="${image.normal}" style="border-radius: 25px;">`;
+export function imageTooltip(image: ImageUris, type: 'normal' | 'art'): string {
+  switch (type) {
+    case 'normal':
+      return `<img src="${image.normal}" style="border-radius: 25px;">`;
+    case 'art':
+      return `<img src="${image.art_crop}" style="border-radius: 25px;">`;
+  }
 }
 
 export function amountOfCardsOfDeck(deck: Deck): number {

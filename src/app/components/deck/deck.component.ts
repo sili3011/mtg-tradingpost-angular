@@ -183,6 +183,7 @@ export class DeckComponent implements OnInit, OnDestroy {
       colors: [
         this.deck && this.deck.colors ? this.deck.colors : MANACOLORS.NONE,
       ],
+      art: [this.deck && this.deck.boxArt ? this.deck.boxArt : 'None'],
       isActive: [this.deck && this.deck.active ? this.deck.active : false],
     });
   }
@@ -195,6 +196,7 @@ export class DeckComponent implements OnInit, OnDestroy {
         this.settingsGroup.setValue({
           format: this.deck!.format ? this.deck!.format : FORMATS.NONE,
           colors: this.deck!.colors ? this.deck!.colors : MANACOLORS.NONE,
+          art: this.deck!.boxArt ? this.deck!.boxArt : 'None',
           isActive: this.deck!.active ? this.deck!.active : false,
         });
         this.currentFormat = Formats.find(
@@ -211,6 +213,7 @@ export class DeckComponent implements OnInit, OnDestroy {
           (f) => Object.values(FORMATS)[f.format] === this.deck!.format
         )!;
         this.deck!.colors = value.colors;
+        this.deck!.boxArt = value.art;
         this.deck!.active = value.isActive;
         this.dbService.setDeck(this.deck!);
       })
@@ -268,9 +271,6 @@ export class DeckComponent implements OnInit, OnDestroy {
     this.missingCards = this.cardsStore.missingCards.filter((c) =>
       this.deck!.cards.map((card) => card.id).includes(c.id)
     );
-    if (this.missingCards.length > 0) {
-      ++this.deckValidation.amountOfProblems;
-    }
   }
 
   parseCurveData(): string {
@@ -398,20 +398,12 @@ export class DeckComponent implements OnInit, OnDestroy {
     );
   }
 
-  imageTooltip(card: CardAdapter | undefined): string {
-    if (card) {
-      if (card.card_faces) {
-        return imageTooltip(card.card_faces[0].image_uris);
-      }
-      return imageTooltip(card.image_uris);
-    }
-    return '';
-  }
-
-  cardsListToHTMLList(cards: Array<CardAdapter>) {
-    let ret = '';
-    cards.forEach((card) => (ret += `<div>${card.name}</div>`));
-    return ret;
+  imageTooltip(card: CardAdapter | undefined, type: 'normal' | 'art'): string {
+    return card
+      ? card!.card_faces
+        ? imageTooltip(card!.card_faces[0].image_uris!, type)
+        : imageTooltip(card!.image_uris!, type)
+      : '';
   }
 
   amountOfCardsInDeck(deck: Deck): number {
@@ -420,5 +412,13 @@ export class DeckComponent implements OnInit, OnDestroy {
 
   setHover(hovered: 'comm' | 'comp') {
     this.hover = hovered;
+  }
+
+  getArt(card: CardAdapter): string {
+    return card
+      ? !card.card_faces
+        ? card.image_uris!.art_crop
+        : card.card_faces[0]!.image_uris!.art_crop
+      : '';
   }
 }

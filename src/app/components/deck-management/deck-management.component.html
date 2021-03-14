@@ -1,12 +1,10 @@
 <div style="margin-left: 5%" fxLayout="row wrap">
   <mat-card
-    matRipple
     class="card"
     *ngFor="let deck of decks"
     [ngStyle]="{
       background: deck.colors ? getColorHexes(deck.colors) : ''
     }"
-    (click)="goto(deck)"
     (mouseenter)="hoveredDeckId = deck.id"
     (mouseleave)="hoveredDeckId = ''"
   >
@@ -19,17 +17,60 @@
         box-shadow: 0px 5px 1px -1px rgb(0 0 0 / 20%),
           0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
       "
+      (click)="goto(deck)"
+      matRipple
     >
       <mat-card-title class="card-title">{{ deck.name }}</mat-card-title>
+      <mat-chip-list style="position: absolute; right: 1em; top: 1em">
+        <mat-chip
+          [disableRipple]="true"
+          style="
+            background-color: #173b30;
+            color: #1baf44;
+            border-style: solid;
+            border-width: 1px;
+          "
+          *ngIf="deck!.playable"
+          >Playable</mat-chip
+        >
+        <mat-chip
+          [disableRipple]="true"
+          style="
+            background-color: #392029;
+            color: #eb8776;
+            border-style: solid;
+            border-width: 1px;
+          "
+          *ngIf="!deck!.playable"
+          >Needs fixing</mat-chip
+        >
+      </mat-chip-list>
     </mat-card-header>
-    <mat-card-content class="card-content">
-      <mat-card-subtitle></mat-card-subtitle>
+    <mat-card-content
+      class="card-content"
+      style="
+        overflow-y: auto;
+        height: calc(42% - 3px);
+        margin: 0;
+        margin-top: 5px;
+      "
+    >
+      <mat-card-subtitle style="margin: 1em 1em 0 1em">
+        <mtg-problem-status
+          *ngIf="getFormat(deck) && validate(deck).amountOfProblems > 0"
+          [showProblemsOnly]="true"
+          [deck]="deck"
+          [deckValidation]="validate(deck)"
+          [currentFormat]="getFormat(deck)"
+          [missingCards]="missingCards(deck)"
+        ></mtg-problem-status>
+      </mat-card-subtitle>
       <button
         *ngIf="deck.id === hoveredDeckId"
         mat-icon-button
         color="warn"
         (click)="removeDeck(deck, $event)"
-        style="position: absolute; right: 5px; bottom: 5px"
+        style="position: absolute; right: 10px; bottom: 5px"
       >
         <mat-icon style="text-shadow: 0px 0px 20px black">delete</mat-icon>
       </button>
@@ -38,7 +79,7 @@
   <mat-card
     matRipple
     class="card"
-    style="background: transparent"
+    style="background: transparent; cursor: pointer"
     (click)="addDeck()"
   >
     <mat-icon

@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { autorun, IReactionDisposer } from 'mobx';
-import { defaultNetworth } from 'src/app/models/defaults';
 import { Deck } from 'src/app/models/deck';
-import { Networth } from 'src/app/services/db.service';
 import { CardsStore } from 'src/app/stores/cards.store';
 import { DecksStore } from 'src/app/stores/decks.store';
 import { UserStore } from 'src/app/stores/user.store';
@@ -64,6 +62,6 @@ export class DashboardComponent implements OnInit {
   }
 
   imageTooltip(card: any): string {
-    return imageTooltip(card);
+    return imageTooltip(card, 'normal');
   }
 }

@@ -45,6 +45,19 @@
           </a>
           <a
             mat-list-item
+            routerLink="/decks"
+            routerLinkActive="true"
+            (click)="stopPropagation($event)"
+          >
+            <mat-icon>view_carousel</mat-icon>
+            <span
+              [@animateText]="linkText ? 'show' : 'hide'"
+              class="sidenav-span"
+              >Decks
+            </span>
+          </a>
+          <a
+            mat-list-item
             routerLink="/deck/{{ deck.id }}"
             routerLinkActive="true"
             *ngFor="let deck of decks"

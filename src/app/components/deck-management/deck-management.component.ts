@@ -3,11 +3,15 @@ import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { autorun, IReactionDisposer } from 'mobx';
 import { Subscription } from 'rxjs';
+import { CardAdapter } from 'src/app/models/card-adapter';
+import { Format, Formats } from 'src/app/models/constants';
 import { Deck } from 'src/app/models/deck';
 import { defaultDeck } from 'src/app/models/defaults';
-import { COLORHEXES, MANACOLORS } from 'src/app/models/enums';
+import { COLORHEXES, FORMATS, MANACOLORS } from 'src/app/models/enums';
 import { DBService } from 'src/app/services/db.service';
+import { CardsStore } from 'src/app/stores/cards.store';
 import { DecksStore } from 'src/app/stores/decks.store';
+import { DeckValidation, validateDeck } from 'src/app/utils/utils';
 import { ConfirmDialogComponent } from '../dialogs/confirm-dialog/confirm-dialog.component';
 
 @Component({
@@ -26,6 +30,7 @@ export class DeckManagementComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private decksStore: DecksStore,
+    private cardsStore: CardsStore,
     private dbService: DBService,
     private dialog: MatDialog
   ) {
@@ -148,5 +153,21 @@ export class DeckManagementComponent implements OnInit, OnDestroy {
 
   addDeck() {
     this.dbService.addDeck(defaultDeck);
+  }
+
+  getFormat(deck: Deck): Format {
+    return Formats.find(
+      (f) => Object.values(FORMATS)[f.format] === deck.format
+    )!;
+  }
+
+  validate(deck: Deck): DeckValidation {
+    return validateDeck(deck, this.getFormat(deck));
+  }
+
+  missingCards(deck: Deck): Array<CardAdapter> {
+    return this.cardsStore.missingCards.filter((c) =>
+      deck.cards.map((card) => card.id).includes(c.id)
+    );
   }
 }

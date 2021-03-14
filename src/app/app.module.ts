@@ -21,6 +21,7 @@ import { AddCardDialogComponent } from './components/dialogs/add-card-dialog/add
 import { AddCardAmountToDeckDialogComponent } from './components/dialogs/add-card-amount-to-deck-dialog/add-card-amount-to-deck-dialog.component';
 import { ConfirmDialogComponent } from './components/dialogs/confirm-dialog/confirm-dialog.component';
 import { DeckManagementComponent } from './components/deck-management/deck-management.component';
+import { ProblemStatusComponent } from './components/problem-status/problem-status.component';
 
 @NgModule({
   declarations: [
@@ -40,6 +41,7 @@ import { DeckManagementComponent } from './components/deck-management/deck-manag
     AddCardAmountToDeckDialogComponent,
     ConfirmDialogComponent,
     DeckManagementComponent,
+    ProblemStatusComponent,
   ],
   imports: [
     BrowserModule,
