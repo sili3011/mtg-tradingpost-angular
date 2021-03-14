@@ -22,6 +22,7 @@
       (mouseenter)="onSidenavToggle(true)"
       (mouseleave)="onSidenavToggle(false)"
       [@onSideNavChange]="sideNavState ? 'open' : 'close'"
+      (click)="goto('decks')"
     >
       <div
         fxLayout="column"
@@ -29,7 +30,12 @@
         style="height: 100%; overflow-x: hidden"
       >
         <mat-nav-list>
-          <a mat-list-item routerLink="/collection" routerLinkActive="true">
+          <a
+            mat-list-item
+            routerLink="/collection"
+            routerLinkActive="true"
+            (click)="stopPropagation($event)"
+          >
             <mat-icon>format_align_justify</mat-icon>
             <span
               [@animateText]="linkText ? 'show' : 'hide'"
@@ -48,6 +54,9 @@
             cdkDropListConnectedTo="cards"
             (cdkDropListDropped)="dropCardOnDeck($event, deck)"
             #rla="routerLinkActive"
+            (click)="stopPropagation($event)"
+            (mouseenter)="hoveredDeckId = deck.id"
+            (mouseleave)="hoveredDeckId = ''"
           >
             <mat-icon
               [svgIcon]="rla.isActive ? 'window-open' : 'window-closed'"
@@ -61,18 +70,25 @@
                   matInput
                   [value]="deck.name"
                   (input)="onDeckNameChange($event, deck)"
+                  (click)="stopPropagation($event)"
                 />
               </mat-form-field>
               <button
+                *ngIf="deck.id === hoveredDeckId"
                 mat-icon-button
                 color="warn"
                 (click)="removeDeck(deck, $event)"
               >
                 <mat-icon>delete</mat-icon>
               </button>
+              <button
+                *ngIf="deck.id !== hoveredDeckId"
+                mat-icon-button
+                [disabled]="true"
+              ></button>
             </span>
           </a>
-          <a mat-list-item (click)="addDeck()">
+          <a mat-list-item (click)="addDeck($event)">
             <mat-icon>add_circle</mat-icon>
             <span
               [@animateText]="linkText ? 'show' : 'hide'"
@@ -85,6 +101,7 @@
             routerLink="/settings"
             routerLinkActive="true"
             style="position: absolute; bottom: 60px"
+            (click)="stopPropagation($event)"
           >
             <mat-icon>settings</mat-icon>
             <span

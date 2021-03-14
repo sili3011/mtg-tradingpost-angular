@@ -1,11 +1,14 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { autorun, IReactionDisposer } from 'mobx';
+import { Subscription } from 'rxjs';
 import { Deck } from 'src/app/models/deck';
 import { defaultDeck } from 'src/app/models/defaults';
 import { COLORHEXES, MANACOLORS } from 'src/app/models/enums';
 import { DBService } from 'src/app/services/db.service';
 import { DecksStore } from 'src/app/stores/decks.store';
+import { ConfirmDialogComponent } from '../dialogs/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'mtg-deck-management',
@@ -15,12 +18,16 @@ import { DecksStore } from 'src/app/stores/decks.store';
 export class DeckManagementComponent implements OnInit, OnDestroy {
   decks: Array<Deck> = [];
 
+  hoveredDeckId = '';
+
   disposer: IReactionDisposer;
+  subscriptions: Subscription = new Subscription();
 
   constructor(
     private router: Router,
     private decksStore: DecksStore,
-    private dbService: DBService
+    private dbService: DBService,
+    private dialog: MatDialog
   ) {
     this.disposer = autorun(() => {
       this.decks = this.decksStore.decks;
@@ -30,7 +37,23 @@ export class DeckManagementComponent implements OnInit, OnDestroy {
   ngOnInit(): void {}
 
   ngOnDestroy(): void {
+    this.subscriptions.unsubscribe();
     this.disposer();
+  }
+
+  removeDeck(deck: Deck, $event: any) {
+    const ref = this.dialog.open(ConfirmDialogComponent, {
+      data: { message: 'Confirm deleting ' + deck.name },
+    });
+    this.subscriptions.add(
+      ref.afterClosed().subscribe(() => {
+        if (ref.componentInstance.confirmed) {
+          this.router.navigate([`/decks`]);
+          this.dbService.removeDeck(deck);
+        }
+      })
+    );
+    $event.stopPropagation();
   }
 
   getColorHexes(identity: MANACOLORS): string {

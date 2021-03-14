@@ -7,6 +7,8 @@
       background: deck.colors ? getColorHexes(deck.colors) : ''
     }"
     (click)="goto(deck)"
+    (mouseenter)="hoveredDeckId = deck.id"
+    (mouseleave)="hoveredDeckId = ''"
   >
     <mat-card-header
       class="card-header"
@@ -22,6 +24,15 @@
     </mat-card-header>
     <mat-card-content class="card-content">
       <mat-card-subtitle></mat-card-subtitle>
+      <button
+        *ngIf="deck.id === hoveredDeckId"
+        mat-icon-button
+        color="warn"
+        (click)="removeDeck(deck, $event)"
+        style="position: absolute; right: 5px; bottom: 5px"
+      >
+        <mat-icon style="text-shadow: 0px 0px 20px black">delete</mat-icon>
+      </button>
     </mat-card-content>
   </mat-card>
   <mat-card

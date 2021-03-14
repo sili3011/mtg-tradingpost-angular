@@ -7,7 +7,7 @@ import {
 } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   ApexAxisChartSeries,
   ApexChart,
@@ -169,6 +169,7 @@ export class DeckComponent implements OnInit, OnDestroy {
   subscriptions: Subscription = new Subscription();
 
   constructor(
+    private router: Router,
     private route: ActivatedRoute,
     private cardsStore: CardsStore,
     private decksStore: DecksStore,
@@ -238,6 +239,7 @@ export class DeckComponent implements OnInit, OnDestroy {
     this.subscriptions.add(
       ref.afterClosed().subscribe(() => {
         if (ref.componentInstance.confirmed) {
+          this.router.navigate([`/decks`]);
           this.dbService.removeDeck(this.deck!);
         }
       })

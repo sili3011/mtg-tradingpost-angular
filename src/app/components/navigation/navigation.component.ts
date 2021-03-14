@@ -9,6 +9,8 @@ import { LISTTYPES } from 'src/app/models/enums';
 import { DBService } from 'src/app/services/db.service';
 import { DecksStore } from 'src/app/stores/decks.store';
 import { AddCardAmountToDeckDialogComponent } from '../dialogs/add-card-amount-to-deck-dialog/add-card-amount-to-deck-dialog.component';
+import { Router } from '@angular/router';
+import { ConfirmDialogComponent } from '../dialogs/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'mtg-navigation',
@@ -24,11 +26,13 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
   decks: Array<Deck> = [];
   selectedDeck: Deck | undefined;
+  hoveredDeckId = '';
 
   subscriptions: Subscription = new Subscription();
   disposer!: IReactionDisposer;
 
   constructor(
+    private router: Router,
     private decksStore: DecksStore,
     private dbService: DBService,
     private dialog: MatDialog
@@ -58,16 +62,27 @@ export class NavigationComponent implements OnInit, OnDestroy {
     this.sideNavState$.next(this.sideNavState);
   }
 
-  addDeck() {
+  addDeck($event: any) {
     this.dbService.addDeck(defaultDeck);
+    this.stopPropagation($event);
   }
 
   removeDeck(deck: Deck, $event: any) {
-    if (deck === this.selectedDeck) {
-      this.selectedDeck = undefined;
-    }
-    this.dbService.removeDeck(deck);
-    $event.preventDefault();
+    const ref = this.dialog.open(ConfirmDialogComponent, {
+      data: { message: 'Confirm deleting ' + deck.name },
+    });
+    this.subscriptions.add(
+      ref.afterClosed().subscribe(() => {
+        if (ref.componentInstance.confirmed) {
+          if (deck === this.selectedDeck) {
+            this.selectedDeck = undefined;
+            this.router.navigate([`/decks`]);
+          }
+          this.dbService.removeDeck(deck);
+        }
+      })
+    );
+    this.stopPropagation($event);
   }
 
   onDeckNameChange($event: any, deck: Deck) {
@@ -91,5 +106,19 @@ export class NavigationComponent implements OnInit, OnDestroy {
       }
       sub.unsubscribe();
     });
+  }
+
+  selectInput($event: any, id: string) {
+    document.getElementById('input-' + id)!.focus();
+    this.stopPropagation($event);
+  }
+
+  goto(name: string) {
+    this.router.navigate([`/${name}`]);
+  }
+
+  stopPropagation($event: any) {
+    $event.stopPropagation();
+    $event.preventDefault();
   }
 }
