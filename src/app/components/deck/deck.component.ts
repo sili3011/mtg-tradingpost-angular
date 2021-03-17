@@ -298,6 +298,7 @@ export class DeckComponent implements OnInit, OnDestroy {
       landW = 0,
       landM = 0,
       landC = 0;
+
     this.deck?.cards.forEach((card) => {
       if (card.type_line.toLowerCase().split(' ').includes('land')) {
         if (card.color_identity.length > 1) {
@@ -362,21 +363,25 @@ export class DeckComponent implements OnInit, OnDestroy {
       }
     });
     let nonLands =
-      `${green > 0 ? green + '-' : ''}` +
-      `${red > 0 ? red + '-' : ''}` +
-      `${black > 0 ? black + '-' : ''}` +
-      `${blue > 0 ? blue + '-' : ''}` +
-      `${white > 0 ? white + '-' : ''}` +
-      `${multi > 0 ? multi + '-' : ''}` +
-      `${coloreless > 0 ? coloreless : ''}`;
+      `${green > 0 ? '<span class="green">' + green + '</span>-' : ''}` +
+      `${red > 0 ? '<span class="red">' + red + '</span>-' : ''}` +
+      `${black > 0 ? '<span class="black">' + black + '</span>-' : ''}` +
+      `${blue > 0 ? '<span class="blue">' + blue + '</span>-' : ''}` +
+      `${white > 0 ? '<span class="white">' + white + '</span>-' : ''}` +
+      `${multi > 0 ? '<span class="multi">' + multi + '</span>-' : ''}` +
+      `${
+        coloreless > 0
+          ? '<span class="coloreless">' + coloreless + '</span>'
+          : ''
+      }`;
     let lands =
-      `${landG > 0 ? landG + '-' : ''}` +
-      `${landR > 0 ? landR + '-' : ''}` +
-      `${landB > 0 ? landB + '-' : ''}` +
-      `${landU > 0 ? landU + '-' : ''}` +
-      `${landW > 0 ? landW + '-' : ''}` +
-      `${landM > 0 ? landM + '-' : ''}` +
-      `${landC > 0 ? landC : ''}`;
+      `${landG > 0 ? '<span class="green">' + landG + '</span>-' : ''}` +
+      `${landR > 0 ? '<span class="red">' + landR + '</span>-' : ''}` +
+      `${landB > 0 ? '<span class="black">' + landB + '</span>-' : ''}` +
+      `${landU > 0 ? '<span class="blue">' + landU + '</span>-' : ''}` +
+      `${landW > 0 ? '<span class="white">' + landW + '</span>-' : ''}` +
+      `${landM > 0 ? '<span class="multi">' + landM + '</span>-' : ''}` +
+      `${landC > 0 ? '<span class="coloreless">' + landC + '</span>' : ''}`;
     nonLands =
       nonLands[nonLands.length - 1] === '-'
         ? nonLands.substr(0, nonLands.length - 1)
@@ -388,7 +393,7 @@ export class DeckComponent implements OnInit, OnDestroy {
     return nonLands + ' | ' + lands;
   }
 
-  setCurrentDist(dt: PIECHART) {
+  setCurrentDist(dt: PIECHART): void {
     this.distType = dt;
     this.distLabels = this.distTypeLabelConsts[this.distType];
     this.distSeries = deckToPie(
@@ -422,7 +427,7 @@ export class DeckComponent implements OnInit, OnDestroy {
       : '';
   }
 
-  getAmountOfProblems() {
+  getAmountOfProblems(): number {
     return this.missingCards.length > 0
       ? this.deckValidation.amountOfProblems + 1
       : this.deckValidation.amountOfProblems;

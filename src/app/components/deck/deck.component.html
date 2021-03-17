@@ -196,7 +196,7 @@
       </div>
     </div>
     <div class="detail">
-      Curve ( {{ parseCurveData() }} )
+      Curve ( <span [innerHTML]="parseCurveData()"></span> )
       <div *ngIf="!listExpanded">
         <apx-chart
           [series]="curveSeries"
@@ -211,7 +211,7 @@
       </div>
     </div>
     <div class="detail">
-      Distribution ( {{ parseColorPieData() }} )
+      Distribution ( <span [innerHTML]="parseColorPieData()"></span> )
       <div style="padding-top: 10px" *ngIf="!listExpanded">
         <apx-chart
           [series]="distSeries"
