@@ -35,8 +35,11 @@
             routerLink="/collection"
             routerLinkActive="true"
             (click)="stopPropagation($event)"
+            #col="routerLinkActive"
           >
-            <mat-icon>format_align_justify</mat-icon>
+            <mat-icon [ngStyle]="{ color: col.isActive ? '#cc8010' : 'white' }"
+              >format_align_justify</mat-icon
+            >
             <span
               [@animateText]="linkText ? 'show' : 'hide'"
               class="sidenav-span"
@@ -48,8 +51,11 @@
             routerLink="/decks"
             routerLinkActive="true"
             (click)="stopPropagation($event)"
+            #dck="routerLinkActive"
           >
-            <mat-icon>view_carousel</mat-icon>
+            <mat-icon [ngStyle]="{ color: dck.isActive ? '#cc8010' : 'white' }"
+              >view_carousel</mat-icon
+            >
             <span
               [@animateText]="linkText ? 'show' : 'hide'"
               class="sidenav-span"
@@ -115,8 +121,11 @@
             routerLinkActive="true"
             style="position: absolute; bottom: 60px"
             (click)="stopPropagation($event)"
+            #set="routerLinkActive"
           >
-            <mat-icon>settings</mat-icon>
+            <mat-icon [ngStyle]="{ color: set.isActive ? '#cc8010' : 'white' }"
+              >settings</mat-icon
+            >
             <span
               [@animateText]="linkText ? 'show' : 'hide'"
               class="sidenav-span"

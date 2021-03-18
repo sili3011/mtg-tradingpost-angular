@@ -1,6 +1,7 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import * as _ from 'lodash';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { Cards } from 'scryfall-sdk';
 import { CardAdapter } from 'src/app/models/card-adapter';
@@ -32,9 +33,9 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.subscriptions.add(
-      this.searchControl.valueChanges.subscribe(async () => {
+      this.searchControl.valueChanges.subscribe(() => {
         this.loaded.next(false);
-        this.autoCompleteCatalogue = await Cards.autoCompleteName(this.input);
+        this.debouncedAutocomplete();
       })
     );
     this.subscriptions.add(
@@ -50,6 +51,10 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
   }
+
+  debouncedAutocomplete = _.debounce(async () => {
+    this.autoCompleteCatalogue = await Cards.autoCompleteName(this.input);
+  }, 200);
 
   onEnter() {
     this.onSelect(this.input);
