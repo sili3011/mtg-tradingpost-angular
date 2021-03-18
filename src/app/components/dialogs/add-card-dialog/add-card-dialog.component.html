@@ -30,6 +30,19 @@
         </mat-autocomplete>
       </mat-form-field>
       <div fxLayout="row">
+        <button
+          *ngIf="selectedPrint && selectedPrint.foil"
+          mat-icon-button
+          [matTooltip]="
+            isFoil ? 'Marked as foil. Shiny!' : 'Mark as foil. Shiny!'
+          "
+          style="position: absolute; z-index: 99; margin-left: 250px"
+          (click)="toggleFoil()"
+        >
+          <mat-icon style="color: #f1ca0f; font-size: 30px">
+            {{ isFoil ? "star" : "star_border" }}
+          </mat-icon>
+        </button>
         <div style="min-width: 300px">
           <div class="flip-card">
             <div class="flip-card-inner">

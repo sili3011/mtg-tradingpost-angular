@@ -5,7 +5,6 @@ import * as _ from 'lodash';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { Cards } from 'scryfall-sdk';
 import { CardAdapter } from 'src/app/models/card-adapter';
-import { LISTTYPES } from 'src/app/models/enums';
 import { DBService } from 'src/app/services/db.service';
 
 @Component({
@@ -22,6 +21,7 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
   lastPicLoaded = 'assets/mtg-cardback.jpg';
 
   amount: number = 1;
+  isFoil: boolean = false;
 
   subscriptions: Subscription = new Subscription();
 
@@ -109,7 +109,8 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
       this.selectedPrint!,
       this.data.listType,
       this.data.deckId,
-      this.amount
+      this.amount,
+      this.isFoil
     );
     this.close();
   }
@@ -122,5 +123,9 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
     if (this.amount > 1) {
       --this.amount;
     }
+  }
+
+  toggleFoil() {
+    this.isFoil = !this.isFoil;
   }
 }

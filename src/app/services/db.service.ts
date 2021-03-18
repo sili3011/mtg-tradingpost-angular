@@ -164,7 +164,8 @@ export class DBService {
     card: CardAdapter,
     listType: number,
     deckId?: string,
-    amount?: number
+    amount?: number,
+    isFoil?: boolean
   ) {
     if (
       this.getCollectionChainCards(listType, deckId)!
@@ -175,6 +176,7 @@ export class DBService {
       return;
     }
     card.amount = amount ? amount : 1;
+    card.isFoil = isFoil ? isFoil : false;
     this.getCollectionChainCards(listType, deckId)!.push(card).write();
   }
 

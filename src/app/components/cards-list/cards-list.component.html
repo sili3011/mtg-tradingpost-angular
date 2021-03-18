@@ -78,7 +78,16 @@
               *ngIf="!row.card_faces"
               cdkDrag
               [cdkDragData]="row"
-              >{{ row.name }}
+            >
+              <span fxLayout="row"
+                >{{ row.name }}
+                <mat-icon
+                  style="color: #f1ca0f; font-size: 13px"
+                  matTooltip="This card is foil. Shiny!"
+                >
+                  {{ row.isFoil ? "star" : "" }}
+                </mat-icon>
+              </span>
               <div *cdkDragPlaceholder></div>
               <img
                 *cdkDragPreview
@@ -86,18 +95,29 @@
                 [alt]="row.name"
             /></span>
             <span *ngIf="row.card_faces" cdkDrag [cdkDragData]="row">
-              <span
-                [matTooltip]="imageTooltip(row.card_faces[0].image_uris)"
-                matTooltipClass="fitToImage"
-                >{{ row.card_faces[0].name }}
+              <span fxLayout="row">
+                <span
+                  [matTooltip]="imageTooltip(row.card_faces[0].image_uris)"
+                  matTooltipClass="fitToImage"
+                  style="padding-right: 5px"
+                >
+                  {{ row.card_faces[0].name }}
+                </span>
+                |
+                <span
+                  [matTooltip]="imageTooltip(row.card_faces[1].image_uris)"
+                  matTooltipClass="fitToImage"
+                  style="padding-left: 5px"
+                >
+                  {{ row.card_faces[1].name }}
+                </span>
+                <mat-icon
+                  style="color: #f1ca0f; font-size: 13px"
+                  matTooltip="This card is foil. Shiny!"
+                >
+                  {{ row.isFoil ? "star" : "" }}
+                </mat-icon>
               </span>
-              |
-              <span
-                [matTooltip]="imageTooltip(row.card_faces[1].image_uris)"
-                matTooltipClass="fitToImage"
-              >
-                {{ row.card_faces[1].name }}</span
-              >
               <div *cdkDragPlaceholder></div>
               <img
                 *cdkDragPreview
