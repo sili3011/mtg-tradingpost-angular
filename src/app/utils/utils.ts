@@ -17,6 +17,9 @@ export function imageTooltip(image: ImageUris, type: 'normal' | 'art'): string {
 export function amountOfCardsOfDeck(deck: Deck): number {
   let cardsCount = 0;
   deck.cards.forEach((card) => (cardsCount += card.amount));
+  if (deck.companion) {
+    --cardsCount;
+  }
   return cardsCount;
 }
 
