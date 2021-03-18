@@ -183,6 +183,7 @@
         [matBadge]="getAmountOfProblems()"
         matBadgeColor="warn"
         style="padding-right: 10px"
+        [matTooltip]="problemsToHTMLList()"
       >
         Problems
       </span>
@@ -211,7 +212,9 @@
       </div>
     </div>
     <div class="detail">
-      Distribution ( <span [innerHTML]="parseColorPieData()"></span> )
+      <span matTooltip="Color Distribution ( Non-Lands | Lands )"
+        >Distribution ( <span [innerHTML]="parseColorPieData()"></span> )</span
+      >
       <div style="padding-top: 10px" *ngIf="!listExpanded">
         <apx-chart
           [series]="distSeries"

@@ -316,13 +316,13 @@ export class DeckComponent implements OnInit, OnDestroy {
             case 'r':
               ++landR;
               break;
-            case 'B':
+            case 'b':
               ++landB;
               break;
             case 'u':
               ++landU;
               break;
-            case 'W':
+            case 'w':
               ++landW;
               break;
             case '':
@@ -346,13 +346,13 @@ export class DeckComponent implements OnInit, OnDestroy {
             case 'r':
               ++red;
               break;
-            case 'B':
+            case 'b':
               ++black;
               break;
             case 'u':
               ++blue;
               break;
-            case 'W':
+            case 'w':
               ++white;
               break;
             case '':
@@ -371,7 +371,7 @@ export class DeckComponent implements OnInit, OnDestroy {
       `${multi > 0 ? '<span class="multi">' + multi + '</span>-' : ''}` +
       `${
         coloreless > 0
-          ? '<span class="coloreless">' + coloreless + '</span>'
+          ? '<span class="colorless">' + coloreless + '</span>'
           : ''
       }`;
     let lands =
@@ -381,7 +381,7 @@ export class DeckComponent implements OnInit, OnDestroy {
       `${landU > 0 ? '<span class="blue">' + landU + '</span>-' : ''}` +
       `${landW > 0 ? '<span class="white">' + landW + '</span>-' : ''}` +
       `${landM > 0 ? '<span class="multi">' + landM + '</span>-' : ''}` +
-      `${landC > 0 ? '<span class="coloreless">' + landC + '</span>' : ''}`;
+      `${landC > 0 ? '<span class="colorless">' + landC + '</span>' : ''}`;
     nonLands =
       nonLands[nonLands.length - 1] === '-'
         ? nonLands.substr(0, nonLands.length - 1)
@@ -431,5 +431,49 @@ export class DeckComponent implements OnInit, OnDestroy {
     return this.missingCards.length > 0
       ? this.deckValidation.amountOfProblems + 1
       : this.deckValidation.amountOfProblems;
+  }
+
+  problemsToHTMLList() {
+    let ret = '';
+    if (!this.deckValidation.hasLegalAmountOfCards) {
+      ret += `<div>${this.amountOfCardsInDeck(
+        this.deck!
+      )} is not a valid amount of cards in
+      ${
+        this.currentFormat ? this.formatArray[this.currentFormat.format] : 0
+      }.</div>`;
+    }
+    if (!this.deckValidation.hasLegalAmountOfCopiesOfCards) {
+      ret += `<div>Some cards exceed the copy limit of
+      ${this.currentFormat ? this.currentFormat.maxCopiesOfCards : 0} in
+      ${
+        this.currentFormat ? this.formatArray[this.currentFormat.format] : 0
+      }.</div>`;
+    }
+    if (!this.deckValidation.hasNotMoreThanMaximumOfSideboardCards) {
+      ret += `<div>${
+        this.deck!.sideboard.length
+      } is not a valid amount of cards for a
+      sideboard in
+      ${
+        this.currentFormat ? this.formatArray[this.currentFormat.format] : 0
+      }.</div>`;
+    }
+    if (!this.deckValidation.hasNoIllegalCards) {
+      ret += `<div>${
+        this.deckValidation.illegalCards.length
+      } of these cards are illegal in
+      ${this.formatArray[this.currentFormat.format]}.</div>`;
+    }
+    if (!this.deckValidation.hasNoIllegalColorIdentities) {
+      ret += `<div>
+      ${this.deckValidation.illegalColorIdentities.length} of these cards are
+      illegal in ${this.deck!.colors}.</div>`;
+    }
+    if (!this.deckValidation.needsCommander) {
+      ret += `<div>
+      You need to assign a commander.</div>`;
+    }
+    return ret;
   }
 }
