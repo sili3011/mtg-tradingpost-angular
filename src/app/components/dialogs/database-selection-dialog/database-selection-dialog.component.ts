@@ -162,7 +162,6 @@ export class DatabaseSelectionDialogComponent implements OnInit, OnDestroy {
         disableClose: true,
         panelClass: 'confirmDialog',
       });
-
       ref.afterClosed().subscribe(() => {
         if (ref.componentInstance.confirmed) {
           this.complete();

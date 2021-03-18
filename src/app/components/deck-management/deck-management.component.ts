@@ -2,7 +2,6 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { Router } from '@angular/router';
 import { autorun, IReactionDisposer } from 'mobx';
-import { Subscription } from 'rxjs';
 import { CardAdapter } from 'src/app/models/card-adapter';
 import { Format, Formats } from 'src/app/models/constants';
 import { Deck } from 'src/app/models/deck';
@@ -25,7 +24,6 @@ export class DeckManagementComponent implements OnInit, OnDestroy {
   hoveredDeckId = '';
 
   disposer: IReactionDisposer;
-  subscriptions: Subscription = new Subscription();
 
   constructor(
     private router: Router,
@@ -42,7 +40,6 @@ export class DeckManagementComponent implements OnInit, OnDestroy {
   ngOnInit(): void {}
 
   ngOnDestroy(): void {
-    this.subscriptions.unsubscribe();
     this.disposer();
   }
 
@@ -50,14 +47,12 @@ export class DeckManagementComponent implements OnInit, OnDestroy {
     const ref = this.dialog.open(ConfirmDialogComponent, {
       data: { message: 'Confirm deleting ' + deck.name },
     });
-    this.subscriptions.add(
-      ref.afterClosed().subscribe(() => {
-        if (ref.componentInstance.confirmed) {
-          this.router.navigate([`/decks`]);
-          this.dbService.removeDeck(deck);
-        }
-      })
-    );
+    ref.afterClosed().subscribe(() => {
+      if (ref.componentInstance.confirmed) {
+        this.router.navigate([`/decks`]);
+        this.dbService.removeDeck(deck);
+      }
+    });
     $event.stopPropagation();
   }
 

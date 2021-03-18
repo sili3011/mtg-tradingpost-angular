@@ -239,14 +239,12 @@ export class DeckComponent implements OnInit, OnDestroy {
     const ref = this.dialog.open(ConfirmDialogComponent, {
       data: { message: 'Confirm deleting ' + this.deck!.name },
     });
-    this.subscriptions.add(
-      ref.afterClosed().subscribe(() => {
-        if (ref.componentInstance.confirmed) {
-          this.router.navigate([`/decks`]);
-          this.dbService.removeDeck(this.deck!);
-        }
-      })
-    );
+    ref.afterClosed().subscribe(() => {
+      if (ref.componentInstance.confirmed) {
+        this.router.navigate([`/decks`]);
+        this.dbService.removeDeck(this.deck!);
+      }
+    });
   }
 
   rerender() {

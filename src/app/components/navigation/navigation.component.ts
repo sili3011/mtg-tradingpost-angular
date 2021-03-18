@@ -38,14 +38,14 @@ export class NavigationComponent implements OnInit, OnDestroy {
     private dialog: MatDialog
   ) {
     this.subscriptions.add(
-      this.sideNavState$.subscribe((res) => {
-        this.onSideNavChange = res;
-      })
+      this.sideNavState$.subscribe((res) => (this.onSideNavChange = res))
     );
   }
 
   ngOnInit(): void {
-    this.disposer = autorun(() => (this.decks = this.decksStore.decks));
+    this.disposer = autorun(() => {
+      this.decks = this.decksStore.decks;
+    });
   }
 
   ngOnDestroy(): void {
@@ -55,7 +55,6 @@ export class NavigationComponent implements OnInit, OnDestroy {
 
   onSidenavToggle(state: boolean) {
     this.sideNavState = state;
-
     setTimeout(() => {
       this.linkText = this.sideNavState;
     }, 200);
@@ -71,17 +70,15 @@ export class NavigationComponent implements OnInit, OnDestroy {
     const ref = this.dialog.open(ConfirmDialogComponent, {
       data: { message: 'Confirm deleting ' + deck.name },
     });
-    this.subscriptions.add(
-      ref.afterClosed().subscribe(() => {
-        if (ref.componentInstance.confirmed) {
-          if (deck === this.selectedDeck) {
-            this.selectedDeck = undefined;
-            this.router.navigate([`/decks`]);
-          }
-          this.dbService.removeDeck(deck);
+    ref.afterClosed().subscribe(() => {
+      if (ref.componentInstance.confirmed) {
+        if (deck === this.selectedDeck) {
+          this.selectedDeck = undefined;
+          this.router.navigate([`/decks`]);
         }
-      })
-    );
+        this.dbService.removeDeck(deck);
+      }
+    });
     this.stopPropagation($event);
   }
 
@@ -95,7 +92,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
     const ref = this.dialog.open(AddCardAmountToDeckDialogComponent, {
       data: { name: card.name, amount: card.amount },
     });
-    const sub = ref.afterClosed().subscribe(() => {
+    ref.afterClosed().subscribe(() => {
       if (ref.componentInstance.confirmed) {
         this.dbService.addCard(
           card,
@@ -104,7 +101,6 @@ export class NavigationComponent implements OnInit, OnDestroy {
           ref.componentInstance.amount
         );
       }
-      sub.unsubscribe();
     });
   }
 

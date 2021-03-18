@@ -262,7 +262,6 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
 
   dropCard(event: CdkDragDrop<CardAdapter[]>) {
     if (this.listType === LISTTYPES.WISHLIST) {
-      console.log(event.previousIndex, event.currentIndex);
       moveItemInArray(
         this.dataSource.data,
         event.previousIndex,
