@@ -11,6 +11,7 @@ import * as lowdb from 'lowdb';
 import { UserStore } from '../stores/user.store';
 import { CardsStore } from '../stores/cards.store';
 import { DecksStore } from '../stores/decks.store';
+import { sameCardComparison } from '../utils/utils';
 
 export interface Networth {
   value: number;
@@ -141,25 +142,6 @@ export class DBService {
     this.db!.set('networth.currency', currency).write();
   }
 
-  // updateCardValue() {
-  //   // const currentValue = store.getters.getCollectionValue;
-  //   // this.db!.set('networth.value', currentValue).write();
-  //   this.db!.set('networth.lastSync', new Date().getTime()).write();
-  //   //UPDATE VALUE OF EACH CARD
-  //   const identifiers: Array<CardIdentifier> = [];
-  //   const cards = this.getCollection();
-  //   cards.forEach((c) => {
-  //     identifiers.push({ id: c.id });
-  //   });
-  //   Cards.collection(...identifiers).on(
-  //     'data',
-  //     (data) => (cards.find((c) => c.id === data.id)!.prices = data.prices)
-  //   );
-  //   // store.commit('setCardsOfCollection', {
-  //   //   networth: this.getCards(LISTTYPES.COLLECTION),
-  //   // });
-  // }
-
   addCard(
     card: CardAdapter,
     listType: number,
@@ -167,16 +149,16 @@ export class DBService {
     amount?: number,
     isFoil?: boolean
   ) {
+    card.isFoil = isFoil ? isFoil : card.isFoil;
     if (
       this.getCollectionChainCards(listType, deckId)!
-        .find((c: CardAdapter) => c.id === card.id)
+        .find((c: CardAdapter) => sameCardComparison(c, card))
         .value()
     ) {
       this.increment(card, listType, deckId, amount);
       return;
     }
     card.amount = amount ? amount : 1;
-    card.isFoil = isFoil ? isFoil : false;
     this.getCollectionChainCards(listType, deckId)!.push(card).write();
   }
 
@@ -186,17 +168,19 @@ export class DBService {
     deckId?: string,
     amount?: number
   ) {
-    const inDB = this.getCollectionChainCards(listType, deckId)!.find(
-      (c: CardAdapter) => c.id === card.id
-    );
+    const inDB = this.getCollectionChainCards(
+      listType,
+      deckId
+    )!.find((c: CardAdapter) => sameCardComparison(c, card));
     const currentAmount = inDB.value().amount;
     inDB.assign({ amount: currentAmount + (amount ? amount : 1) }).write();
   }
 
   decrement(card: CardAdapter, listType: number, deckId?: string): boolean {
-    const inDB = this.getCollectionChainCards(listType, deckId)!.find(
-      (c: CardAdapter) => c.id === card.id
-    );
+    const inDB = this.getCollectionChainCards(
+      listType,
+      deckId
+    )!.find((c: CardAdapter) => sameCardComparison(c, card));
     const currentAmount = inDB.value().amount;
     if (currentAmount - 1 === 0) {
       this.getCollectionChainCards(listType, deckId)!

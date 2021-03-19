@@ -240,9 +240,10 @@
           <span *ngIf="selectedCurrency === Currencies.EUR"
             >{{ row.prices.eur }}€</span
           >
-          <span *ngIf="selectedCurrency === Currencies.USD"
-            >{{ row.prices.usd }}$</span
-          >
+          <span *ngIf="selectedCurrency === Currencies.USD">
+            <span *ngIf="!row.isFoil"> {{ row.prices.usd }}$ </span>
+            <span *ngIf="row.isFoil"> {{ row.prices.usd_foil }}$ </span>
+          </span>
         </td>
       </ng-container>
       <ng-container matColumnDef="amount">
@@ -292,7 +293,10 @@
           </div>
         </td>
       </ng-container>
-      <ng-container matColumnDef="actions" *ngIf="deck">
+      <ng-container
+        matColumnDef="actions"
+        *ngIf="deck || listType === ListTypes.WISHLIST"
+      >
         <th
           mat-header-cell
           *matHeaderCellDef
@@ -307,7 +311,11 @@
           Actions
         </th>
         <td mat-cell *matCellDef="let row">
-          <div fxLayout="row" style="justify-content: center">
+          <div
+            fxLayout="row"
+            style="justify-content: center"
+            *ngIf="listType !== ListTypes.WISHLIST"
+          >
             <button
               mat-icon-button
               matTooltip="Move to sideboard"
@@ -325,7 +333,7 @@
             <button
               mat-icon-button
               (click)="assignAsCompanion(row)"
-              *ngIf="canBeCompanion(row) && row.id !== deck.companion?.id"
+              *ngIf="canBeCompanion(row) && !compareCard(row, deck!.companion)"
               matTooltip="Assign as companion"
             >
               <mat-icon
@@ -336,7 +344,7 @@
             <button
               mat-icon-button
               (click)="deassignAsCompanion()"
-              *ngIf="canBeCompanion(row) && row.id === deck.companion?.id"
+              *ngIf="canBeCompanion(row) && compareCard(row, deck!.companion)"
               matTooltip="Assign as companion"
             >
               <mat-icon
@@ -382,6 +390,19 @@
               >
                 post_add
               </mat-icon>
+            </button>
+          </div>
+          <div
+            fxLayout="row"
+            style="justify-content: center"
+            *ngIf="listType === ListTypes.WISHLIST"
+          >
+            <button
+              mat-icon-button
+              matTooltip="Move to collection"
+              (click)="moveToCollection(row)"
+            >
+              <mat-icon style="color: orange"> menu_open </mat-icon>
             </button>
           </div>
         </td>

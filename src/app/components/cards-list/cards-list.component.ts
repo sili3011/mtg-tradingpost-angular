@@ -22,7 +22,11 @@ import { CURRENCIES, FORMATS, LISTTYPES } from 'src/app/models/enums';
 import { DBService } from 'src/app/services/db.service';
 import { CardsStore } from 'src/app/stores/cards.store';
 import { DecksStore } from 'src/app/stores/decks.store';
-import { DeckValidation, imageTooltip } from 'src/app/utils/utils';
+import {
+  DeckValidation,
+  imageTooltip,
+  sameCardComparison,
+} from 'src/app/utils/utils';
 import { AddCardDialogComponent } from '../dialogs/add-card-dialog/add-card-dialog.component';
 
 @Component({
@@ -100,7 +104,7 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
       }
       this.dataSource = new MatTableDataSource(this.cardsList);
       this.selectedCurrency = this.cardsStore.networth.currency;
-      if (this.deck) {
+      if (this.deck || this.listType === this.ListTypes.WISHLIST) {
         this.displayedColumns.push('actions');
       }
     });
@@ -237,27 +241,41 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
 
   moveToWishlist(card: CardAdapter) {}
 
+  moveToCollection(card: CardAdapter) {
+    this.decrement(card);
+    this.dbService.addCard(
+      Object.assign({}, card),
+      this.ListTypes.COLLECTION,
+      undefined,
+      undefined,
+      card.isFoil
+    );
+  }
+
   imageTooltip(card: any): string {
     return imageTooltip(card, 'normal');
   }
 
   isCardIllegal(card: CardAdapter): boolean {
     return (
-      this.deckValidation?.illegalCards.find((c) => c.id === card.id) !==
-      undefined
+      this.deckValidation?.illegalCards.find((c) =>
+        sameCardComparison(c, card)
+      ) !== undefined
     );
   }
 
   isCardIllegalColors(card: CardAdapter): boolean {
     return (
-      this.deckValidation?.illegalColorIdentities.find(
-        (c) => c.id === card.id
+      this.deckValidation?.illegalColorIdentities.find((c) =>
+        sameCardComparison(c, card)
       ) !== undefined
     );
   }
 
   isCardInMissingCards(card: CardAdapter) {
-    return this.missingCards.map((card) => card.id).includes(card.id);
+    return this.missingCards
+      .map((c) => [c.id, c.isFoil])
+      .includes([card.id, card.isFoil]);
   }
 
   dropCard(event: CdkDragDrop<CardAdapter[]>) {
@@ -269,5 +287,9 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
       );
       this.reapplyDatasource();
     }
+  }
+
+  compareCard(card1: CardAdapter | undefined, card2: CardAdapter | undefined) {
+    return sameCardComparison(card1, card2);
   }
 }

@@ -318,3 +318,12 @@ export function validateDeck(deck: Deck, format: Format): DeckValidation {
   }
   return ret;
 }
+
+export function sameCardComparison(
+  card1: CardAdapter | undefined,
+  card2: CardAdapter | undefined
+): boolean {
+  return card1 && card2
+    ? card1.id === card2.id && card1.isFoil === card2.isFoil
+    : false;
+}

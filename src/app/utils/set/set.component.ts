@@ -1,4 +1,5 @@
 import { Component, Input } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import keyrune from './set.scss';
 
 @Component({
@@ -62,7 +63,6 @@ export class SetComponent {
     classes += this.foil ? 'ss-foil ' : '';
 
     return `<i 
-    title="${this.set_name}"
     alt="${this.set_name}" aria-hidden class="${classes}"></i>`;
   }
 }

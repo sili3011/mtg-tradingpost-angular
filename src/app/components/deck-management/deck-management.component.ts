@@ -162,7 +162,9 @@ export class DeckManagementComponent implements OnInit, OnDestroy {
 
   missingCards(deck: Deck): Array<CardAdapter> {
     return this.cardsStore.missingCards.filter((c) =>
-      deck.cards.map((card) => card.id).includes(c.id)
+      deck.cards
+        .map((card) => [card.id, card.isFoil])
+        .includes([c.id, c.isFoil])
     );
   }
 }

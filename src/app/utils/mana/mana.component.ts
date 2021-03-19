@@ -64,7 +64,7 @@ export class ManaComponent implements OnChanges {
         ? [`ms-loyalty-${this.loyalty}`] + ' '
         : '';
 
-    return `<i title=${this.icons[this.symbol]} alt=${
+    return `<i alt=${
       this.icons[this.symbol]
     } aria-hidden class="${classes}"></i>`;
   }

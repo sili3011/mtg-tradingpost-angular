@@ -5,6 +5,7 @@ import { Networth } from '../services/db.service';
 import { defaultNetworth } from '../models/defaults';
 import { CURRENCIES } from '../models/enums';
 import { DecksStore } from './decks.store';
+import { sameCardComparison } from '../utils/utils';
 
 @Injectable({
   providedIn: 'root',
@@ -66,7 +67,7 @@ export class CardsStore {
     const neededCards: Array<CardAdapter> = [];
     this.decksStore.decks.forEach((deck) =>
       deck.cards.forEach((card) => {
-        const found = neededCards.find((c) => c.id === card.id);
+        const found = neededCards.find((c) => sameCardComparison(c, card));
         if (found) {
           found.amount += card.amount;
         } else {
@@ -76,7 +77,7 @@ export class CardsStore {
     );
     const missingCards: Array<CardAdapter> = [];
     neededCards.forEach((card) => {
-      const found = this.collection.find((c) => c.id === card.id);
+      const found = this.collection.find((c) => sameCardComparison(c, card));
       if (found) {
         if (card.amount - found.amount <= 0) {
           return;
