@@ -23,6 +23,7 @@
       (mouseleave)="onSidenavToggle(false)"
       [@onSideNavChange]="sideNavState ? 'open' : 'close'"
       (click)="goto('decks')"
+      [disableClose]="true"
     >
       <div
         fxLayout="column"
