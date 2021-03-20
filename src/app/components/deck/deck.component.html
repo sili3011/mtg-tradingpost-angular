@@ -180,7 +180,7 @@
     </div>
     <div class="detail">
       <span
-        [matBadge]="getAmountOfProblems()"
+        [matBadge]="amountOfProblems"
         matBadgeColor="warn"
         style="padding-right: 10px"
         [matTooltip]="problemsToHTMLList()"
@@ -197,7 +197,7 @@
       </div>
     </div>
     <div class="detail">
-      Curve ( <span [innerHTML]="parseCurveData()"></span> )
+      Curve ( <span [innerHTML]="parsedCurve"></span> )
       <div *ngIf="!listExpanded">
         <apx-chart
           [series]="curveSeries"
@@ -213,7 +213,7 @@
     </div>
     <div class="detail">
       <span matTooltip="Color Distribution ( Non-Lands | Lands )"
-        >Distribution ( <span [innerHTML]="parseColorPieData()"></span> )</span
+        >Distribution ( <span [innerHTML]="parsedPie"></span> )</span
       >
       <div style="padding-top: 10px" *ngIf="!listExpanded">
         <apx-chart

@@ -113,6 +113,8 @@ export class DeckComponent implements OnInit, OnDestroy {
   };
   // CURVE END
 
+  parsedCurve: string = '';
+
   // DISTRIBUTION
   distType: PIECHART = PIECHART.COLORS;
   distChart: ApexChart = {
@@ -150,11 +152,14 @@ export class DeckComponent implements OnInit, OnDestroy {
   };
   // DISTRIBUTION END
 
+  parsedPie: string = '';
+
   listExpanded: boolean = false;
 
   deckId: string = '';
   deck!: Deck | undefined;
   deckValidation: DeckValidation = Object.assign({}, defaultDeckValidation);
+  amountOfProblems: number = 0;
 
   missingCards: Array<CardAdapter> = [];
 
@@ -252,12 +257,14 @@ export class DeckComponent implements OnInit, OnDestroy {
   rerender() {
     this.deck = this.decksStore.decks.find((d) => d.id === this.deckId);
     this.curveSeries = deckToCurve(this.deck!);
+    this.parsedCurve = this.parseCurveData();
     this.distLabels = this.distTypeLabelConsts[this.distType];
     this.distSeries = deckToPie(
       this.deck!,
       this.distTypeLabelConsts[this.distType],
       this.distType
     );
+    this.parsedPie = this.parseColorPieData();
     if (this.currentFormat) {
       this.deckValidation = validateDeck(this.deck!, this.currentFormat);
       if (
@@ -274,6 +281,8 @@ export class DeckComponent implements OnInit, OnDestroy {
         c.isFoil,
       ])
     );
+    this.amountOfProblems = this.getAmountOfProblems();
+    this.cd.detectChanges();
   }
 
   parseCurveData(): string {

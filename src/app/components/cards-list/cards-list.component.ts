@@ -245,9 +245,6 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   moveTo(card: CardAdapter, listType: LISTTYPES, deckId?: string) {
-    if (listType !== LISTTYPES.WISHLIST) {
-      this.decrement(card);
-    }
     this.dbService.addCard(
       Object.assign({}, card),
       listType,
@@ -255,6 +252,9 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
       undefined,
       card.isFoil
     );
+    if (listType !== LISTTYPES.WISHLIST) {
+      this.decrement(card);
+    }
   }
 
   imageTooltip(card: any): string {
