@@ -127,6 +127,10 @@ export class DBService {
         return this.db!.get('decks')
           .find((d: Deck) => d.id === deckId)
           .get('cards');
+      case LISTTYPES.SIDEBOARD:
+        return this.db!.get('decks')
+          .find((d: Deck) => d.id === deckId)
+          .get('sideboard');
     }
   }
 

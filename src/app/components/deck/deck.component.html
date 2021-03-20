@@ -258,6 +258,42 @@
   >
     <mat-icon>{{ !listExpanded ? "expand_less" : "expand_more" }}</mat-icon>
   </button>
+  <div style="position: absolute; left: 5em">
+    <mat-button-toggle-group
+      name="listStyle"
+      aria-label="List style"
+      style="border: none"
+    >
+      <mat-button-toggle
+        value="list"
+        style="background-color: transparent"
+        matTooltip="Main deck"
+        (click)="currentListType = ListTypes.DECK"
+        ><mat-icon
+          color="primary"
+          [ngStyle]="{
+            color: currentListType === ListTypes.DECK ? '' : 'gray'
+          }"
+          >format_align_justify</mat-icon
+        ></mat-button-toggle
+      >
+      <mat-button-toggle
+        value="detail"
+        style="background-color: transparent"
+        matTooltip="Sideboard"
+        (click)="currentListType = ListTypes.SIDEBOARD"
+        ><mat-icon
+          color="primary"
+          [ngStyle]="{
+            color: currentListType === ListTypes.SIDEBOARD ? '' : 'gray'
+          }"
+          style="margin-top: 12px"
+        >
+          drag_handle
+        </mat-icon></mat-button-toggle
+      >
+    </mat-button-toggle-group>
+  </div>
   <div style="position: absolute; right: 2em">
     <mat-button-toggle-group
       name="listStyle"
@@ -265,9 +301,7 @@
       style="border: none"
     >
       <mat-button-toggle value="list" style="background-color: transparent"
-        ><mat-icon color="primary"
-          >format_align_justify</mat-icon
-        ></mat-button-toggle
+        ><mat-icon color="primary">reorder</mat-icon></mat-button-toggle
       >
       <mat-button-toggle value="detail" style="background-color: transparent"
         ><mat-icon color="primary"> view_module </mat-icon></mat-button-toggle
@@ -276,7 +310,7 @@
   </div>
 </div>
 <mtg-cards-list
-  [listType]="ListTypes.DECK"
+  [listType]="currentListType"
   [deck]="deck"
   [format]="currentFormat"
   [deckValidation]="deckValidation"

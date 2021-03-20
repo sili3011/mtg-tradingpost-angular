@@ -2,6 +2,7 @@ export enum LISTTYPES {
   COLLECTION,
   WISHLIST,
   DECK,
+  SIDEBOARD,
 }
 
 export enum CURRENCIES {

@@ -1,6 +1,11 @@
 <mat-card
   style="height: inherit"
-  [ngStyle]="{ margin: listType === ListTypes.DECK ? '0 2em 2em 2em' : '2em' }"
+  [ngStyle]="{
+    margin:
+      listType === ListTypes.DECK || listType === ListTypes.SIDEBOARD
+        ? '0 2em 2em 2em'
+        : '2em'
+  }"
 >
   <div fxLayout="row">
     <mat-form-field style="margin-left: 15%; margin-right: 12%; width: 70%">
@@ -319,17 +324,22 @@
             <button
               mat-icon-button
               matTooltip="Move to sideboard"
-              *ngIf="!showSideboard"
-              (click)="moveToSideboard(row)"
-              [disabled]="true"
+              *ngIf="listType === ListTypes.DECK"
+              (click)="moveTo(row, ListTypes.SIDEBOARD, deck?.id)"
             >
-              <mat-icon style="color: gray"> menu_open </mat-icon>
+              <mat-icon color="primary" style="transform: rotate(180deg)">
+                menu_open
+              </mat-icon>
             </button>
             <button
               mat-icon-button
-              *ngIf="!canBeCompanion(row)"
-              [disabled]="true"
-            ></button>
+              matTooltip="Move to main deck"
+              *ngIf="listType === ListTypes.SIDEBOARD"
+              (click)="moveTo(row, ListTypes.DECK, deck?.id)"
+            >
+              <mat-icon color="primary"> menu_open </mat-icon>
+            </button>
+            <button mat-icon-button *ngIf="!canBeCompanion(row)"></button>
             <button
               mat-icon-button
               (click)="assignAsCompanion(row)"
@@ -338,7 +348,7 @@
             >
               <mat-icon
                 svgIcon="paw"
-                [ngStyle]="{ color: canBeCompanion(row) ? 'orange' : 'gray' }"
+                [ngStyle]="{ color: canBeCompanion(row) ? '#cc8010' : 'gray' }"
               ></mat-icon>
             </button>
             <button
@@ -349,7 +359,7 @@
             >
               <mat-icon
                 svgIcon="paw-off"
-                [ngStyle]="{ color: canBeCompanion(row) ? 'orange' : 'gray' }"
+                [ngStyle]="{ color: canBeCompanion(row) ? '#cc8010' : 'gray' }"
               ></mat-icon>
             </button>
             <button
@@ -365,22 +375,13 @@
             >
               <mat-icon
                 svgIcon="account-check"
-                [ngStyle]="{ color: canBeCommander(row) ? 'orange' : 'gray' }"
+                [ngStyle]="{ color: canBeCommander(row) ? '#cc8010' : 'gray' }"
               ></mat-icon>
             </button>
             <button
               mat-icon-button
-              matTooltip="Move to main deck"
-              *ngIf="showSideboard"
-              (click)="moveToMainDeck(row)"
-              [disabled]="true"
-            >
-              <mat-icon style="color: gray"> menu_open </mat-icon>
-            </button>
-            <button
-              mat-icon-button
               matTooltip="Add to wishlist"
-              (click)="moveToWishlist(row)"
+              (click)="moveTo(row, ListTypes.WISHLIST)"
             >
               <mat-icon
                 color="primary"
@@ -400,9 +401,9 @@
             <button
               mat-icon-button
               matTooltip="Move to collection"
-              (click)="moveToCollection(row)"
+              (click)="moveTo(row, ListTypes.COLLECTION)"
             >
-              <mat-icon style="color: orange"> menu_open </mat-icon>
+              <mat-icon style="color: #cc8010"> menu_open </mat-icon>
             </button>
           </div>
         </td>

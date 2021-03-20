@@ -166,6 +166,8 @@ export class DeckComponent implements OnInit, OnDestroy {
 
   hover: 'comm' | 'comp' = 'comm';
 
+  currentListType = LISTTYPES.DECK;
+
   subscriptions: Subscription = new Subscription();
 
   constructor(

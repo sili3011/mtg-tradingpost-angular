@@ -78,8 +78,6 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
   @Input()
   expanded: boolean = false;
 
-  showSideboard: boolean = false;
-
   disposer!: IReactionDisposer;
 
   constructor(
@@ -141,6 +139,18 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.deck) {
       this.cardsList = this.deck?.cards!;
+      this.reapplyDatasource();
+    }
+    if (
+      changes.listType &&
+      changes.listType.previousValue !== changes.listType.currentValue
+    ) {
+      if (changes.listType.currentValue === LISTTYPES.DECK) {
+        this.cardsList = this.deck?.cards!;
+      }
+      if (changes.listType.currentValue === LISTTYPES.SIDEBOARD) {
+        this.cardsList = this.deck?.sideboard!;
+      }
       this.reapplyDatasource();
     }
   }
@@ -234,19 +244,14 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
     this.dbService.setDeck(this.deck!);
   }
 
-  // TODO
-  moveToSideboard(card: CardAdapter) {}
-
-  moveToMainDeck(card: CardAdapter) {}
-
-  moveToWishlist(card: CardAdapter) {}
-
-  moveToCollection(card: CardAdapter) {
-    this.decrement(card);
+  moveTo(card: CardAdapter, listType: LISTTYPES, deckId?: string) {
+    if (listType !== LISTTYPES.WISHLIST) {
+      this.decrement(card);
+    }
     this.dbService.addCard(
       Object.assign({}, card),
-      this.ListTypes.COLLECTION,
-      undefined,
+      listType,
+      deckId,
       undefined,
       card.isFoil
     );
