@@ -60,7 +60,7 @@ export class DeckManagementComponent implements OnInit, OnDestroy {
     const colors = Object.values(MANACOLORS)[
       Object.keys(MANACOLORS).indexOf(identity)
     ];
-    let color = `linear-gradient(60deg, ONE 50%, TWO 50%)`;
+    let color = `linear-gradient(60deg, COLORS)`;
     switch (colors) {
       case MANACOLORS.NONE:
         color = '';
@@ -81,54 +81,170 @@ export class DeckManagementComponent implements OnInit, OnDestroy {
         color = COLORHEXES.BLACK;
         break;
       case MANACOLORS.AZORIUS:
-        color = color
-          .replace('ONE', COLORHEXES.WHITE)
-          .replace('TWO', COLORHEXES.BLUE);
+        color = color.replace(
+          'COLORS',
+          `${COLORHEXES.WHITE} 50%, ${COLORHEXES.BLUE} 50%`
+        );
         break;
       case MANACOLORS.ORZOV:
-        color = color
-          .replace('ONE', COLORHEXES.WHITE)
-          .replace('TWO', COLORHEXES.BLACK);
+        color = color.replace(
+          'COLORS',
+          `${COLORHEXES.WHITE} 50%, ${COLORHEXES.BLACK} 50%`
+        );
         break;
       case MANACOLORS.DIMIR:
-        color = color
-          .replace('ONE', COLORHEXES.BLUE)
-          .replace('TWO', COLORHEXES.BLACK);
+        color = color.replace(
+          'COLORS',
+          `${COLORHEXES.BLUE} 50%, ${COLORHEXES.BLACK} 50%`
+        );
         break;
       case MANACOLORS.IZZET:
-        color = color
-          .replace('ONE', COLORHEXES.RED)
-          .replace('TWO', COLORHEXES.BLUE);
+        color = color.replace(
+          'COLORS',
+          `${COLORHEXES.RED} 50%, ${COLORHEXES.BLUE} 50%`
+        );
         break;
       case MANACOLORS.GOLGARI:
-        color = color
-          .replace('ONE', COLORHEXES.GREEN)
-          .replace('TWO', COLORHEXES.BLACK);
+        color = color.replace(
+          'COLORS',
+          `${COLORHEXES.GREEN} 50%, ${COLORHEXES.BLACK} 50%`
+        );
         break;
       case MANACOLORS.RAKDOS:
-        color = color
-          .replace('ONE', COLORHEXES.RED)
-          .replace('TWO', COLORHEXES.BLACK);
+        color = color.replace(
+          'COLORS',
+          `${COLORHEXES.RED} 50%, ${COLORHEXES.BLACK} 50%`
+        );
         break;
       case MANACOLORS.BOROS:
-        color = color
-          .replace('ONE', COLORHEXES.WHITE)
-          .replace('TWO', COLORHEXES.RED);
+        color = color.replace(
+          'COLORS',
+          `${COLORHEXES.WHITE} 50%, ${COLORHEXES.RED} 50%`
+        );
         break;
       case MANACOLORS.GRUUL:
-        color = color
-          .replace('ONE', COLORHEXES.GREEN)
-          .replace('TWO', COLORHEXES.RED);
+        color = color.replace(
+          'COLORS',
+          `${COLORHEXES.GREEN} 50%, ${COLORHEXES.RED} 50%`
+        );
         break;
       case MANACOLORS.SIMMIC:
-        color = color
-          .replace('ONE', COLORHEXES.BLUE)
-          .replace('TWO', COLORHEXES.GREEN);
+        color = color.replace(
+          'COLORS',
+          `${COLORHEXES.BLUE} 50%, ${COLORHEXES.GREEN} 50%`
+        );
         break;
       case MANACOLORS.SELESNYA:
+        color = color.replace(
+          'COLORS',
+          `${COLORHEXES.WHITE} 50%, ${COLORHEXES.GREEN} 50%`
+        );
+        break;
+      case MANACOLORS.BANT:
+        color = color.replace(
+          'COLORS',
+          `${COLORHEXES.WHITE} 33%, ${COLORHEXES.BLUE} 33%, ${COLORHEXES.BLUE} 66%, ${COLORHEXES.GREEN} 66%`
+        );
+        break;
+      case MANACOLORS.ESPER:
+        color = color.replace(
+          'COLORS',
+          `${COLORHEXES.BLUE} 33%, ${COLORHEXES.BLACK} 33%, ${COLORHEXES.BLACK} 66% ${COLORHEXES.WHITE} 66%`
+        );
+        break;
+      case MANACOLORS.GRIXIS:
+        color = color.replace(
+          'COLORS',
+          `${COLORHEXES.BLACK} 33%, ${COLORHEXES.RED} 33%, ${COLORHEXES.RED} 66%, ${COLORHEXES.BLUE} 66%`
+        );
+        break;
+      case MANACOLORS.JUND:
+        color = color.replace(
+          'COLORS',
+          `${COLORHEXES.RED} 33%, ${COLORHEXES.GREEN} 33%, ${COLORHEXES.GREEN} 66%, ${COLORHEXES.BLACK} 66%`
+        );
+        break;
+      case MANACOLORS.NAYA:
+        color = color.replace(
+          'COLORS',
+          `${COLORHEXES.GREEN} 33%, ${COLORHEXES.WHITE} 33%, ${COLORHEXES.WHITE} 66%, ${COLORHEXES.RED} 66%`
+        );
+        break;
+      case MANACOLORS.ABZAN:
+        color = color.replace(
+          'COLORS',
+          `${COLORHEXES.WHITE} 33%, ${COLORHEXES.BLACK} 33%, ${COLORHEXES.BLACK} 66%, ${COLORHEXES.GREEN} 66%`
+        );
+        break;
+      case MANACOLORS.JESKAI:
+        color = color.replace(
+          'COLORS',
+          `${COLORHEXES.BLUE} 33%, ${COLORHEXES.RED} 33%, ${COLORHEXES.RED} 66%, ${COLORHEXES.WHITE} 66%`
+        );
+        break;
+      case MANACOLORS.SULTAI:
+        color = color.replace(
+          'COLORS',
+          `${COLORHEXES.BLACK} 33%, ${COLORHEXES.GREEN} 33%, ${COLORHEXES.GREEN} 66%, ${COLORHEXES.BLUE} 66%`
+        );
+        break;
+      case MANACOLORS.MARDU:
+        color = color.replace(
+          'COLORS',
+          `${COLORHEXES.RED} 33%, ${COLORHEXES.WHITE} 33%, ${COLORHEXES.WHITE} 66%, ${COLORHEXES.BLACK} 66%`
+        );
+        break;
+      case MANACOLORS.TEMUR:
+        color = color.replace(
+          'COLORS',
+          `${COLORHEXES.GREEN} 33%, ${COLORHEXES.BLUE} 33%, ${COLORHEXES.BLUE} 66%, ${COLORHEXES.RED} 66%`
+        );
+        break;
+      case MANACOLORS.UBRG:
+        color = color.replace(
+          'COLORS',
+          `${COLORHEXES.BLUE} 25%, ${COLORHEXES.BLACK} 25%, ${COLORHEXES.BLACK} 50%, ${COLORHEXES.RED} 50%, ${COLORHEXES.RED} 75%, ${COLORHEXES.GREEN} 75%`
+        );
+        break;
+      case MANACOLORS.BRGW:
         color = color
-          .replace('ONE', COLORHEXES.WHITE)
-          .replace('TWO', COLORHEXES.GREEN);
+          .replace(
+            'COLORS',
+            `${COLORHEXES.BLACK} 25%, ${COLORHEXES.RED} 25%, ${COLORHEXES.RED} 50%, ${COLORHEXES.GREEN} 50%, ${COLORHEXES.GREEN} 75%, ${COLORHEXES.WHITE} 75%`
+          )
+          .replace('60', '70');
+        break;
+      case MANACOLORS.RGWU:
+        color = color
+          .replace(
+            'COLORS',
+            `${COLORHEXES.RED} 25%, ${COLORHEXES.GREEN} 25%, ${COLORHEXES.GREEN} 50%, ${COLORHEXES.WHITE} 50%, ${COLORHEXES.WHITE} 75%, ${COLORHEXES.BLUE} 75%`
+          )
+          .replace('60', '70');
+        break;
+      case MANACOLORS.RGWU:
+        color = color
+          .replace(
+            'COLORS',
+            `${COLORHEXES.GREEN} 25%, ${COLORHEXES.WHITE} 25%, ${COLORHEXES.WHITE} 50%, ${COLORHEXES.BLUE} 50%, ${COLORHEXES.BLUE} 75% ${COLORHEXES.BLACK} 75%`
+          )
+          .replace('60', '70');
+        break;
+      case MANACOLORS.WUBR:
+        color = color
+          .replace(
+            'COLORS',
+            `${COLORHEXES.WHITE} 25%, ${COLORHEXES.BLUE} 25%, ${COLORHEXES.BLUE} 50%, ${COLORHEXES.BLACK} 50%, ${COLORHEXES.BLACK} 75%, ${COLORHEXES.RED} 75%`
+          )
+          .replace('60', '70');
+        break;
+      case MANACOLORS.WUBRG:
+        color = color
+          .replace(
+            'COLORS',
+            `${COLORHEXES.WHITE} 20%, ${COLORHEXES.BLUE} 20%, ${COLORHEXES.BLUE} 40%, ${COLORHEXES.BLACK} 40%, ${COLORHEXES.BLACK} 60%, ${COLORHEXES.RED} 60%, ${COLORHEXES.RED} 80%, ${COLORHEXES.GREEN} 80%`
+          )
+          .replace('60', '75');
         break;
       default:
         throw new Error(

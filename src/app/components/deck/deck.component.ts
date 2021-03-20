@@ -475,7 +475,7 @@ export class DeckComponent implements OnInit, OnDestroy {
       ret += `<div>${
         this.deckValidation.illegalCards.length
       } of these cards are illegal in
-      ${this.formatArray[this.currentFormat.format]}.</div>`;
+      ${this.formatArray[this.currentFormat?.format]}.</div>`;
     }
     if (!this.deckValidation.hasNoIllegalColorIdentities) {
       ret += `<div>
