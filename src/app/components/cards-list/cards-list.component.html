@@ -59,7 +59,7 @@
             color:
               listType === ListTypes.DECK && !deckValidation?.hasNoIllegalCards
                 ? '#f44336'
-                : 'white'
+                : ''
           }"
         >
           Name
@@ -137,7 +137,7 @@
               matTooltipClass="fitToImage"
               *ngIf="!row.card_faces"
               [ngStyle]="{
-                color: isCardIllegal(row) ? '#f44336' : 'white'
+                color: isCardIllegal(row) ? '#f44336' : ''
               }"
               >{{ row.name }}
             </span>
@@ -179,7 +179,7 @@
               listType === ListTypes.DECK &&
               !deckValidation?.hasNoIllegalColorIdentities
                 ? '#f44336'
-                : 'white'
+                : ''
           }"
         >
           Mana Cost
@@ -257,7 +257,7 @@
               listType === ListTypes.DECK &&
               !deckValidation?.hasLegalAmountOfCopiesOfCards
                 ? '#f44336'
-                : 'white'
+                : ''
           }"
         >
           Amount
@@ -278,7 +278,7 @@
                 color:
                   format && row.amount > format.maxCopiesOfCards
                     ? '#f44336'
-                    : 'white'
+                    : ''
               }"
               >{{ row.amount }}</span
             >
@@ -305,7 +305,7 @@
             color:
               listType === ListTypes.DECK && missingCards.length > 0
                 ? '#f44336'
-                : 'white'
+                : ''
           }"
         >
           Actions
