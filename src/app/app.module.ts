@@ -22,6 +22,15 @@ import { AddCardAmountToDeckDialogComponent } from './components/dialogs/add-car
 import { ConfirmDialogComponent } from './components/dialogs/confirm-dialog/confirm-dialog.component';
 import { DeckManagementComponent } from './components/deck-management/deck-management.component';
 import { ProblemStatusComponent } from './components/problem-status/problem-status.component';
+import { BoxOpeningComponent } from './components/box-opening/box-opening.component';
+import { CardDetectionComponent } from './components/card-detection/card-detection.component';
+import { NgOpenCVModule } from 'ng-open-cv';
+
+const openCVConfig = {
+  scriptUrl: 'assets/opencv/asm/3.4/opencv.js',
+  usingWasm: false,
+  onRuntimeInitialized: () => {},
+};
 
 @NgModule({
   declarations: [
@@ -42,6 +51,8 @@ import { ProblemStatusComponent } from './components/problem-status/problem-stat
     ConfirmDialogComponent,
     DeckManagementComponent,
     ProblemStatusComponent,
+    BoxOpeningComponent,
+    CardDetectionComponent,
   ],
   imports: [
     BrowserModule,
@@ -50,6 +61,7 @@ import { ProblemStatusComponent } from './components/problem-status/problem-stat
     SharedModule,
     HttpClientModule,
     MatIconModule,
+    NgOpenCVModule.forRoot(openCVConfig),
   ],
   providers: [],
   bootstrap: [AppComponent],

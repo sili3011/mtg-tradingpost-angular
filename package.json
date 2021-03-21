@@ -33,6 +33,7 @@
     "mana-font": "^1.10.0",
     "mobx": "^6.1.8",
     "ng-apexcharts": "^1.5.8",
+    "ng-open-cv": "^0.3.1",
     "ng-packagr": "^11.2.4",
     "ngx-material-file-input": "^2.1.1",
     "rxjs": "^6.6.6",

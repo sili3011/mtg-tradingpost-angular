@@ -28,6 +28,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MaterialFileInputModule } from 'ngx-material-file-input';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgApexchartsModule } from 'ng-apexcharts';
+import { NgOpenCVModule } from 'ng-open-cv';
 
 @NgModule({
   declarations: [],
@@ -68,6 +69,7 @@ import { NgApexchartsModule } from 'ng-apexcharts';
     FormsModule,
     ReactiveFormsModule,
     NgApexchartsModule,
+    NgOpenCVModule,
   ],
 })
 export class SharedModule {}
