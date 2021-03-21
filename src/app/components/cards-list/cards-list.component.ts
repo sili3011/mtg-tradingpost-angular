@@ -278,9 +278,11 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   isCardInMissingCards(card: CardAdapter) {
-    return this.missingCards
-      .map((c) => [c.id, c.isFoil])
-      .includes([card.id, card.isFoil]);
+    return (
+      this.missingCards.filter(
+        (c) => card.id === c.id && card.isFoil === c.isFoil
+      ).length > 0
+    );
   }
 
   dropCard(event: CdkDragDrop<CardAdapter[]>) {

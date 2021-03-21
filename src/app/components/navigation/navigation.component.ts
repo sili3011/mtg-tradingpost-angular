@@ -11,6 +11,7 @@ import { DecksStore } from 'src/app/stores/decks.store';
 import { AddCardAmountToDeckDialogComponent } from '../dialogs/add-card-amount-to-deck-dialog/add-card-amount-to-deck-dialog.component';
 import { Router } from '@angular/router';
 import { ConfirmDialogComponent } from '../dialogs/confirm-dialog/confirm-dialog.component';
+import { CardAdapter } from 'src/app/models/card-adapter';
 
 @Component({
   selector: 'mtg-navigation',
@@ -88,17 +89,19 @@ export class NavigationComponent implements OnInit, OnDestroy {
   }
 
   dropCardOnDeck($event: any, deck: Deck) {
-    const card = $event.item.data;
+    const card: CardAdapter = $event.item.data;
     const ref = this.dialog.open(AddCardAmountToDeckDialogComponent, {
       data: { name: card.name, amount: card.amount },
     });
+    console.log(card.isFoil);
     ref.afterClosed().subscribe(() => {
       if (ref.componentInstance.confirmed) {
         this.dbService.addCard(
           card,
           LISTTYPES.DECK,
           deck.id,
-          ref.componentInstance.amount
+          ref.componentInstance.amount,
+          card.isFoil
         );
       }
     });
