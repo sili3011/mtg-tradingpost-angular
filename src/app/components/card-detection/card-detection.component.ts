@@ -50,7 +50,7 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
     let img_gray = new cv.Mat(480, 640, cv.CV_8UC1);
     cv.cvtColor(src, img_gray, cv.COLOR_BGR2GRAY);
     let img_blur = new cv.Mat(480, 640, cv.CV_8UC1);
-    cv.medianBlur(img_gray, img_blur, 3);
+    cv.medianBlur(img_gray, img_blur, 5);
     let img_thresh = new cv.Mat(480, 640, cv.CV_8UC1);
     cv.adaptiveThreshold(
       img_blur,
@@ -81,13 +81,14 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
     let cnts_rect = new cv.MatVector();
     for (let i = 0; i < cnts.size(); ++i) {
       let cnt = cnts.get(i);
-      const size = cv.contourArea(cnt);
-      const peri = cv.arcLength(cnt, true);
+      const size = cv.contourArea(cnt, true);
+      const peri = cv.arcLength(cnt, false);
       let approx = new cv.Mat();
       cv.approxPolyDP(cnt, approx, 0.04 * peri, true);
       if (size >= 10 && approx.size().width * approx.size().height === 4) {
         cnts_rect.push_back(approx);
       }
+      approx.delete();
     }
 
     //calc warp
@@ -216,12 +217,14 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
       mat.delete();
     }
 
+    let dst = cv.Mat.zeros(src.rows, src.cols, cv.CV_8UC3);
+
     // draw contours
     for (let i = 0; i < cnts_rect.size(); ++i) {
-      cv.drawContours(src, cnts_rect, i, new cv.Scalar(0, 255, 0), 2);
+      cv.drawContours(dst, cnts_rect, i, new cv.Scalar(0, 255, 0, 1), 1);
     }
 
-    cv.imshow(this.canvas.nativeElement, src);
+    cv.imshow(this.canvas.nativeElement, dst);
     const delay = 1000 / 30 - (Date.now() - begin);
     setTimeout(() => {
       this.detectCard(cap, src);
