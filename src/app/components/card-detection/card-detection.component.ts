@@ -196,7 +196,7 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
         bl[1],
       ]);
 
-      let size = new cv.Size(maxHeight, maxWidth);
+      let size = new cv.Size(maxWidth, maxHeight);
 
       // compute the perspective transform matrix and then apply it
       let mat = cv.getPerspectiveTransform(srcCoords, finalDestCoords);
