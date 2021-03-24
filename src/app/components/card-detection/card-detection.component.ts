@@ -14,6 +14,8 @@ import { NgOpenCVService } from 'ng-open-cv';
 export class CardDetectionComponent implements OnInit, OnDestroy {
   @ViewChild('cam') cam!: ElementRef;
   @ViewChild('canvas') canvas!: ElementRef;
+  @ViewChild('canvas1') canvas1!: ElementRef;
+  @ViewChild('canvas2') canvas2!: ElementRef;
 
   cameraStarted: boolean = false;
 
@@ -39,6 +41,7 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.cameraStarted = false;
     this.openCVService.stopCamera();
   }
 
@@ -50,7 +53,7 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
     let img_gray = new cv.Mat(480, 640, cv.CV_8UC1);
     cv.cvtColor(src, img_gray, cv.COLOR_BGR2GRAY);
     let img_blur = new cv.Mat(480, 640, cv.CV_8UC1);
-    cv.medianBlur(img_gray, img_blur, 5);
+    cv.medianBlur(img_gray, img_blur, 9);
     let img_thresh = new cv.Mat(480, 640, cv.CV_8UC1);
     cv.adaptiveThreshold(
       img_blur,
@@ -85,54 +88,56 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
       const peri = cv.arcLength(cnt, false);
       let approx = new cv.Mat();
       cv.approxPolyDP(cnt, approx, 0.04 * peri, true);
-      if (size >= 10 && approx.size().width * approx.size().height === 4) {
+      if (size >= 100 && approx.size().width * approx.size().height === 4) {
         cnts_rect.push_back(approx);
       }
       approx.delete();
     }
 
+    let warpedImages = new cv.MatVector();
+
     //calc warp
     for (let i = 0; i < cnts_rect.size(); ++i) {
       let points = [
         {
-          x: parseFloat(cnts_rect.get(i).data[0]),
-          y: parseFloat(cnts_rect.get(i).data[4]),
+          x: parseFloat(cnts_rect.get(i).data32S[0]),
+          y: parseFloat(cnts_rect.get(i).data32S[1]),
           sum:
-            parseFloat(cnts_rect.get(i).data[0]) +
-            parseFloat(cnts_rect.get(i).data[4]),
+            parseFloat(cnts_rect.get(i).data32S[0]) +
+            parseFloat(cnts_rect.get(i).data32S[1]),
           diff:
-            parseFloat(cnts_rect.get(i).data[0]) -
-            parseFloat(cnts_rect.get(i).data[4]),
+            parseFloat(cnts_rect.get(i).data32S[0]) -
+            parseFloat(cnts_rect.get(i).data32S[1]),
         },
         {
-          x: parseFloat(cnts_rect.get(i).data[8]),
-          y: parseFloat(cnts_rect.get(i).data[12]),
+          x: parseFloat(cnts_rect.get(i).data32S[2]),
+          y: parseFloat(cnts_rect.get(i).data32S[3]),
           sum:
-            parseFloat(cnts_rect.get(i).data[8]) +
-            parseFloat(cnts_rect.get(i).data[12]),
+            parseFloat(cnts_rect.get(i).data32S[2]) +
+            parseFloat(cnts_rect.get(i).data32S[3]),
           diff:
-            parseFloat(cnts_rect.get(i).data[8]) -
-            parseFloat(cnts_rect.get(i).data[12]),
+            parseFloat(cnts_rect.get(i).data32S[2]) -
+            parseFloat(cnts_rect.get(i).data32S[3]),
         },
         {
-          x: parseFloat(cnts_rect.get(i).data[16]),
-          y: parseFloat(cnts_rect.get(i).data[20]),
+          x: parseFloat(cnts_rect.get(i).data32S[4]),
+          y: parseFloat(cnts_rect.get(i).data32S[5]),
           sum:
-            parseFloat(cnts_rect.get(i).data[16]) +
-            parseFloat(cnts_rect.get(i).data[20]),
+            parseFloat(cnts_rect.get(i).data32S[4]) +
+            parseFloat(cnts_rect.get(i).data32S[5]),
           diff:
-            parseFloat(cnts_rect.get(i).data[16]) -
-            parseFloat(cnts_rect.get(i).data[20]),
+            parseFloat(cnts_rect.get(i).data32S[4]) -
+            parseFloat(cnts_rect.get(i).data32S[5]),
         },
         {
-          x: parseFloat(cnts_rect.get(i).data[24]),
-          y: parseFloat(cnts_rect.get(i).data[28]),
+          x: parseFloat(cnts_rect.get(i).data32S[6]),
+          y: parseFloat(cnts_rect.get(i).data32S[7]),
           sum:
-            parseFloat(cnts_rect.get(i).data[24]) +
-            parseFloat(cnts_rect.get(i).data[28]),
+            parseFloat(cnts_rect.get(i).data32S[6]) +
+            parseFloat(cnts_rect.get(i).data32S[7]),
           diff:
-            parseFloat(cnts_rect.get(i).data[24]) -
-            parseFloat(cnts_rect.get(i).data[28]),
+            parseFloat(cnts_rect.get(i).data32S[6]) -
+            parseFloat(cnts_rect.get(i).data32S[7]),
         },
       ];
 
@@ -170,17 +175,17 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
       let heightB = Math.sqrt((tl[0] - bl[0]) ** 2 + (tl[1] - bl[1]) ** 2);
       let maxHeight = Math.max(heightA, heightB);
 
-      let finalDestCoords = cv.matFromArray(4, 1, cv.CV_32FC2, [
+      let finalDestCoords = cv.matFromArray(1, 4, cv.CV_32FC2, [
         0,
         0,
-        maxWidth - 1,
+        maxWidth,
         0,
-        maxWidth - 1,
-        maxHeight - 1,
+        maxWidth,
+        maxHeight,
         0,
-        maxHeight - 1,
+        maxHeight,
       ]);
-      let srcCoords = cv.matFromArray(4, 1, cv.CV_32FC2, [
+      let srcCoords = cv.matFromArray(1, 4, cv.CV_32FC2, [
         tl[0],
         tl[1],
         tr[0],
@@ -191,7 +196,7 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
         bl[1],
       ]);
 
-      let size = new cv.Size(maxHeight, maxHeight);
+      let size = new cv.Size(maxHeight, maxWidth);
 
       // compute the perspective transform matrix and then apply it
       let mat = cv.getPerspectiveTransform(srcCoords, finalDestCoords);
@@ -200,7 +205,7 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
 
       // If the image is horizontally long, rotate it by 90
       if (maxWidth > maxHeight) {
-        let center = new cv.Point(maxHeight / 2, maxHeight / 2);
+        let center = new cv.Point(maxHeight / 2, maxWidth / 2);
         let mat_rot = cv.getRotationMatrix2D(center, 270, 1.0);
         cv.warpAffine(
           warped,
@@ -213,8 +218,21 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
         );
         mat_rot.delete();
       }
-      warped.delete();
+
+      warpedImages.push_back(warped.clone());
+
       mat.delete();
+      finalDestCoords.delete();
+      srcCoords.delete();
+      warped.delete();
+    }
+
+    if (warpedImages.size() > 0) {
+      cv.imshow(this.canvas1.nativeElement, warpedImages.get(0));
+    }
+
+    if (warpedImages.size() > 1) {
+      cv.imshow(this.canvas2.nativeElement, warpedImages.get(1));
     }
 
     let dst = cv.Mat.zeros(src.rows, src.cols, cv.CV_8UC3);
@@ -225,11 +243,14 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
     }
 
     cv.imshow(this.canvas.nativeElement, dst);
-    const delay = 1000 / 30 - (Date.now() - begin);
-    setTimeout(() => {
-      this.detectCard(cap, src);
-    }, delay);
+    const delay = 1000 / 10 - (Date.now() - begin);
+    if (this.cameraStarted) {
+      setTimeout(() => {
+        this.detectCard(cap, src);
+      }, delay);
+    }
 
+    warpedImages.delete();
     img_erode.delete();
     img_gray.delete();
     img_thresh.delete();

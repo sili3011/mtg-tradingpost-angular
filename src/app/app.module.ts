@@ -27,7 +27,7 @@ import { CardDetectionComponent } from './components/card-detection/card-detecti
 import { NgOpenCVModule } from 'ng-open-cv';
 
 const openCVConfig = {
-  scriptUrl: 'assets/opencv/asm/3.4/opencv.js',
+  scriptUrl: 'assets/opencv/asm/4.5.1/opencv.js',
   usingWasm: false,
   onRuntimeInitialized: () => {},
 };
