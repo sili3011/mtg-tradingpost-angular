@@ -6,6 +6,8 @@ import {
   ViewChild,
 } from '@angular/core';
 import { NgOpenCVService } from 'ng-open-cv';
+import * as blockhash from 'blockhash';
+
 @Component({
   selector: 'mtg-card-detection',
   templateUrl: './card-detection.component.html',
@@ -14,8 +16,7 @@ import { NgOpenCVService } from 'ng-open-cv';
 export class CardDetectionComponent implements OnInit, OnDestroy {
   @ViewChild('cam') cam!: ElementRef;
   @ViewChild('canvas') canvas!: ElementRef;
-  @ViewChild('canvas1') canvas1!: ElementRef;
-  @ViewChild('canvas2') canvas2!: ElementRef;
+  @ViewChild('dummyToHash') dummyToHash!: ElementRef;
 
   cameraStarted: boolean = false;
 
@@ -228,12 +229,35 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
     }
 
     if (warpedImages.size() > 0) {
-      cv.imshow(this.canvas1.nativeElement, warpedImages.get(0));
+      cv.imshow(this.dummyToHash.nativeElement, warpedImages.get(0));
+      const ctx = this.dummyToHash.nativeElement.getContext('2d');
+      const hash = blockhash.blockhashData(
+        ctx!.getImageData(
+          0,
+          0,
+          this.dummyToHash.nativeElement.width,
+          this.dummyToHash.nativeElement.height
+        ),
+        8,
+        1
+      );
+      console.log(hash);
     }
 
-    if (warpedImages.size() > 1) {
-      cv.imshow(this.canvas2.nativeElement, warpedImages.get(1));
-    }
+    // for (let i = 0; i < warpedImages.size(); ++i) {
+    //   const compression_params = new cv.MatVector();
+
+    //   const result = cv.imwrite(
+    //     'alpha.png',
+    //     warpedImages.get(1),
+    //     compression_params
+    //   );
+
+    //   const hash = blockhash.blockhashData(result, 32, 1);
+    //   console.log(hash);
+
+    //   compression_params.delete();
+    // }
 
     let dst = cv.Mat.zeros(src.rows, src.cols, cv.CV_8UC3);
 

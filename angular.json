@@ -26,10 +26,29 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "tsconfig.app.json",
             "aot": true,
-            "assets": ["src/favicon.ico", "src/assets", { "glob": "mdi.svg", "input": "node_modules/@mdi/angular-material/", "output": "./assets" }],
-            "styles": ["src/styles.scss", "node_modules/mana-font/css/mana.css" , "node_modules/keyrune/css/keyrune.css"],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets",
+              {
+                "glob": "mdi.svg",
+                "input": "node_modules/@mdi/angular-material/",
+                "output": "./assets"
+              }
+            ],
+            "styles": [
+              "src/styles.scss",
+              "node_modules/mana-font/css/mana.css",
+              "node_modules/keyrune/css/keyrune.css"
+            ],
             "scripts": ["node_modules/apexcharts/dist/apexcharts.min.js"],
-            "allowedCommonJsDependencies": ["lodash", "lowdb", "scryfall-sdk", "file-saver", "apexcharts"]
+            "allowedCommonJsDependencies": [
+              "lodash",
+              "lowdb",
+              "scryfall-sdk",
+              "file-saver",
+              "apexcharts",
+              "blockhash"
+            ]
           },
           "configurations": {
             "production": {
