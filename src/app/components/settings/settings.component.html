@@ -1,13 +1,23 @@
 <mat-card style="margin: 2%; height: 100%">
-  <button
-    mat-raised-button
-    color="primary"
-    style="color: black"
-    (click)="openDBDialog()"
-  >
-    Manage DB
-  </button>
+  <div fxLayout="row">
+    <button
+      mat-raised-button
+      color="primary"
+      style="color: black"
+      (click)="openDBDialog()"
+    >
+      Manage DB
+    </button>
 
+    <button
+      mat-raised-button
+      color="primary"
+      style="color: black"
+      (click)="rehash()"
+    >
+      Rehash
+    </button>
+  </div>
   <mat-select matSelect [formControl]="currencyControl">
     <mat-option [value]="currencies.EUR">€</mat-option>
     <mat-option [value]="currencies.USD">$</mat-option>

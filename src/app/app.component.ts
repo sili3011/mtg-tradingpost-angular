@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
@@ -13,7 +14,11 @@ import { DBService } from './services/db.service';
 export class AppComponent implements OnInit {
   title = 'mtg-tradingpost';
 
-  constructor(private dbService: DBService, private dialog: MatDialog) {
+  constructor(
+    private dbService: DBService,
+    private dialog: MatDialog,
+    private http: HttpClient
+  ) {
     Object.defineProperty(TooltipComponent.prototype, 'message', {
       set(v: any) {
         const el = document.querySelectorAll('.mat-tooltip');
@@ -32,5 +37,9 @@ export class AppComponent implements OnInit {
         disableClose: true,
       });
     }
+
+    this.http
+      .get<JSON>('https://mtg-tradingpost-backend.web.app/sets')
+      .subscribe((data) => console.log(data));
   }
 }
