@@ -5,6 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { TooltipComponent } from '@angular/material/tooltip';
 import { DatabaseSelectionDialogComponent } from './components/dialogs/database-selection-dialog/database-selection-dialog.component';
 import { DBService } from './services/db.service';
+import { HashStore } from './stores/hash.store';
 
 @Component({
   selector: 'app-root',
@@ -14,8 +15,11 @@ import { DBService } from './services/db.service';
 export class AppComponent implements OnInit {
   title = 'mtg-tradingpost';
 
+  backendURL = 'https://mtg-tradingpost-backend.web.app/';
+
   constructor(
     private dbService: DBService,
+    private hashStore: HashStore,
     private dialog: MatDialog,
     private http: HttpClient
   ) {
@@ -38,8 +42,14 @@ export class AppComponent implements OnInit {
       });
     }
 
-    this.http
-      .get<JSON>('https://mtg-tradingpost-backend.web.app/sets')
-      .subscribe((data) => console.log(data));
+    this.http.get<Array<string>>(this.backendURL + 'sets').subscribe((sets) =>
+      sets.forEach((set) => {
+        if (!this.hashStore.hasSet(set)) {
+          this.http
+            .get<JSON>(this.backendURL + set)
+            .subscribe((json) => this.hashStore.addToHashtable(set, json));
+        }
+      })
+    );
   }
 }
