@@ -25,6 +25,7 @@ import { ProblemStatusComponent } from './components/problem-status/problem-stat
 import { BoxOpeningComponent } from './components/box-opening/box-opening.component';
 import { CardDetectionComponent } from './components/card-detection/card-detection.component';
 import { NgOpenCVModule } from 'ng-open-cv';
+import { AngularFireModule } from '@angular/fire';
 
 const openCVConfig = {
   scriptUrl: 'assets/opencv/asm/4.5.1/opencv.js',
@@ -62,6 +63,7 @@ const openCVConfig = {
     HttpClientModule,
     MatIconModule,
     NgOpenCVModule.forRoot(openCVConfig),
+    AngularFireModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
