@@ -7,6 +7,8 @@ import {
 } from '@angular/core';
 import { NgOpenCVService } from 'ng-open-cv';
 import * as blockhash from 'blockhash';
+import { autorun, IReactionDisposer } from 'mobx';
+import { HashStore } from 'src/app/stores/hash.store';
 
 @Component({
   selector: 'mtg-card-detection',
@@ -20,9 +22,21 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
 
   cameraStarted: boolean = false;
 
-  constructor(private openCVService: NgOpenCVService) {}
+  selectedSets: Map<string, JSON> = new Map();
+
+  disposer!: IReactionDisposer;
+
+  constructor(
+    private openCVService: NgOpenCVService,
+    private hashStore: HashStore
+  ) {}
 
   ngOnInit(): void {
+    this.disposer = autorun(() => {
+      this.selectedSets = this.hashStore.hashtable;
+      console.log(this.selectedSets);
+    });
+
     this.openCVService.startCamera(
       640,
       (stream: any) => {
@@ -44,6 +58,7 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.cameraStarted = false;
     this.openCVService.stopCamera();
+    this.disposer();
   }
 
   detectCard(cap: any, src: any) {
@@ -241,23 +256,7 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
         8,
         1
       );
-      console.log(hash);
     }
-
-    // for (let i = 0; i < warpedImages.size(); ++i) {
-    //   const compression_params = new cv.MatVector();
-
-    //   const result = cv.imwrite(
-    //     'alpha.png',
-    //     warpedImages.get(1),
-    //     compression_params
-    //   );
-
-    //   const hash = blockhash.blockhashData(result, 32, 1);
-    //   console.log(hash);
-
-    //   compression_params.delete();
-    // }
 
     let dst = cv.Mat.zeros(src.rows, src.cols, cv.CV_8UC3);
 
