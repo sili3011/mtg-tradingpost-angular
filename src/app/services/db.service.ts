@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-import { CardIdentifier, Cards } from 'scryfall-sdk';
 import { defaultDB, defaultNetworth } from '../models/defaults';
 import { CardAdapter } from '../models/card-adapter';
 import { Deck } from '../models/deck';

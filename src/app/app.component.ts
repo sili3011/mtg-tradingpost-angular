@@ -3,6 +3,7 @@ import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TooltipComponent } from '@angular/material/tooltip';
+import Dexie from 'dexie';
 import { DatabaseSelectionDialogComponent } from './components/dialogs/database-selection-dialog/database-selection-dialog.component';
 import { DBService } from './services/db.service';
 import { HashStore } from './stores/hash.store';
@@ -42,14 +43,55 @@ export class AppComponent implements OnInit {
       });
     }
 
-    this.http.get<Array<string>>(this.backendURL + 'sets').subscribe((sets) =>
-      sets.forEach((set) => {
-        if (!this.hashStore.hasSet(set)) {
-          this.http
-            .get<JSON>(this.backendURL + set)
-            .subscribe((json) => this.hashStore.addToHashtable(set, json));
-        }
-      })
-    );
+    var db = new HashtablesDatabase();
+
+    try {
+      this.http
+        .get<Array<any>>(this.backendURL + 'sets')
+        .subscribe(async (sets) => {
+          for (const set of sets.map((set) => set.code)) {
+            if (!this.hashStore.hasSet(set)) {
+              const setInStorage = await db.hashtables
+                .where('code')
+                .equals(set)
+                .first();
+
+              if (setInStorage) {
+                this.hashStore.addToHashtable(set, setInStorage.data);
+              } else {
+                try {
+                  this.http
+                    .get<JSON>(this.backendURL + set)
+                    .subscribe((json) => {
+                      db.hashtables.put({ code: set, data: json });
+                      this.hashStore.addToHashtable(set, json);
+                    });
+                } catch (error) {
+                  console.log(error);
+                }
+              }
+            }
+          }
+        });
+    } catch (error) {
+      console.log(error);
+    }
   }
+}
+
+class HashtablesDatabase extends Dexie {
+  hashtables: Dexie.Table<IHashtable, number>;
+
+  constructor() {
+    super('hashtablesDatabase');
+    this.version(1).stores({
+      hashtables: 'code,data',
+    });
+    this.hashtables = this.table('hashtables');
+  }
+}
+
+interface IHashtable {
+  code: string;
+  data: JSON;
 }

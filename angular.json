@@ -47,7 +47,7 @@
               "scryfall-sdk",
               "file-saver",
               "apexcharts",
-              "blockhash"
+              "imghash"
             ]
           },
           "configurations": {

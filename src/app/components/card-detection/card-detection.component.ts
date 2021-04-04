@@ -6,9 +6,10 @@ import {
   ViewChild,
 } from '@angular/core';
 import { NgOpenCVService } from 'ng-open-cv';
-import * as blockhash from 'blockhash';
+import * as imghash from 'imghash';
 import { autorun, IReactionDisposer } from 'mobx';
 import { HashStore } from 'src/app/stores/hash.store';
+import { Hash } from 'src/app/models/hash';
 
 @Component({
   selector: 'mtg-card-detection',
@@ -22,7 +23,7 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
 
   cameraStarted: boolean = false;
 
-  selectedSets: Map<string, JSON> = new Map();
+  selectedSets: Map<string, Hash> = new Map();
 
   disposer!: IReactionDisposer;
 
@@ -33,7 +34,7 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.disposer = autorun(() => {
-      this.selectedSets = this.hashStore.hashtable;
+      this.selectedSets = this.hashStore.sortedHashes;
       console.log(this.selectedSets);
     });
 
@@ -246,16 +247,15 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
     if (warpedImages.size() > 0) {
       cv.imshow(this.dummyToHash.nativeElement, warpedImages.get(0));
       const ctx = this.dummyToHash.nativeElement.getContext('2d');
-      const hash = blockhash.blockhashData(
+      const hash = imghash.hash(
         ctx!.getImageData(
           0,
           0,
           this.dummyToHash.nativeElement.width,
           this.dummyToHash.nativeElement.height
-        ),
-        8,
-        1
+        )
       );
+      console.log(hash, this.selectedSets.get(hash)?.name);
     }
 
     let dst = cv.Mat.zeros(src.rows, src.cols, cv.CV_8UC3);
@@ -266,7 +266,7 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
     }
 
     cv.imshow(this.canvas.nativeElement, dst);
-    const delay = 1000 / 10 - (Date.now() - begin);
+    const delay = 1000 / 5 - (Date.now() - begin);
     if (this.cameraStarted) {
       setTimeout(() => {
         this.detectCard(cap, src);
