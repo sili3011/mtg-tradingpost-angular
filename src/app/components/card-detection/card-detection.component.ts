@@ -49,9 +49,8 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
           this.cam.nativeElement.srcObject = stream;
           this.cam.nativeElement.play();
           this.cameraStarted = true;
-          let src = new cv.Mat(480, 640, cv.CV_8UC4);
           let cap = new cv.VideoCapture(this.cam.nativeElement);
-          this.detectCard(cap, src);
+          this.detectCard(cap);
         }
       },
       this.cam
@@ -64,8 +63,9 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
     this.disposer();
   }
 
-  detectCard(cap: any, src: any) {
+  detectCard(cap: any) {
     const begin = Date.now();
+    let src = new cv.Mat(480, 640, cv.CV_8UC4);
     cap.read(src);
 
     //preprocessing
@@ -286,19 +286,23 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
         .map(([k]) => k)[0];
     }
 
-    let dst = cv.Mat.zeros(src.rows, src.cols, cv.CV_8UC3);
+    //let dst = cv.Mat.zeros(src.rows, src.cols, cv.CV_8UC3);
+
+    let dst = new cv.Mat(src.rows, src.cols, cv.CV_8UC3);
+    cv.cvtColor(src, dst, cv.COLOR_BGRA2BGR);
 
     // draw contours
     for (let i = 0; i < cnts_rect.size(); ++i) {
-      cv.drawContours(dst, cnts_rect, i, new cv.Scalar(0, 255, 0, 1), 1);
+      cv.drawContours(dst, cnts_rect, i, new cv.Scalar(0, 255, 0), 1);
     }
 
     cv.imshow(this.canvas.nativeElement, dst);
+
     const delay = 1000 / 60 - (Date.now() - begin);
     if (this.cameraStarted) {
       setTimeout(() => {
         try {
-          this.detectCard(cap, src);
+          this.detectCard(cap);
         } catch (error) {
           console.error(error);
         }
@@ -313,6 +317,8 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
     img_dilate.delete();
     cnts.delete();
     hier.delete();
+    dst.delete();
+    src.delete();
   }
 
   reset() {
