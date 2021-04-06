@@ -2,4 +2,6 @@
   <video #cam width="640" height="480"></video>
   <canvas #canvas></canvas>
   <canvas #dummyToHash [hidden]="false"></canvas>
+  <p>{{ mostFoundCard?.name }} {{ mostFoundCardTimes }}</p>
+  <button (click)="reset()">reset</button>
 </div>

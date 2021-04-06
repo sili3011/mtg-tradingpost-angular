@@ -30,6 +30,7 @@
     "apexcharts": "^3.25.0",
     "browserify-fs": "^1.0.0",
     "dexie": "^3.0.3",
+    "fast-levenshtein": "^3.0.0",
     "file-saver": "^2.0.5",
     "firebase": "^8.3.1",
     "imghash": "0.0.8",

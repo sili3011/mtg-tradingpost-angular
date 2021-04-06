@@ -7,6 +7,7 @@ import {
 } from '@angular/core';
 import { NgOpenCVService } from 'ng-open-cv';
 import * as imghash from 'imghash';
+import * as leven from 'fast-levenshtein';
 import { autorun, IReactionDisposer } from 'mobx';
 import { HashStore } from 'src/app/stores/hash.store';
 import { Hash } from 'src/app/models/hash';
@@ -25,6 +26,10 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
 
   selectedSets: Map<string, Hash> = new Map();
 
+  mostFoundCards: Map<Hash, number> = new Map();
+  mostFoundCard?: Hash;
+  mostFoundCardTimes?: number;
+
   disposer!: IReactionDisposer;
 
   constructor(
@@ -35,7 +40,6 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.disposer = autorun(() => {
       this.selectedSets = this.hashStore.sortedHashes;
-      console.log(this.selectedSets);
     });
 
     this.openCVService.startCamera(
@@ -47,9 +51,7 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
           this.cameraStarted = true;
           let src = new cv.Mat(480, 640, cv.CV_8UC4);
           let cap = new cv.VideoCapture(this.cam.nativeElement);
-          setTimeout(() => {
-            this.detectCard(cap, src);
-          }, 0);
+          this.detectCard(cap, src);
         }
       },
       this.cam
@@ -253,9 +255,35 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
           0,
           this.dummyToHash.nativeElement.width,
           this.dummyToHash.nativeElement.height
-        )
+        ),
+        16
       );
-      console.log(hash, this.selectedSets.get(hash)?.name);
+      let lToBeat = 99;
+      let found: any = [];
+      this.selectedSets.forEach((card) => {
+        const l = leven.get(hash, card.hash);
+        if (l < lToBeat) {
+          found = [];
+          found.push(card);
+          lToBeat = l;
+        } else if (l === lToBeat) {
+          found.push(card);
+        }
+      });
+      found.forEach((card: Hash) => {
+        if (this.mostFoundCards.has(card)) {
+          let currentAmount = this.mostFoundCards.get(card);
+          this.mostFoundCards.set(card, currentAmount ? ++currentAmount : 1);
+        } else {
+          this.mostFoundCards.set(card, 1);
+        }
+      });
+
+      this.mostFoundCardTimes = Math.max(...this.mostFoundCards.values());
+
+      this.mostFoundCard = [...this.mostFoundCards.entries()]
+        .filter(({ 1: v }) => v === this.mostFoundCardTimes)
+        .map(([k]) => k)[0];
     }
 
     let dst = cv.Mat.zeros(src.rows, src.cols, cv.CV_8UC3);
@@ -266,10 +294,14 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
     }
 
     cv.imshow(this.canvas.nativeElement, dst);
-    const delay = 1000 / 5 - (Date.now() - begin);
+    const delay = 1000 / 60 - (Date.now() - begin);
     if (this.cameraStarted) {
       setTimeout(() => {
-        this.detectCard(cap, src);
+        try {
+          this.detectCard(cap, src);
+        } catch (error) {
+          console.error(error);
+        }
       }, delay);
     }
 
@@ -281,5 +313,11 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
     img_dilate.delete();
     cnts.delete();
     hier.delete();
+  }
+
+  reset() {
+    this.mostFoundCards = new Map();
+    this.mostFoundCard = undefined;
+    this.mostFoundCardTimes = 0;
   }
 }

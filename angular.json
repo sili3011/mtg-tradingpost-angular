@@ -47,7 +47,8 @@
               "scryfall-sdk",
               "file-saver",
               "apexcharts",
-              "imghash"
+              "imghash",
+              "fast-levenshtein"
             ]
           },
           "configurations": {

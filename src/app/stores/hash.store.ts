@@ -21,15 +21,15 @@ export class HashStore {
 
   @computed get sortedHashes(): Map<string, Hash> {
     const ret: Map<string, Hash> = new Map();
-    this.hashtable.forEach((set) => {
-      const parsedSet = JSON.parse(JSON.stringify(set));
-      parsedSet.forEach((card: Hash) => {
-        ret.set(card.hash, card);
-        if (card.hash_back) {
-          ret.set(card.hash_back, card);
-        }
-      });
+    //this.hashtable.forEach((set) => {
+    const parsedSet = JSON.parse(JSON.stringify(this.hashtable.get('cmr'))); // replace "this.hashtable.get('cmr')" with "set"
+    parsedSet.forEach((card: Hash) => {
+      ret.set(card.hash, card);
+      if (card.hash_back) {
+        ret.set(card.hash_back, card);
+      }
     });
+    //});
     return new Map([...ret.entries()].sort());
   }
 }
