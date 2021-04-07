@@ -108,7 +108,7 @@ export class DatabaseSelectionDialogComponent implements OnInit, OnDestroy {
   }
 
   setDummyFileToShow() {
-    if (this.name.trim() !== '' && this.owner.trim() !== '')
+    if (this.name.trim() !== '' && this.owner.trim() !== '') {
       this.dbGroup.patchValue({
         file: new FileInput([
           new File([], this.name + '_' + this.owner + '.json', {
@@ -116,6 +116,10 @@ export class DatabaseSelectionDialogComponent implements OnInit, OnDestroy {
           }),
         ]),
       });
+    }
+    if (!this.inputJSON) {
+      this.inputJSON = this.file;
+    }
   }
 
   createBackup() {

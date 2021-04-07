@@ -275,11 +275,11 @@ export class DeckComponent implements OnInit, OnDestroy {
         this.dbService.setDeck(this.deck!);
       }
     }
-    this.missingCards = this.cardsStore.missingCards.filter((c) =>
-      this.deck!.cards.map((card) => [card.id, card.isFoil]).includes([
-        c.id,
-        c.isFoil,
-      ])
+    this.missingCards = this.cardsStore.missingCards.filter(
+      (c) =>
+        this.deck!.cards.filter(
+          (card) => card.id === c.id && card.isFoil === c.isFoil
+        ).length > 0
     );
     this.amountOfProblems = this.getAmountOfProblems();
     this.cd.detectChanges();

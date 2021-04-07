@@ -234,6 +234,7 @@ export class DBService {
   }
 
   resetDB() {
+    this.setDecks([]);
     this.setCollection([]);
     this.setWishlist([]);
     this.setNetworth(defaultNetworth);
