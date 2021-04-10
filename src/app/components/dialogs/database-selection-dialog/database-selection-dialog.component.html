@@ -32,7 +32,7 @@
       <div fxLayout="row">
         <mat-icon svgIcon="rename-box" class="input" color="primary"></mat-icon>
         <mat-form-field class="form-field">
-          <mat-label>name of db</mat-label>
+          <mat-label>Name of database</mat-label>
           <input matInput formControlName="name" />
         </mat-form-field>
       </div>
@@ -43,7 +43,7 @@
           color="primary"
         ></mat-icon>
         <mat-form-field class="form-field">
-          <mat-label>owner</mat-label>
+          <mat-label>Owner</mat-label>
           <input matInput formControlName="owner" />
         </mat-form-field>
       </div>
@@ -54,6 +54,9 @@
       mat-fab
       color="primary"
       style="margin-right: 10px"
+      #tooltip="matTooltip"
+      matTooltip="Create new database"
+      matTooltipPosition="left"
       (click)="createNew = true"
     >
       <mat-icon svgIcon="database-plus" style="color: #303030"></mat-icon>
@@ -65,10 +68,22 @@
         (!file || file.files?.length === 0 || file.files[0].size === 0) &&
         !hasBeenInitialized
       "
+      #tooltip="matTooltip"
+      matTooltip="Backup current database"
+      matTooltipPosition="right"
       (click)="createBackup()"
     >
       <mat-icon svgIcon="database-refresh" style="color: #303030"></mat-icon>
     </button>
+  </div>
+  <div
+    style="text-align: center; color: orange; margin-top: 1em"
+    [ngStyle]="{ 'margin-bottom': !createNew ? '34px' : '0' }"
+  >
+    <span *ngIf="createNew"
+      >New db will be created if confirmed. Be sure to have your current one
+      backuped.</span
+    >
   </div>
   <div mat-dialog-actions>
     <button
