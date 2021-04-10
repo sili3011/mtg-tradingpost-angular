@@ -4,12 +4,22 @@
       background-size: cover;
       background-image: url('../../assets/cm2-225-trading-post-crop-crop.jpg');
       font-size: 24px;
-      padding: 17px;
+      padding: 5px;
     "
   >
-    <span style="top: 50%" routerLink="/dashboard" style="cursor: pointer"
-      >mtg-tradingpost</span
-    >
+    <span routerLink="/dashboard" fxLayout="row">
+      <mtg-set
+        set="jud"
+        rarity="rare"
+        [fixed]="true"
+        size="2x"
+        (click)="goto('/dashboard')"
+        style="cursor: pointer"
+      ></mtg-set>
+      <span style="cursor: pointer; margin: 15px 0 15px 0"
+        >mtg-tradingpost</span
+      >
+    </span>
     <span class="spacer"></span>
   </div>
 
