@@ -173,6 +173,8 @@ export class DeckComponent implements OnInit, OnDestroy {
 
   currentListType = LISTTYPES.DECK;
 
+  bigCards: boolean = false;
+
   subscriptions: Subscription = new Subscription();
 
   constructor(
@@ -238,7 +240,9 @@ export class DeckComponent implements OnInit, OnDestroy {
   toggleListExpanded() {
     this.listExpanded = !this.listExpanded;
     this.listExpanded
-      ? this.cardsList.setPageSize(10)
+      ? this.cardsList.paginator.pageSize < 10
+        ? this.cardsList.setPageSize(10)
+        : ''
       : this.cardsList.setPageSize(5);
   }
 

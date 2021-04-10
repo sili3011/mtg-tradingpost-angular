@@ -15,6 +15,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { IReactionDisposer, autorun } from 'mobx';
+import { threadId } from 'node:worker_threads';
 import { CardAdapter } from 'src/app/models/card-adapter';
 import { Format } from 'src/app/models/constants';
 import { Deck } from 'src/app/models/deck';
@@ -52,15 +53,15 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
   Formats = FORMATS;
 
   @Input()
-  deck: Deck | undefined;
+  deck?: Deck;
 
   decks: Array<string> = [];
 
   @Input()
-  format: Format | undefined;
+  format?: Format;
 
   @Input()
-  deckValidation: DeckValidation | undefined;
+  deckValidation?: DeckValidation;
 
   @Input()
   missingCards: Array<CardAdapter> = [];
@@ -77,6 +78,9 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
 
   @Input()
   expanded: boolean = false;
+
+  @Input()
+  bigCards: boolean = false;
 
   disposer!: IReactionDisposer;
 
@@ -178,12 +182,12 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
     return filtered;
   }
 
-  increment(card: CardAdapter) {
+  increment(card: any) {
     this.dbService.increment(card, this.listType, this.deck?.id);
     this.rerender.emit(true);
   }
 
-  decrement(card: CardAdapter) {
+  decrement(card: any) {
     if (!this.dbService.decrement(card, this.listType, this.deck?.id)) {
       this.reapplyDatasource();
     }
@@ -298,5 +302,11 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
 
   compareCard(card1: CardAdapter | undefined, card2: CardAdapter | undefined) {
     return sameCardComparison(card1, card2);
+  }
+
+  currentShownData(): Array<CardAdapter> {
+    return this.dataSource.filteredData
+      .filter((u, i) => i >= this.paginator.pageSize * this.paginator.pageIndex)
+      .filter((u, i) => i < this.paginator.pageSize);
   }
 }

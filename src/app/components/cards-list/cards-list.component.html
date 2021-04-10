@@ -42,400 +42,420 @@
 
   <div
     style="overflow-y: auto"
-    [ngStyle]="{ 'max-height': !expanded ? '74%' : '84%' }"
+    [ngStyle]="{ 'max-height': !expanded ? '74%' : '85%' }"
   >
-    <table
-      mat-table
-      [dataSource]="dataSource"
-      matSort
-      style="width: 100%"
-      *ngIf="this.dataSource.data.length > 0"
-      cdkDropList
-      id="cards"
-      [cdkDropListConnectedTo]="decks"
-      (cdkDropListDropped)="dropCard($event)"
-    >
-      <ng-container matColumnDef="name">
-        <th
-          mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header
-          [ngStyle]="{
-            color:
-              listType === ListTypes.DECK && !deckValidation?.hasNoIllegalCards
-                ? '#f44336'
-                : ''
-          }"
-        >
-          Name
-        </th>
-        <td mat-cell *matCellDef="let row">
-          <span
-            *ngIf="
-              listType === ListTypes.COLLECTION ||
-              listType === ListTypes.WISHLIST
-            "
-            style="cursor: grab"
-          >
-            <span
-              [matTooltip]="imageTooltip(row.image_uris)"
-              matTooltipClass="fitToImage"
-              *ngIf="!row.card_faces"
-              cdkDrag
-              [cdkDragData]="row"
-            >
-              <span fxLayout="row"
-                >{{ row.name }}
-                <mat-icon
-                  style="color: #f1ca0f; font-size: 13px"
-                  matTooltip="This card is foil. Shiny!"
-                >
-                  {{ row.isFoil ? "star" : "" }}
-                </mat-icon>
-              </span>
-              <div *cdkDragPlaceholder></div>
-              <img
-                *cdkDragPreview
-                [src]="row.image_uris.small"
-                [alt]="row.name"
-            /></span>
-            <span *ngIf="row.card_faces" cdkDrag [cdkDragData]="row">
-              <span fxLayout="row">
-                <span
-                  [matTooltip]="imageTooltip(row.card_faces[0].image_uris)"
-                  matTooltipClass="fitToImage"
-                  style="padding-right: 5px"
-                >
-                  {{ row.card_faces[0].name }}
-                </span>
-                |
-                <span
-                  [matTooltip]="imageTooltip(row.card_faces[1].image_uris)"
-                  matTooltipClass="fitToImage"
-                  style="padding-left: 5px"
-                >
-                  {{ row.card_faces[1].name }}
-                </span>
-                <mat-icon
-                  style="color: #f1ca0f; font-size: 13px"
-                  matTooltip="This card is foil. Shiny!"
-                >
-                  {{ row.isFoil ? "star" : "" }}
-                </mat-icon>
-              </span>
-              <div *cdkDragPlaceholder></div>
-              <img
-                *cdkDragPreview
-                [src]="row.card_faces[0].image_uris.small"
-                [alt]="row.name"
-              />
-            </span>
-          </span>
-          <span
-            *ngIf="
-              listType !== ListTypes.COLLECTION &&
-              listType !== ListTypes.WISHLIST
-            "
-          >
-            <span
-              [matTooltip]="imageTooltip(row.image_uris)"
-              matTooltipClass="fitToImage"
-              *ngIf="!row.card_faces"
-              [ngStyle]="{
-                color: isCardIllegal(row) ? '#f44336' : ''
-              }"
-            >
-              <span fxLayout="row"
-                >{{ row.name }}
-                <mat-icon
-                  style="color: #f1ca0f; font-size: 13px"
-                  matTooltip="This card is foil. Shiny!"
-                >
-                  {{ row.isFoil ? "star" : "" }}
-                </mat-icon>
-              </span>
-            </span>
-            <span *ngIf="row.card_faces">
-              <span fxLayout="row">
-                <span
-                  [matTooltip]="imageTooltip(row.card_faces[0].image_uris)"
-                  matTooltipClass="fitToImage"
-                  style="padding-right: 5px"
-                >
-                  {{ row.card_faces[0].name }}
-                </span>
-                |
-                <span
-                  [matTooltip]="imageTooltip(row.card_faces[1].image_uris)"
-                  matTooltipClass="fitToImage"
-                  style="padding-left: 5px"
-                >
-                  {{ row.card_faces[1].name }}
-                </span>
-                <mat-icon
-                  style="color: #f1ca0f; font-size: 13px"
-                  matTooltip="This card is foil. Shiny!"
-                >
-                  {{ row.isFoil ? "star" : "" }}
-                </mat-icon>
-              </span>
-            </span>
-          </span>
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="set">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Set</th>
-        <td mat-cell *matCellDef="let row">
-          <mtg-set
-            [set]="row.set"
-            [set_name]="row.set_name"
-            [rarity]="row.rarity"
-            [fixed]="true"
-            size="2x"
-          ></mtg-set>
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="mana_cost">
-        <th
-          mat-header-cell
-          *matHeaderCellDef
-          [ngStyle]="{
-            color:
-              listType === ListTypes.DECK &&
-              !deckValidation?.hasNoIllegalColorIdentities
-                ? '#f44336'
-                : ''
-          }"
-        >
-          Mana Cost
-        </th>
-        <td mat-cell *matCellDef="let row">
-          <span fxLayout="row">
-            <div>
-              <div fxLayout="row" *ngIf="!row.card_faces">
-                <mtg-mana
-                  *ngFor="let mana of manas(row.mana_cost)"
-                  [symbol]="mana"
-                  [cost]="true"
-                  [shadow]="true"
-                  [fixed]="true"
-                ></mtg-mana>
-              </div>
-              <div fxLayout="row" *ngIf="row.card_faces">
-                <mtg-mana
-                  *ngFor="let mana of manas(row.card_faces[0].mana_cost)"
-                  [symbol]="mana"
-                  [cost]="true"
-                  [shadow]="true"
-                  [fixed]="true"
-                ></mtg-mana>
-              </div>
-              <div fxLayout="row" *ngIf="row.card_faces">
-                <mtg-mana
-                  *ngFor="let mana of manas(row.card_faces[1].mana_cost)"
-                  [symbol]="mana"
-                  [cost]="true"
-                  [shadow]="true"
-                  [fixed]="true"
-                ></mtg-mana>
-              </div>
-            </div>
-            <div style="width: 100%" *ngIf="isCardIllegalColors(row)">
-              <mat-icon
-                style="color: #f44336; float: right; margin-right: 10px"
-                [ngStyle]="{
-                  'margin-top': row.card_faces?.length > 1 ? '8%' : ''
-                }"
-                matTooltip="This card does not match the decks color identity"
-                >report_problem</mat-icon
-              >
-            </div>
-          </span>
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="cmc">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>CMC</th>
-        <td mat-cell *matCellDef="let row">
-          <span>{{ row.cmc }}</span>
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="value">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Value</th>
-        <td mat-cell *matCellDef="let row">
-          <span *ngIf="selectedCurrency === Currencies.EUR"
-            >{{ row.prices.eur }}€</span
-          >
-          <span *ngIf="selectedCurrency === Currencies.USD">
-            <span *ngIf="!row.isFoil"> {{ row.prices.usd }}$ </span>
-            <span *ngIf="row.isFoil"> {{ row.prices.usd_foil }}$ </span>
-          </span>
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="amount">
-        <th
-          mat-header-cell
-          *matHeaderCellDef
-          mat-sort-header
-          style="justify-content: center"
-          [ngStyle]="{
-            color:
-              listType === ListTypes.DECK &&
-              !deckValidation?.hasLegalAmountOfCopiesOfCards
-                ? '#f44336'
-                : ''
-          }"
-        >
-          Amount
-        </th>
-        <td mat-cell *matCellDef="let row">
-          <div fxLayout="row" style="justify-content: center">
-            <button
-              mat-icon-button
-              color="primary"
-              style="margin-right: 10px"
-              (click)="decrement(row)"
-            >
-              <mat-icon color="primary"> remove </mat-icon>
-            </button>
-            <span
-              style="margin-top: 1em; margin-bottom: 1em"
-              [ngStyle]="{
-                color:
-                  format && row.amount > format.maxCopiesOfCards
-                    ? '#f44336'
-                    : ''
-              }"
-              >{{ row.amount }}</span
-            >
-            <button
-              mat-icon-button
-              color="primary"
-              style="margin-left: 10px"
-              (click)="increment(row)"
-            >
-              <mat-icon color="primary"> add </mat-icon>
-            </button>
-          </div>
-        </td>
-      </ng-container>
-      <ng-container
-        matColumnDef="actions"
-        *ngIf="deck || listType === ListTypes.WISHLIST"
+    <span *ngIf="!bigCards">
+      <table
+        mat-table
+        [dataSource]="dataSource"
+        matSort
+        style="width: 100%"
+        *ngIf="this.dataSource.data.length > 0"
+        cdkDropList
+        id="cards"
+        [cdkDropListConnectedTo]="decks"
+        (cdkDropListDropped)="dropCard($event)"
       >
-        <th
-          mat-header-cell
-          *matHeaderCellDef
-          style="text-align: center"
-          [ngStyle]="{
-            color:
-              listType === ListTypes.DECK && missingCards.length > 0
-                ? '#f44336'
-                : ''
-          }"
-        >
-          Actions
-        </th>
-        <td mat-cell *matCellDef="let row">
-          <div
-            fxLayout="row"
-            style="justify-content: center"
-            *ngIf="listType !== ListTypes.WISHLIST"
+        <ng-container matColumnDef="name">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            [ngStyle]="{
+              color:
+                listType === ListTypes.DECK &&
+                !deckValidation?.hasNoIllegalCards
+                  ? '#f44336'
+                  : ''
+            }"
           >
-            <button
-              mat-icon-button
-              matTooltip="Move to sideboard"
-              *ngIf="listType === ListTypes.DECK"
-              (click)="moveTo(row, ListTypes.SIDEBOARD, deck?.id)"
+            Name
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <span
+              *ngIf="
+                listType === ListTypes.COLLECTION ||
+                listType === ListTypes.WISHLIST
+              "
+              style="cursor: grab"
             >
-              <mat-icon color="primary" style="transform: rotate(180deg)">
-                menu_open
-              </mat-icon>
-            </button>
-            <button
-              mat-icon-button
-              matTooltip="Move to main deck"
-              *ngIf="listType === ListTypes.SIDEBOARD"
-              (click)="moveTo(row, ListTypes.DECK, deck?.id)"
+              <span
+                [matTooltip]="imageTooltip(row.image_uris)"
+                matTooltipClass="fitToImage"
+                *ngIf="!row.card_faces"
+                cdkDrag
+                [cdkDragData]="row"
+              >
+                <span fxLayout="row"
+                  >{{ row.name }}
+                  <mat-icon
+                    style="color: #f1ca0f; font-size: 13px"
+                    matTooltip="This card is foil. Shiny!"
+                  >
+                    {{ row.isFoil ? "star" : "" }}
+                  </mat-icon>
+                </span>
+                <div *cdkDragPlaceholder></div>
+                <img
+                  *cdkDragPreview
+                  [src]="row.image_uris.small"
+                  [alt]="row.name"
+              /></span>
+              <span *ngIf="row.card_faces" cdkDrag [cdkDragData]="row">
+                <span fxLayout="row">
+                  <span
+                    [matTooltip]="imageTooltip(row.card_faces[0].image_uris)"
+                    matTooltipClass="fitToImage"
+                    style="padding-right: 5px"
+                  >
+                    {{ row.card_faces[0].name }}
+                  </span>
+                  |
+                  <span
+                    [matTooltip]="imageTooltip(row.card_faces[1].image_uris)"
+                    matTooltipClass="fitToImage"
+                    style="padding-left: 5px"
+                  >
+                    {{ row.card_faces[1].name }}
+                  </span>
+                  <mat-icon
+                    style="color: #f1ca0f; font-size: 13px"
+                    matTooltip="This card is foil. Shiny!"
+                  >
+                    {{ row.isFoil ? "star" : "" }}
+                  </mat-icon>
+                </span>
+                <div *cdkDragPlaceholder></div>
+                <img
+                  *cdkDragPreview
+                  [src]="row.card_faces[0].image_uris.small"
+                  [alt]="row.name"
+                />
+              </span>
+            </span>
+            <span
+              *ngIf="
+                listType !== ListTypes.COLLECTION &&
+                listType !== ListTypes.WISHLIST
+              "
             >
-              <mat-icon color="primary"> menu_open </mat-icon>
-            </button>
-            <button mat-icon-button *ngIf="!canBeCompanion(row)"></button>
-            <button
-              mat-icon-button
-              (click)="assignAsCompanion(row)"
-              *ngIf="canBeCompanion(row) && !compareCard(row, deck!.companion)"
-              matTooltip="Assign as companion"
-            >
-              <mat-icon
-                svgIcon="paw"
-                [ngStyle]="{ color: canBeCompanion(row) ? '#cc8010' : 'gray' }"
-              ></mat-icon>
-            </button>
-            <button
-              mat-icon-button
-              (click)="deassignAsCompanion()"
-              *ngIf="canBeCompanion(row) && compareCard(row, deck!.companion)"
-              matTooltip="Assign as companion"
-            >
-              <mat-icon
-                svgIcon="paw-off"
-                [ngStyle]="{ color: canBeCompanion(row) ? '#cc8010' : 'gray' }"
-              ></mat-icon>
-            </button>
-            <button
-              mat-icon-button
-              *ngIf="isCommander() && !canBeCommander(row)"
-              [disabled]="true"
-            ></button>
-            <button
-              mat-icon-button
-              *ngIf="isCommander() && canBeCommander(row)"
-              (click)="assignAsCommander(row)"
-              matTooltip="Assign as commander"
-            >
-              <mat-icon
-                svgIcon="account-check"
-                [ngStyle]="{ color: canBeCommander(row) ? '#cc8010' : 'gray' }"
-              ></mat-icon>
-            </button>
-            <button
-              mat-icon-button
-              matTooltip="Add to wishlist"
-              (click)="moveTo(row, ListTypes.WISHLIST)"
-            >
-              <mat-icon
-                color="primary"
+              <span
+                [matTooltip]="imageTooltip(row.image_uris)"
+                matTooltipClass="fitToImage"
+                *ngIf="!row.card_faces"
                 [ngStyle]="{
-                  color: !isCardInMissingCards(row) ? '' : '#f44336'
+                  color: isCardIllegal(row) ? '#f44336' : ''
                 }"
               >
-                post_add
-              </mat-icon>
-            </button>
-          </div>
-          <div
-            fxLayout="row"
-            style="justify-content: center"
-            *ngIf="listType === ListTypes.WISHLIST"
+                <span fxLayout="row"
+                  >{{ row.name }}
+                  <mat-icon
+                    style="color: #f1ca0f; font-size: 13px"
+                    matTooltip="This card is foil. Shiny!"
+                  >
+                    {{ row.isFoil ? "star" : "" }}
+                  </mat-icon>
+                </span>
+              </span>
+              <span *ngIf="row.card_faces">
+                <span fxLayout="row">
+                  <span
+                    [matTooltip]="imageTooltip(row.card_faces[0].image_uris)"
+                    matTooltipClass="fitToImage"
+                    style="padding-right: 5px"
+                  >
+                    {{ row.card_faces[0].name }}
+                  </span>
+                  |
+                  <span
+                    [matTooltip]="imageTooltip(row.card_faces[1].image_uris)"
+                    matTooltipClass="fitToImage"
+                    style="padding-left: 5px"
+                  >
+                    {{ row.card_faces[1].name }}
+                  </span>
+                  <mat-icon
+                    style="color: #f1ca0f; font-size: 13px"
+                    matTooltip="This card is foil. Shiny!"
+                  >
+                    {{ row.isFoil ? "star" : "" }}
+                  </mat-icon>
+                </span>
+              </span>
+            </span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="set">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Set</th>
+          <td mat-cell *matCellDef="let row">
+            <mtg-set
+              [set]="row.set"
+              [set_name]="row.set_name"
+              [rarity]="row.rarity"
+              [fixed]="true"
+              size="2x"
+            ></mtg-set>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="mana_cost">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            [ngStyle]="{
+              color:
+                listType === ListTypes.DECK &&
+                !deckValidation?.hasNoIllegalColorIdentities
+                  ? '#f44336'
+                  : ''
+            }"
           >
-            <button
-              mat-icon-button
-              matTooltip="Move to collection"
-              (click)="moveTo(row, ListTypes.COLLECTION)"
+            Mana Cost
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <span fxLayout="row">
+              <div>
+                <div fxLayout="row" *ngIf="!row.card_faces">
+                  <mtg-mana
+                    *ngFor="let mana of manas(row.mana_cost)"
+                    [symbol]="mana"
+                    [cost]="true"
+                    [shadow]="true"
+                    [fixed]="true"
+                  ></mtg-mana>
+                </div>
+                <div fxLayout="row" *ngIf="row.card_faces">
+                  <mtg-mana
+                    *ngFor="let mana of manas(row.card_faces[0].mana_cost)"
+                    [symbol]="mana"
+                    [cost]="true"
+                    [shadow]="true"
+                    [fixed]="true"
+                  ></mtg-mana>
+                </div>
+                <div fxLayout="row" *ngIf="row.card_faces">
+                  <mtg-mana
+                    *ngFor="let mana of manas(row.card_faces[1].mana_cost)"
+                    [symbol]="mana"
+                    [cost]="true"
+                    [shadow]="true"
+                    [fixed]="true"
+                  ></mtg-mana>
+                </div>
+              </div>
+              <div style="width: 100%" *ngIf="isCardIllegalColors(row)">
+                <mat-icon
+                  style="color: #f44336; float: right; margin-right: 10px"
+                  [ngStyle]="{
+                    'margin-top': row.card_faces?.length > 1 ? '8%' : ''
+                  }"
+                  matTooltip="This card does not match the decks color identity"
+                  >report_problem</mat-icon
+                >
+              </div>
+            </span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="cmc">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>CMC</th>
+          <td mat-cell *matCellDef="let row">
+            <span>{{ row.cmc }}</span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="value">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Value</th>
+          <td mat-cell *matCellDef="let row">
+            <span *ngIf="selectedCurrency === Currencies.EUR"
+              >{{ row.prices.eur }}€</span
             >
-              <mat-icon style="color: #cc8010"> menu_open </mat-icon>
-            </button>
-          </div>
-        </td>
-      </ng-container>
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-      <tr class="mat-row" *matNoDataRow>
-        <td class="mat-cell" colspan="10">
-          No data matching the filter "{{ input.value }}"
-        </td>
-      </tr>
-    </table>
+            <span *ngIf="selectedCurrency === Currencies.USD">
+              <span *ngIf="!row.isFoil"> {{ row.prices.usd }}$ </span>
+              <span *ngIf="row.isFoil"> {{ row.prices.usd_foil }}$ </span>
+            </span>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="amount">
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            mat-sort-header
+            style="justify-content: center"
+            [ngStyle]="{
+              color:
+                listType === ListTypes.DECK &&
+                !deckValidation?.hasLegalAmountOfCopiesOfCards
+                  ? '#f44336'
+                  : ''
+            }"
+          >
+            Amount
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <div fxLayout="row" style="justify-content: center">
+              <button
+                mat-icon-button
+                color="primary"
+                style="margin-right: 10px"
+                (click)="decrement(row)"
+              >
+                <mat-icon color="primary"> remove </mat-icon>
+              </button>
+              <span
+                style="margin-top: 1em; margin-bottom: 1em"
+                [ngStyle]="{
+                  color:
+                    format && row.amount > format.maxCopiesOfCards
+                      ? '#f44336'
+                      : ''
+                }"
+                >{{ row.amount }}</span
+              >
+              <button
+                mat-icon-button
+                color="primary"
+                style="margin-left: 10px"
+                (click)="increment(row)"
+              >
+                <mat-icon color="primary"> add </mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+        <ng-container
+          matColumnDef="actions"
+          *ngIf="deck || listType === ListTypes.WISHLIST"
+        >
+          <th
+            mat-header-cell
+            *matHeaderCellDef
+            style="text-align: center"
+            [ngStyle]="{
+              color:
+                listType === ListTypes.DECK && missingCards.length > 0
+                  ? '#f44336'
+                  : ''
+            }"
+          >
+            Actions
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <div
+              fxLayout="row"
+              style="justify-content: center"
+              *ngIf="listType !== ListTypes.WISHLIST"
+            >
+              <button
+                mat-icon-button
+                matTooltip="Move to sideboard"
+                *ngIf="listType === ListTypes.DECK"
+                (click)="moveTo(row, ListTypes.SIDEBOARD, deck?.id)"
+              >
+                <mat-icon color="primary" style="transform: rotate(180deg)">
+                  menu_open
+                </mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                matTooltip="Move to main deck"
+                *ngIf="listType === ListTypes.SIDEBOARD"
+                (click)="moveTo(row, ListTypes.DECK, deck?.id)"
+              >
+                <mat-icon color="primary"> menu_open </mat-icon>
+              </button>
+              <button mat-icon-button *ngIf="!canBeCompanion(row)"></button>
+              <button
+                mat-icon-button
+                (click)="assignAsCompanion(row)"
+                *ngIf="
+                  canBeCompanion(row) && !compareCard(row, deck!.companion)
+                "
+                matTooltip="Assign as companion"
+              >
+                <mat-icon
+                  svgIcon="paw"
+                  [ngStyle]="{
+                    color: canBeCompanion(row) ? '#cc8010' : 'gray'
+                  }"
+                ></mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                (click)="deassignAsCompanion()"
+                *ngIf="canBeCompanion(row) && compareCard(row, deck!.companion)"
+                matTooltip="Assign as companion"
+              >
+                <mat-icon
+                  svgIcon="paw-off"
+                  [ngStyle]="{
+                    color: canBeCompanion(row) ? '#cc8010' : 'gray'
+                  }"
+                ></mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                *ngIf="isCommander() && !canBeCommander(row)"
+                [disabled]="true"
+              ></button>
+              <button
+                mat-icon-button
+                *ngIf="isCommander() && canBeCommander(row)"
+                (click)="assignAsCommander(row)"
+                matTooltip="Assign as commander"
+              >
+                <mat-icon
+                  svgIcon="account-check"
+                  [ngStyle]="{
+                    color: canBeCommander(row) ? '#cc8010' : 'gray'
+                  }"
+                ></mat-icon>
+              </button>
+              <button
+                mat-icon-button
+                matTooltip="Add to wishlist"
+                (click)="moveTo(row, ListTypes.WISHLIST)"
+              >
+                <mat-icon
+                  color="primary"
+                  [ngStyle]="{
+                    color: !isCardInMissingCards(row) ? '' : '#f44336'
+                  }"
+                >
+                  post_add
+                </mat-icon>
+              </button>
+            </div>
+            <div
+              fxLayout="row"
+              style="justify-content: center"
+              *ngIf="listType === ListTypes.WISHLIST"
+            >
+              <button
+                mat-icon-button
+                matTooltip="Move to collection"
+                (click)="moveTo(row, ListTypes.COLLECTION)"
+              >
+                <mat-icon style="color: #cc8010"> menu_open </mat-icon>
+              </button>
+            </div>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="10">
+            No data matching the filter "{{ input.value }}"
+          </td>
+        </tr>
+      </table>
+    </span>
+    <span *ngIf="bigCards" fxLayout="row wrap"
+      ><mtg-card-detail
+        *ngFor="let card of currentShownData()"
+        [card]="card"
+        [format]="format"
+        (incrementEmitter)="increment($event)"
+        (decrementEmitter)="decrement($event)"
+      ></mtg-card-detail
+    ></span>
   </div>
 
   <mat-paginator
