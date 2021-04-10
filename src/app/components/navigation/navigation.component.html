@@ -67,7 +67,7 @@
             mat-list-item
             routerLink="/deck/{{ deck.id }}"
             routerLinkActive="true"
-            *ngFor="let deck of decks"
+            *ngFor="let deck of decksStore.decks"
             (click)="selectedDeck = deck"
             cdkDropList
             id="{{ deck.id }}"

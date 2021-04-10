@@ -11,6 +11,7 @@ import { UserStore } from '../stores/user.store';
 import { CardsStore } from '../stores/cards.store';
 import { DecksStore } from '../stores/decks.store';
 import { sameCardComparison } from '../utils/utils';
+import { v4 as uuidv4 } from 'uuid';
 
 export interface Networth {
   value: number;
@@ -204,6 +205,7 @@ export class DBService {
   }
 
   addDeck(deck: Deck) {
+    deck.id = uuidv4();
     this.db!.get('decks').push(deck).write();
   }
 

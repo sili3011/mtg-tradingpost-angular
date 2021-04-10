@@ -1,5 +1,4 @@
 import { MANACOLORS, CURRENCIES, FORMATS } from './enums';
-import { v4 as uuidv4 } from 'uuid';
 
 export const defaultDB = {
   hasBeenInitialized: false,
@@ -22,7 +21,7 @@ export const defaultNetworth = {
 };
 
 export const defaultDeck = {
-  id: uuidv4(),
+  id: '',
   name: '',
   cards: [],
   format: FORMATS.NONE,

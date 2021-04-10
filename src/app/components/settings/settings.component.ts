@@ -52,6 +52,4 @@ export class SettingsComponent implements OnInit, OnDestroy {
       disableClose: true,
     });
   }
-
-  rehash() {}
 }

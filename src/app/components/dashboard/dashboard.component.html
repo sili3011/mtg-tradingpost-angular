@@ -7,9 +7,10 @@
       <mat-card-title class="card-title">Card Collection</mat-card-title>
     </mat-card-header>
     <mat-card-content class="card-content">
-      <mat-card-subtitle>Collection of {{ owner }}</mat-card-subtitle>
-      Total of {{ totalCardsCount }} cards owned. {{ uniqueCardsCount }} of them
-      unique, across {{ setCount }} sets.
+      <mat-card-subtitle>Collection of {{ userStore.owner }}</mat-card-subtitle>
+      Total of {{ cardsStore.totalCardsCount }} cards owned.
+      {{ cardsStore.uniqueCardsCount }} of them unique, across
+      {{ cardsStore.setCount }} sets.
     </mat-card-content>
   </mat-card>
   <mat-card matRipple class="card" (click)="goto('decks')">
@@ -23,8 +24,9 @@
     </mat-card-header>
     <mat-card-content class="card-content">
       <mat-card-subtitle>Your assembled decks</mat-card-subtitle>
-      You have {{ decks.length }} decks prepared. {{ playableAmount }} ready to
-      play, {{ unplayableAmount }} need your attention.
+      You have {{ decksStore.decks.length }} decks prepared.
+      {{ decksStore.playableAmount() }} ready to play,
+      {{ decksStore.unplayableAmount() }} need your attention.
     </mat-card-content>
   </mat-card>
   <mat-card matRipple class="card">
@@ -36,7 +38,8 @@
     </mat-card-header>
     <mat-card-content class="card-content">
       <mat-card-subtitle>Net worth of your collection</mat-card-subtitle>
-      Your cards collection has a total value of {{ networth }}.
+      Your cards collection has a total value of
+      {{ cardsStore.networthWithCurrency }}.
     </mat-card-content>
   </mat-card>
   <mat-card matRipple class="card" (click)="goto('wishlist')">
@@ -50,35 +53,39 @@
       <mat-card-subtitle>
         Manage a list of cards you want to buy in future
       </mat-card-subtitle>
-      <span *ngIf="!mostWanted"></span
-      ><span *ngIf="mostWanted"
+      <span *ngIf="!(cardsStore.wishlist.length > 0)"></span
+      ><span *ngIf="cardsStore.wishlist.length > 0"
         >Your most wanted is
         <span
-          *ngIf="!mostWanted.card_faces"
-          [matTooltip]="imageTooltip(mostWanted.image_uris)"
+          *ngIf="!cardsStore.wishlist[0].card_faces"
+          [matTooltip]="imageTooltip(cardsStore.wishlist[0].image_uris)"
           matTooltipClass="fitToImage"
-          >{{ mostWanted.name }}</span
+          >{{ cardsStore.wishlist[0].name }}</span
         >
-        <span *ngIf="mostWanted.card_faces">
+        <span *ngIf="cardsStore.wishlist[0].card_faces">
           <span
-            [matTooltip]="imageTooltip(mostWanted.card_faces[0].image_uris)"
+            [matTooltip]="
+              imageTooltip(cardsStore.wishlist[0].card_faces[0].image_uris)
+            "
             matTooltipClass="fitToImage"
-            >{{ mostWanted.card_faces[0].name }}
+            >{{ cardsStore.wishlist[0].card_faces[0].name }}
           </span>
           |
           <span
-            [matTooltip]="imageTooltip(mostWanted.card_faces[1].image_uris)"
+            [matTooltip]="
+              imageTooltip(cardsStore.wishlist[0].card_faces[1].image_uris)
+            "
             matTooltipClass="fitToImage"
           >
-            {{ mostWanted.card_faces[1].name }}</span
+            {{ cardsStore.wishlist[0].card_faces[1].name }}</span
           >
         </span>
         . It's currently at
-        <span *ngIf="selectedCurrency === Currencies.EUR"
-          >{{ mostWanted.prices.eur }}€</span
+        <span *ngIf="cardsStore.networth.currency === Currencies.EUR"
+          >{{ cardsStore.wishlist[0].prices.eur }}€</span
         >
-        <span *ngIf="selectedCurrency === Currencies.USD"
-          >{{ mostWanted.prices.usd }}$</span
+        <span *ngIf="cardsStore.networth.currency === Currencies.USD"
+          >{{ cardsStore.wishlist[0].prices.usd }}$</span
         ></span
       >
     </mat-card-content>

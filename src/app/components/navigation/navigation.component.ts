@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { autorun, IReactionDisposer } from 'mobx';
 import { Subject, Subscription } from 'rxjs';
 import { onSideNavChange, animateText } from 'src/app/animations/animations';
 import { defaultDeck } from 'src/app/models/defaults';
@@ -19,22 +18,20 @@ import { CardAdapter } from 'src/app/models/card-adapter';
   styleUrls: ['./navigation.component.scss'],
   animations: [onSideNavChange, animateText],
 })
-export class NavigationComponent implements OnInit, OnDestroy {
+export class NavigationComponent implements OnDestroy {
   sideNavState = false;
   linkText = false;
   onSideNavChange = false;
   sideNavState$: Subject<boolean> = new Subject();
 
-  decks: Array<Deck> = [];
   selectedDeck: Deck | undefined;
   hoveredDeckId = '';
 
   subscriptions: Subscription = new Subscription();
-  disposer!: IReactionDisposer;
 
   constructor(
     private router: Router,
-    private decksStore: DecksStore,
+    public decksStore: DecksStore,
     private dbService: DBService,
     private dialog: MatDialog
   ) {
@@ -43,15 +40,8 @@ export class NavigationComponent implements OnInit, OnDestroy {
     );
   }
 
-  ngOnInit(): void {
-    this.disposer = autorun(() => {
-      this.decks = this.decksStore.decks;
-    });
-  }
-
   ngOnDestroy(): void {
     this.subscriptions.unsubscribe();
-    this.disposer();
   }
 
   onSidenavToggle(state: boolean) {
@@ -63,7 +53,7 @@ export class NavigationComponent implements OnInit, OnDestroy {
   }
 
   addDeck($event: any) {
-    this.dbService.addDeck(defaultDeck);
+    this.dbService.addDeck(Object.assign({}, defaultDeck));
     this.stopPropagation($event);
   }
 
