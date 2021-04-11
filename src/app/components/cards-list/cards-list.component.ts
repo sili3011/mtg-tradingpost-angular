@@ -15,7 +15,6 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { IReactionDisposer, autorun } from 'mobx';
-import { threadId } from 'node:worker_threads';
 import { CardAdapter } from 'src/app/models/card-adapter';
 import { Format } from 'src/app/models/constants';
 import { Deck } from 'src/app/models/deck';

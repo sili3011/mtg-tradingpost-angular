@@ -51,4 +51,11 @@ export class CardDetailComponent implements OnInit {
     }
     return ret;
   }
+
+  flipCard(id: string) {
+    const flip = document.getElementById(id);
+    flip!.classList.contains('animated')
+      ? flip!.classList.remove('animated')
+      : flip!.classList.add('animated');
+  }
 }

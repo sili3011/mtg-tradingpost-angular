@@ -1,16 +1,46 @@
-<div style="margin: 0 2em 0 2em; max-width: 200px">
+<div style="margin: 0 2em 0 2em">
   <div
     [matTooltip]="imageTooltip(card, 'normal')"
     [matTooltipShowDelay]="500"
     matTooltipClass="fitToImage"
     style="padding-top: 10px"
   >
+    <div fxLayout="row" *ngIf="card!.card_faces" (click)="flipCard(card.id)">
+      <button
+        *ngIf="card!.isFoil"
+        mat-icon-button
+        [matTooltip]="
+          card!.isFoil ? 'Marked as foil. Shiny!' : 'Mark as foil. Shiny!'
+        "
+        style="position: absolute; z-index: 99; margin-left: 250px"
+      >
+        <mat-icon style="color: #f1ca0f; font-size: 30px">
+          {{ card!.isFoil ? "star" : "star_border" }}
+        </mat-icon>
+      </button>
+      <div style="min-width: 146px">
+        <div class="flip-card">
+          <div class="flip-card-inner" id="{{ card.id }}">
+            <div class="flip-card-front">
+              <img
+                [src]="card!.card_faces[0].image_uris!.small"
+                style="border-radius: 6px"
+              />
+            </div>
+            <div class="flip-card-back">
+              <img
+                [src]="card!.card_faces[1].image_uris!.small"
+                :lazy-src="assets/mtg-cardback.jpg"
+                style="border-radius: 6px; width: 146px"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
     <img
-      [src]="
-        card!.card_faces
-          ? card!.card_faces[0].image_uris!.small
-          : card!.image_uris!.small
-      "
+      *ngIf="!card.card_faces"
+      [src]="card!.image_uris!.small"
       style="border-radius: 6px; position: relative; z-index: 99"
     />
     <img
@@ -25,7 +55,10 @@
       "
     />
   </div>
-  <div style="width: 100%; text-align: -webkit-center">
+  <div
+    style="width: 100%; text-align: -webkit-center"
+    [ngStyle]="{ 'margin-top': card!.card_faces ? '210px' : '' }"
+  >
     <button
       mat-icon-button
       color="primary"
