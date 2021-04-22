@@ -379,9 +379,9 @@
               </button>
               <button
                 mat-icon-button
-                (click)="deassignAsCompanion()"
+                (click)="unassignAsCompanion()"
                 *ngIf="canBeCompanion(row) && compareCard(row, deck!.companion)"
-                matTooltip="Assign as companion"
+                matTooltip="Unassign as companion"
               >
                 <mat-icon
                   svgIcon="paw-off"
@@ -452,8 +452,23 @@
         *ngFor="let card of currentShownData()"
         [card]="card"
         [format]="format"
+        [listType]="listType"
+        [commander]="isCommander() && canBeCommander(card)"
+        [canCompanion]="
+          canBeCompanion(card) && !compareCard(card, deck!.companion)
+        "
+        [isCompanion]="
+          canBeCompanion(card) && compareCard(card, deck!.companion)
+        "
+        [isMissing]="isCardInMissingCards(card)"
         (incrementEmitter)="increment($event)"
         (decrementEmitter)="decrement($event)"
+        (moveToSidedeckEmitter)="moveTo(card, ListTypes.SIDEBOARD, deck?.id)"
+        (moveToDeckEmitter)="moveTo(card, ListTypes.DECK, deck?.id)"
+        (assignAsCompanionEmitter)="assignAsCompanion(card)"
+        (unassignAsCompanionEmitter)="unassignAsCompanion()"
+        (assignAsCommanderEmitter)="assignAsCommander(card)"
+        (moveToWishlistEmitter)="moveTo(card, ListTypes.WISHLIST)"
       ></mtg-card-detail
     ></span>
   </div>

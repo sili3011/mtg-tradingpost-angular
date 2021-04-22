@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CardAdapter } from 'src/app/models/card-adapter';
 import { Format } from 'src/app/models/constants';
-import { FORMATS } from 'src/app/models/enums';
+import { FORMATS, LISTTYPES } from 'src/app/models/enums';
 import { imageTooltip } from 'src/app/utils/utils';
 
 @Component({
@@ -16,13 +16,49 @@ export class CardDetailComponent implements OnInit {
   @Input()
   format?: Format;
 
+  @Input()
+  listType!: LISTTYPES;
+
+  @Input()
+  canCompanion = false;
+
+  @Input()
+  isCompanion = false;
+
+  @Input()
+  commander = false;
+
+  @Input()
+  isMissing = false;
+
   @Output()
   incrementEmitter: EventEmitter<CardAdapter> = new EventEmitter();
 
   @Output()
   decrementEmitter: EventEmitter<CardAdapter> = new EventEmitter();
 
+  @Output()
+  moveToSidedeckEmitter: EventEmitter<void> = new EventEmitter();
+
+  @Output()
+  moveToDeckEmitter: EventEmitter<void> = new EventEmitter();
+
+  @Output()
+  assignAsCompanionEmitter: EventEmitter<void> = new EventEmitter();
+
+  @Output()
+  unassignAsCompanionEmitter: EventEmitter<void> = new EventEmitter();
+
+  @Output()
+  assignAsCommanderEmitter: EventEmitter<void> = new EventEmitter();
+
+  @Output()
+  moveToWishlistEmitter: EventEmitter<void> = new EventEmitter();
+
   Formats = FORMATS;
+  ListTypes = LISTTYPES;
+
+  showMenu = false;
 
   constructor() {}
 
@@ -57,5 +93,33 @@ export class CardDetailComponent implements OnInit {
     flip!.classList.contains('animated')
       ? flip!.classList.remove('animated')
       : flip!.classList.add('animated');
+  }
+
+  toggleMenu() {
+    this.showMenu = !this.showMenu;
+  }
+
+  moveToSidedeck() {
+    this.moveToSidedeckEmitter.emit();
+  }
+
+  moveToDeck() {
+    this.moveToDeckEmitter.emit();
+  }
+
+  assignAsCompanion() {
+    this.assignAsCompanionEmitter.emit();
+  }
+
+  unassignAsCompanion() {
+    this.unassignAsCompanionEmitter.emit();
+  }
+
+  assignAsCommander() {
+    this.assignAsCommanderEmitter.emit();
+  }
+
+  moveToWishlist() {
+    this.moveToWishlistEmitter.emit();
   }
 }

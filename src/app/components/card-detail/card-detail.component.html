@@ -1,25 +1,37 @@
-<div style="margin: 0 2em 0 2em">
-  <div
+<div
+  style="margin: 0 2em 0 2em"
+  (mouseenter)="toggleMenu()"
+  (mouseleave)="toggleMenu()"
+>
+  <span
     [matTooltip]="imageTooltip(card, 'normal')"
-    [matTooltipShowDelay]="500"
     matTooltipClass="fitToImage"
+    #tooltip="matTooltip"
+  ></span>
+  <div
     style="padding-top: 10px"
+    (click)="tooltip.toggle()"
+    (mouseleave)="tooltip.hide()"
   >
-    <div fxLayout="row" *ngIf="card!.card_faces" (click)="flipCard(card.id)">
+    <div fxLayout="row">
       <button
         *ngIf="card!.isFoil"
         mat-icon-button
         [matTooltip]="
           card!.isFoil ? 'Marked as foil. Shiny!' : 'Mark as foil. Shiny!'
         "
-        style="position: absolute; z-index: 99; margin-left: 250px"
+        style="position: absolute; z-index: 9999; margin-left: 250px"
       >
         <mat-icon style="color: #f1ca0f; font-size: 30px">
           {{ card!.isFoil ? "star" : "star_border" }}
         </mat-icon>
       </button>
-      <div style="min-width: 146px">
-        <div class="flip-card">
+      <div style="min-width: 146px; z-index: 9998">
+        <div
+          class="flip-card"
+          *ngIf="card!.card_faces"
+          (click)="flipCard(card.id)"
+        >
           <div class="flip-card-inner" id="{{ card.id }}">
             <div class="flip-card-front">
               <img
@@ -36,24 +48,99 @@
             </div>
           </div>
         </div>
+        <img
+          *ngIf="!card.card_faces"
+          [src]="card!.image_uris!.small"
+          style="border-radius: 6px; position: relative; z-index: 99"
+        />
       </div>
+      <div style="position: sticky; z-index: 9999" *ngIf="showMenu">
+        <div style="position: absolute">
+          <button
+            mat-icon-button
+            matTooltip="Move to sideboard"
+            *ngIf="listType === ListTypes.DECK"
+            (click)="moveToSidedeck()"
+          >
+            <mat-icon color="primary" style="transform: rotate(180deg)">
+              menu_open
+            </mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            matTooltip="Move to main deck"
+            *ngIf="listType === ListTypes.SIDEBOARD"
+            (click)="moveToDeck()"
+          >
+            <mat-icon color="primary"> menu_open </mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            (click)="assignAsCompanion()"
+            *ngIf="canCompanion"
+            matTooltip="Assign as companion"
+          >
+            <mat-icon
+              svgIcon="paw"
+              [ngStyle]="{
+                color: canCompanion ? '#cc8010' : 'gray'
+              }"
+            ></mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            (click)="unassignAsCompanion()"
+            *ngIf="isCompanion"
+            matTooltip="Unassign as companion"
+          >
+            <mat-icon
+              svgIcon="paw-off"
+              [ngStyle]="{
+                color: isCompanion ? '#cc8010' : 'gray'
+              }"
+            ></mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            *ngIf="commander"
+            (click)="assignAsCommander()"
+            matTooltip="Assign as commander"
+          >
+            <mat-icon
+              svgIcon="account-check"
+              [ngStyle]="{
+                color: commander ? '#cc8010' : 'gray'
+              }"
+            ></mat-icon>
+          </button>
+          <button
+            mat-icon-button
+            matTooltip="Add to wishlist"
+            (click)="moveToWishlist()"
+          >
+            <mat-icon
+              color="primary"
+              [ngStyle]="{
+                color: !isMissing ? '' : '#f44336'
+              }"
+            >
+              post_add
+            </mat-icon>
+          </button>
+        </div>
+      </div>
+      <img
+        *ngFor="let i of cardBacks()"
+        src="assets/mtg-cardback.jpg"
+        style="
+          border-radius: 6px;
+          max-height: 204px;
+          margin-left: {{ 15 * i }}px;
+          position: absolute;
+          z-index: {{ 99 - i }};
+        "
+      />
     </div>
-    <img
-      *ngIf="!card.card_faces"
-      [src]="card!.image_uris!.small"
-      style="border-radius: 6px; position: relative; z-index: 99"
-    />
-    <img
-      *ngFor="let i of cardBacks()"
-      src="assets/mtg-cardback.jpg"
-      style="
-        border-radius: 6px;
-        max-height: 204px;
-        margin-left: {{ -150 + 15 * i }}px;
-        position: absolute;
-        z-index: {{ 99 - i }};
-      "
-    />
   </div>
   <div
     style="width: 100%; text-align: -webkit-center"

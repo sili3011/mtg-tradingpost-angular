@@ -40,7 +40,9 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
     );
     this.subscriptions.add(
       this.loaded.subscribe((loaded) => {
-        const flip = document.body.getElementsByClassName('flip-card-inner')[0];
+        const flip = document.body.getElementsByClassName(
+          'dialog-flip-card-inner'
+        )[0];
         loaded
           ? flip.classList.add('animated')
           : flip.classList.remove('animated');

@@ -242,7 +242,7 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
     this.dbService.setDeck(this.deck!);
   }
 
-  deassignAsCompanion() {
+  unassignAsCompanion() {
     this.deck!.companion = undefined;
     this.dbService.setDeck(this.deck!);
   }

@@ -169,7 +169,7 @@
               style="padding-top: 10px"
             >
               <img
-                src="https://c1.scryfall.com/file/scryfall-cards/small/front/5/a/5ad36fb2-c44e-4085-ba0d-54277841ad3a.jpg?1613387006"
+                [src]="this.deck!.companion?.image_uris?.small"
                 style="border-radius: 6px"
                 (mouseenter)="setHover('comp')"
               />
