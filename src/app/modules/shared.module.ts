@@ -29,10 +29,11 @@ import { MaterialFileInputModule } from 'ngx-material-file-input';
 import { BrowserModule } from '@angular/platform-browser';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { NgOpenCVModule } from 'ng-open-cv';
+import { NgScrollbarModule } from 'ngx-scrollbar';
 
 @NgModule({
   declarations: [],
-  imports: [CommonModule],
+  imports: [CommonModule, NgScrollbarModule],
   exports: [
     // Angular Material
     MatCardModule,
@@ -70,6 +71,7 @@ import { NgOpenCVModule } from 'ng-open-cv';
     ReactiveFormsModule,
     NgApexchartsModule,
     NgOpenCVModule,
+    NgScrollbarModule,
   ],
 })
 export class SharedModule {}

@@ -52,23 +52,20 @@
     </mat-card-header>
     <mat-card-content
       class="card-content"
-      style="
-        overflow-y: auto;
-        height: calc(42% - 3px);
-        margin: 0;
-        margin-top: 5px;
-      "
+      style="height: calc(42% - 3px); margin: 0; margin-top: 5px"
     >
-      <mat-card-subtitle style="margin: 1em 1em 0 1em">
-        <mtg-problem-status
-          *ngIf="getFormat(deck) && validate(deck).amountOfProblems > 0"
-          [showProblemsOnly]="true"
-          [deck]="deck"
-          [deckValidation]="validate(deck)"
-          [currentFormat]="getFormat(deck)"
-          [missingCards]="missingCards(deck)"
-        ></mtg-problem-status>
-      </mat-card-subtitle>
+      <ng-scrollbar>
+        <mat-card-subtitle style="height: 100%; margin: 1em 1em 0 1em">
+          <mtg-problem-status
+            *ngIf="getFormat(deck) && validate(deck).amountOfProblems > 0"
+            [showProblemsOnly]="true"
+            [deck]="deck"
+            [deckValidation]="validate(deck)"
+            [currentFormat]="getFormat(deck)"
+            [missingCards]="missingCards(deck)"
+          ></mtg-problem-status>
+        </mat-card-subtitle>
+      </ng-scrollbar>
       <button
         *ngIf="deck.id === hoveredDeckId"
         mat-icon-button

@@ -187,14 +187,14 @@
       >
         Problems
       </span>
-      <div style="height: 95%; overflow-y: auto" *ngIf="!listExpanded">
+      <ng-scrollbar style="height: 95%" *ngIf="!listExpanded">
         <mtg-problem-status
           [deck]="deck!"
           [deckValidation]="deckValidation"
           [currentFormat]="currentFormat"
           [missingCards]="missingCards"
         ></mtg-problem-status>
-      </div>
+      </ng-scrollbar>
     </div>
     <div class="detail">
       Curve ( <span [innerHTML]="parsedCurve"></span> )
