@@ -104,4 +104,30 @@
       Track your new cards and their value. 0 games played.
     </mat-card-content>
   </mat-card>
+  <mat-card matRipple class="card" (click)="goto('')">
+    <mat-card-header
+      class="card-header"
+      style="background-image: url('../../assets/xln-250-treasure-map.jpg')"
+    >
+      <mat-card-title class="card-title">Roadmap</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="card-content">
+      <mat-card-subtitle>Back to landing page</mat-card-subtitle>
+      Have a look at whats (hopefully) about to come in the future.
+    </mat-card-content>
+  </mat-card>
+  <mat-card matRipple class="card" (click)="goto('settings')">
+    <mat-card-header
+      class="card-header"
+      style="
+        background-image: url('../../assets/war-234-saheeli-sublime-artificer.jpg');
+      "
+    >
+      <mat-card-title class="card-title">Settings</mat-card-title>
+    </mat-card-header>
+    <mat-card-content class="card-content">
+      <mat-card-subtitle>Set preferences and manage data</mat-card-subtitle>
+      Think of backing up your data regularly to not lose any progress.
+    </mat-card-content>
+  </mat-card>
 </div>

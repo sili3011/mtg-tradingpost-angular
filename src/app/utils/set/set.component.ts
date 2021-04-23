@@ -25,7 +25,7 @@ export class SetComponent {
   sets: any = [];
   rarities: Array<string> = [];
 
-  sizes = [`2x`, `3x`, `4x`, `5x`, `6x`];
+  sizes = [`2x`, `3x`, `4x`, `5x`, `6x`, `12x`];
 
   constructor() {
     let data = keyrune.split('{');
@@ -61,7 +61,6 @@ export class SetComponent {
     classes += this.gradient || this.foil ? 'ss-grad ' : '';
     classes += this.foil ? 'ss-foil ' : '';
 
-    return `<i 
-    alt="${this.set_name}" aria-hidden class="${classes}"></i>`;
+    return `<i alt="${this.set_name}" aria-hidden class="${classes}"></i>`;
   }
 }

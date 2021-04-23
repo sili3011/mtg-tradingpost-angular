@@ -27,6 +27,7 @@ import { CardDetectionComponent } from './components/card-detection/card-detecti
 import { NgOpenCVModule } from 'ng-open-cv';
 import { AngularFireModule } from '@angular/fire';
 import { CardDetailComponent } from './components/card-detail/card-detail.component';
+import { LandingpageComponent } from './components/landingpage/landingpage.component';
 
 const openCVConfig = {
   scriptUrl: 'assets/opencv/asm/4.5.1/opencv.js',
@@ -56,6 +57,7 @@ const openCVConfig = {
     BoxOpeningComponent,
     CardDetectionComponent,
     CardDetailComponent,
+    LandingpageComponent,
   ],
   imports: [
     BrowserModule,

@@ -1,0 +1,54 @@
+<div>
+  <div
+    style="
+      background-size: cover;
+      background-image: url('../../assets/cm2-225-trading-post-crop.jpg');
+      position: absolute;
+      height: 40%;
+      width: 100%;
+      z-index: 98;
+      box-shadow: 0px 6px 1px -1px rgb(0 0 0 / 20%),
+        0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
+      transition: height 2s;
+    "
+    [ngStyle]="{ height: show ? '40%' : '0%' }"
+  ></div>
+  <div
+    style="
+      position: absolute;
+      left: calc(50% - 200px / 2);
+      z-index: 99;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      background-color: gray;
+      cursor: pointer;
+      box-shadow: 0px 6px 1px -1px rgb(0 0 0 / 20%),
+        0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
+      transition: top 2s;
+    "
+    [ngStyle]="{ top: show ? 'calc(40% - 200px / 2)' : 'calc(0% - 200px)' }"
+    (click)="leave()"
+  >
+    <div style="margin-top: 8px; margin-left: 25px">
+      <mtg-set
+        set="jud"
+        rarity="rare"
+        size="12x"
+        style="text-shadow: 0 0 4px black"
+      ></mtg-set>
+    </div>
+  </div>
+  <div
+    style="
+      position: absolute;
+      top: 40%;
+      height: 60%;
+      width: 100%;
+      z-index: 97;
+      background-color: #303030;
+      transition: top 2s;
+    "
+    [ngStyle]="{ top: show ? '40%' : '100%' }"
+  ></div>
+</div>

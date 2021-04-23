@@ -1,3 +1,7 @@
 <body>
-  <mtg-navigation> </mtg-navigation>
+  <mtg-landingpage
+    [show]="showLandingpage"
+    (leaveLandingpageEmitter)="gotoApp()"
+  ></mtg-landingpage>
+  <mtg-navigation *ngIf="!showLandingpage"> </mtg-navigation>
 </body>

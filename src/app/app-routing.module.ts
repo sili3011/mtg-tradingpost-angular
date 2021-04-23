@@ -9,7 +9,6 @@ import { SettingsComponent } from './components/settings/settings.component';
 import { WishlistComponent } from './components/wishlist/wishlist.component';
 
 const routes: Routes = [
-  { path: '', component: DashboardComponent },
   { path: 'box-opening', component: BoxOpeningComponent },
   { path: 'collection', component: CollectionComponent },
   { path: 'dashboard', component: DashboardComponent },

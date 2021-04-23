@@ -3,6 +3,7 @@ import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TooltipComponent } from '@angular/material/tooltip';
+import { Router } from '@angular/router';
 import Dexie from 'dexie';
 import { DatabaseSelectionDialogComponent } from './components/dialogs/database-selection-dialog/database-selection-dialog.component';
 import { DBService } from './services/db.service';
@@ -15,14 +16,16 @@ import { HashStore } from './stores/hash.store';
 })
 export class AppComponent implements OnInit {
   title = 'mtg-tradingpost';
-
   backendURL = 'https://mtg-tradingpost-backend.web.app/';
+
+  showLandingpage = true;
 
   constructor(
     private dbService: DBService,
     private hashStore: HashStore,
     private dialog: MatDialog,
-    private http: HttpClient
+    private http: HttpClient,
+    private router: Router
   ) {
     Object.defineProperty(TooltipComponent.prototype, 'message', {
       set(v: any) {
@@ -35,7 +38,7 @@ export class AppComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     if (!this.dbService.getHasBeenInitialized()) {
       this.dialog.open(DatabaseSelectionDialogComponent, {
         width: '50%',
@@ -77,8 +80,18 @@ export class AppComponent implements OnInit {
       console.log(error);
     }
   }
+
+  goto(name: string) {
+    this.router.navigate([`/${name}`]);
+  }
+
+  gotoApp() {
+    this.showLandingpage = false;
+    this.goto('/dashboard');
+  }
 }
 
+// TODO: put code below somewhere else
 class HashtablesDatabase extends Dexie {
   hashtables: Dexie.Table<IHashtable, number>;
 
