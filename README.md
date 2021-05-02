@@ -4,7 +4,7 @@ I want to create a webapp to keep track of all my MTG Cards that also tells me h
 
 ## How to use:
 > :warning: **The app is in an unreleased pre-alpha state! There will be bugs and errors!**  
-- Go to: https://mtg-tradingpost-frontend.web.app/
+- [Go here!](https://mtg-tradingpost-frontend.web.app/)
 - Create a database (insert a name into **owner** and a name into **name**)
 - Optional: Dont forget to make a backup of your data once you leave!
 
