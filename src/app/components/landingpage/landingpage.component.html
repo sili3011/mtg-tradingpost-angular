@@ -41,15 +41,10 @@
     </div>
   </div>
   <div
+    class="landing-scroll"
     style="
-      position: absolute;
       top: calc( 40% - {{ scrolled }}px);
       height: calc( 100% - 40% + {{ scrolled }}px);
-      width: 100%;
-      z-index: 98;
-      background-color: #303030;
-      transition: top 2s, height 2s;
-      overflow-y: auto;
     "
     [ngStyle]="{
       top: show ? '40%' : '100%',

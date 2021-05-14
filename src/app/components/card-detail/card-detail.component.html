@@ -164,9 +164,15 @@
       style="margin-top: 1em; margin-bottom: 1em"
       [ngStyle]="{
         color:
-          (format!.format === Formats.COMMANDER ||
+          !card.type_line.toLowerCase().includes('basic land') &&
+          (((format!.format === Formats.COMMANDER ||
             format!.format === Formats.BRAWL) &&
-          card.amount > 1
+            card.amount > 1) ||
+            (!(
+              format!.format === Formats.COMMANDER ||
+              format!.format === Formats.BRAWL
+            ) &&
+              card.amount > 4))
             ? '#f44336'
             : 'white'
       }"

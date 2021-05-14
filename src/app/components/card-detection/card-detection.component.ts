@@ -40,6 +40,7 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.disposer = autorun(() => {
       this.selectedSets = this.hashStore.sortedHashes;
+      console.log(this.selectedSets);
     });
 
     this.openCVService.startCamera(

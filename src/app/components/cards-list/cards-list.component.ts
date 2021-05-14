@@ -208,6 +208,30 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
 
   private reapplyDatasource() {
     this.dataSource = new MatTableDataSource(this.cardsList);
+    this.dataSource.sortingDataAccessor = (card, sortHeaderId) => {
+      switch (sortHeaderId) {
+        case 'name':
+          return card.name;
+        case 'set':
+          return card.set;
+        case 'mana_cost':
+          return card.mana_cost!;
+        case 'cmc':
+          return card.cmc;
+        case 'value':
+          switch (this.selectedCurrency) {
+            case CURRENCIES.EUR:
+              return parseFloat(card.prices.eur!);
+            case CURRENCIES.USD:
+              return parseFloat(card.prices.usd!);
+          }
+        case 'amount':
+          return card.amount;
+        default:
+          return '';
+      }
+    };
+    this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
     this.rerender.emit(true);
   }

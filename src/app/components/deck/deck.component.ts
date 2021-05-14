@@ -57,6 +57,7 @@ export class DeckComponent implements OnInit, OnDestroy {
   ListTypes = LISTTYPES;
   Colors = MANACOLORS;
   Pies = PIECHART;
+  Formats = FORMATS;
 
   colorsArray = Object.keys(MANACOLORS);
 

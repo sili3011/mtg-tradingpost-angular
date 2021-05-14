@@ -177,6 +177,9 @@ export function validateDeck(deck: Deck, format: Format): DeckValidation {
   // VALIDATE CARD COPIES
   let foundTooMany = false;
   deck.cards.forEach((c) => {
+    if (c.type_line.toLowerCase().includes('basic land')) {
+      return;
+    }
     if (c.amount > format.maxCopiesOfCards) {
       foundTooMany = true;
       return;

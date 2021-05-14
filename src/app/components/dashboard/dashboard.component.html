@@ -1,4 +1,4 @@
-<div style="margin-left: 5%" fxLayout="row wrap">
+<div style="margin-left: 5%; padding-bottom: 60px" fxLayout="row wrap">
   <mat-card matRipple class="card" (click)="goto('collection')">
     <mat-card-header
       class="card-header"
@@ -8,9 +8,9 @@
     </mat-card-header>
     <mat-card-content class="card-content">
       <mat-card-subtitle>Collection of {{ userStore.owner }}</mat-card-subtitle>
-      Total of {{ cardsStore.totalCardsCount }} cards owned.
-      {{ cardsStore.uniqueCardsCount }} of them unique, across
-      {{ cardsStore.setCount }} sets.
+      Total of {{ cardsStore.totalCardsCount }} across
+      {{ cardsStore.setCount }} sets cards owned,
+      {{ cardsStore.uniqueCardsCount }} of them unique.
     </mat-card-content>
   </mat-card>
   <mat-card matRipple class="card" (click)="goto('decks')">

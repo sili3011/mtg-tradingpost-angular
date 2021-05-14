@@ -147,9 +147,11 @@
       </div>
     </mat-sidenav>
     <mat-sidenav-content style="height: 100%">
-      <div class="main_content" class="basic-vh">
-        <router-outlet></router-outlet>
-      </div>
+      <ng-scrollbar>
+        <div class="main_content" class="basic-vh">
+          <router-outlet></router-outlet>
+        </div>
+      </ng-scrollbar>
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>

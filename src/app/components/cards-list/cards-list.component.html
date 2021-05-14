@@ -36,7 +36,7 @@
       (click)="openAddCardDialog()"
     >
       <mat-icon color="primary"> add_circle </mat-icon>
-      ADD CARD
+      <span style="margin-right: 15px">ADD CARD</span>
     </button>
   </div>
 
@@ -306,7 +306,9 @@
                   style="margin-top: 1em; margin-bottom: 1em"
                   [ngStyle]="{
                     color:
-                      format && row.amount > format.maxCopiesOfCards
+                      format &&
+                      row.amount > format.maxCopiesOfCards &&
+                      !row.type_line.toLowerCase().includes('basic land')
                         ? '#f44336'
                         : ''
                   }"

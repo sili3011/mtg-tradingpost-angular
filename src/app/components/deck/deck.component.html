@@ -282,7 +282,12 @@
         value="detail"
         style="background-color: transparent"
         matTooltip="Sideboard"
-        (click)="currentListType = ListTypes.SIDEBOARD"
+        (click)="
+          currentFormat.format !== Formats.COMMANDER
+            ? (currentListType = ListTypes.SIDEBOARD)
+            : null
+        "
+        [disabled]="currentFormat.format === Formats.COMMANDER"
         ><mat-icon
           color="primary"
           [ngStyle]="{

@@ -1,0 +1,16 @@
+/* Hide scrollbar for Chrome, Safari and Opera */
+.landing-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.landing-scroll {
+  -ms-overflow-style: none; /* IE and Edge */
+  scrollbar-width: none; /* Firefox */
+  position: absolute;
+  width: 100%;
+  z-index: 98;
+  background-color: #303030;
+  transition: top 2s, height 2s;
+  overflow-y: auto;
+}
