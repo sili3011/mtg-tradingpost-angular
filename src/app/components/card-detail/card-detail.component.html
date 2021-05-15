@@ -143,23 +143,15 @@
     </div>
   </div>
   <div style="display: flex">
-    <div
-      style="margin: 0 auto"
-      [ngStyle]="{ 'margin-top': card!.card_faces ? '210px' : '' }"
-    >
+    <div style="margin: 0 auto">
+      <div *ngIf="card!.card_faces" style="height: 210px"></div>
       <button
         mat-icon-button
         color="primary"
         style="margin-right: 10px"
         (click)="decrement()"
-        [disabled]="card.amount <= 1"
       >
-        <mat-icon
-          color="primary"
-          [ngStyle]="{ color: card.amount <= 1 ? 'grey' : '' }"
-        >
-          remove
-        </mat-icon>
+        <mat-icon color="primary"> remove </mat-icon>
       </button>
       <span
         style="margin-top: 1em; margin-bottom: 1em"
