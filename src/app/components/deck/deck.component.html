@@ -283,11 +283,11 @@
         style="background-color: transparent"
         matTooltip="Sideboard"
         (click)="
-          currentFormat.format !== Formats.COMMANDER
+          currentFormat?.format !== Formats.COMMANDER
             ? (currentListType = ListTypes.SIDEBOARD)
             : null
         "
-        [disabled]="currentFormat.format === Formats.COMMANDER"
+        [disabled]="currentFormat?.format === Formats.COMMANDER"
         ><mat-icon
           color="primary"
           [ngStyle]="{

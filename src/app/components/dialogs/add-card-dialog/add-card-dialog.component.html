@@ -89,30 +89,32 @@
         </div>
       </div>
     </div>
-    <div style="width: 100%; text-align: -webkit-center">
-      <button
-        mat-icon-button
-        color="primary"
-        style="margin-right: 10px"
-        (click)="decrement()"
-        [disabled]="amount <= 1"
-      >
-        <mat-icon
+    <div style="display: flex">
+      <span style="margin: 0 auto">
+        <button
+          mat-icon-button
           color="primary"
-          [ngStyle]="{ color: amount <= 1 ? 'grey' : '' }"
+          style="margin-right: 10px"
+          (click)="decrement()"
+          [disabled]="amount <= 1"
         >
-          remove
-        </mat-icon>
-      </button>
-      <span style="margin-top: 1em; margin-bottom: 1em">{{ amount }}</span>
-      <button
-        mat-icon-button
-        color="primary"
-        style="margin-left: 10px"
-        (click)="increment()"
-      >
-        <mat-icon color="primary"> add </mat-icon>
-      </button>
+          <mat-icon
+            color="primary"
+            [ngStyle]="{ color: amount <= 1 ? 'grey' : '' }"
+          >
+            remove
+          </mat-icon>
+        </button>
+        <span style="margin-top: 1em; margin-bottom: 1em">{{ amount }}</span>
+        <button
+          mat-icon-button
+          color="primary"
+          style="margin-left: 10px"
+          (click)="increment()"
+        >
+          <mat-icon color="primary"> add </mat-icon>
+        </button>
+      </span>
     </div>
   </div>
   <div mat-dialog-actions>

@@ -45,6 +45,7 @@
     style="
       top: calc( 40% - {{ scrolled }}px);
       height: calc( 100% - 40% + {{ scrolled }}px);
+      padding: 5em;
     "
     [ngStyle]="{
       top: show ? '40%' : '100%',
@@ -53,9 +54,27 @@
     (scroll)="handleScroll($event)"
   >
     <div style="height: 1500px; margin-top: {{ scrolled }}px; transition: none">
-      <span style="font-size: 40px; color: #a58e4a"
-        >Welcome, to a new collecting experience!</span
+      <div
+        style="
+          font-size: 45px;
+          color: #a58e4a;
+          text-shadow: 0px 0px 5px black;
+          padding-top: 6rem;
+          padding-bottom: 3rem;
+        "
+        class="container"
       >
+        Welcome, to a new collecting experience!
+      </div>
+      <div
+        style="
+          background-color: #232323;
+          border-radius: 25px;
+          width: calc(100% - 8rem);
+          display: flex;
+          height: 20%;
+        "
+      ></div>
     </div>
   </div>
 </div>

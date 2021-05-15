@@ -142,49 +142,51 @@
       />
     </div>
   </div>
-  <div
-    style="width: 100%; text-align: -webkit-center"
-    [ngStyle]="{ 'margin-top': card!.card_faces ? '210px' : '' }"
-  >
-    <button
-      mat-icon-button
-      color="primary"
-      style="margin-right: 10px"
-      (click)="decrement()"
-      [disabled]="card.amount <= 1"
+  <div style="display: flex">
+    <div
+      style="margin: 0 auto"
+      [ngStyle]="{ 'margin-top': card!.card_faces ? '210px' : '' }"
     >
-      <mat-icon
+      <button
+        mat-icon-button
         color="primary"
-        [ngStyle]="{ color: card.amount <= 1 ? 'grey' : '' }"
+        style="margin-right: 10px"
+        (click)="decrement()"
+        [disabled]="card.amount <= 1"
       >
-        remove
-      </mat-icon>
-    </button>
-    <span
-      style="margin-top: 1em; margin-bottom: 1em"
-      [ngStyle]="{
-        color:
-          !card.type_line.toLowerCase().includes('basic land') &&
-          (((format!.format === Formats.COMMANDER ||
-            format!.format === Formats.BRAWL) &&
-            card.amount > 1) ||
-            (!(
-              format!.format === Formats.COMMANDER ||
-              format!.format === Formats.BRAWL
-            ) &&
-              card.amount > 4))
-            ? '#f44336'
-            : 'white'
-      }"
-      >{{ card.amount }}</span
-    >
-    <button
-      mat-icon-button
-      color="primary"
-      style="margin-left: 10px"
-      (click)="increment()"
-    >
-      <mat-icon color="primary"> add </mat-icon>
-    </button>
+        <mat-icon
+          color="primary"
+          [ngStyle]="{ color: card.amount <= 1 ? 'grey' : '' }"
+        >
+          remove
+        </mat-icon>
+      </button>
+      <span
+        style="margin-top: 1em; margin-bottom: 1em"
+        [ngStyle]="{
+          color:
+            !card.type_line.toLowerCase().includes('basic land') &&
+            (((format!.format === Formats.COMMANDER ||
+              format!.format === Formats.BRAWL) &&
+              card.amount > 1) ||
+              (!(
+                format!.format === Formats.COMMANDER ||
+                format!.format === Formats.BRAWL
+              ) &&
+                card.amount > 4))
+              ? '#f44336'
+              : 'white'
+        }"
+        >{{ card.amount }}</span
+      >
+      <button
+        mat-icon-button
+        color="primary"
+        style="margin-left: 10px"
+        (click)="increment()"
+      >
+        <mat-icon color="primary"> add </mat-icon>
+      </button>
+    </div>
   </div>
 </div>
