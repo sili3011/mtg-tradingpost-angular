@@ -268,11 +268,11 @@
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Value</th>
             <td mat-cell *matCellDef="let row">
               <span *ngIf="selectedCurrency === Currencies.EUR"
-                >{{ row.prices.eur }}€</span
+                >{{ row.prices.eur }} €</span
               >
               <span *ngIf="selectedCurrency === Currencies.USD">
-                <span *ngIf="!row.isFoil"> {{ row.prices.usd }}$ </span>
-                <span *ngIf="row.isFoil"> {{ row.prices.usd_foil }}$ </span>
+                <span *ngIf="!row.isFoil"> {{ row.prices.usd }} $ </span>
+                <span *ngIf="row.isFoil"> {{ row.prices.usd_foil }} $ </span>
               </span>
             </td>
           </ng-container>

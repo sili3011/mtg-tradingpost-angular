@@ -1,5 +1,14 @@
 <div style="height: 100%">
-  <video #cam width="640" height="480" [hidden]="true"></video>
+  <video
+    #cam
+    width="640"
+    height="480"
+    [hidden]="true"
+    autoplay=""
+    muted=""
+    loop=""
+    playsinline=""
+  ></video>
   <canvas #canvas></canvas>
   <canvas #dummyToHash [hidden]="false"></canvas>
   <p>{{ mostFoundCard?.name }} {{ mostFoundCardTimes }}</p>

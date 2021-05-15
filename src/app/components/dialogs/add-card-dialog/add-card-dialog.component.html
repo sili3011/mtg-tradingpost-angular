@@ -39,7 +39,7 @@
           style="position: absolute; z-index: 99; margin-left: 250px"
           (click)="toggleFoil()"
         >
-          <mat-icon style="color: #f1ca0f; font-size: 30px">
+          <mat-icon style="color: #f1ca0f; font-size: 30px; margin-right: 5px">
             {{ isFoil ? "star" : "star_border" }}
           </mat-icon>
         </button>
@@ -60,6 +60,14 @@
                 />
               </div>
             </div>
+          </div>
+          <div style="display: flex">
+            <span *ngIf="selectedPrint?.prices" style="margin: 0 auto">
+              {{ priceOfPrint() }}
+            </span>
+            <span *ngIf="!selectedPrint?.prices" style="margin: 0 auto">
+              No price data available
+            </span>
           </div>
         </div>
         <div style="max-height: 400px; width: 70%; overflow-y: auto">

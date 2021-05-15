@@ -52,6 +52,10 @@
     }"
     (scroll)="handleScroll($event)"
   >
-    <div style="height: 1500px"></div>
+    <div style="height: 1500px; margin-top: {{ scrolled }}px; transition: none">
+      <span style="font-size: 40px; color: #a58e4a"
+        >Welcome, to a new collecting experience!</span
+      >
+    </div>
   </div>
 </div>

@@ -5,7 +5,9 @@ import * as _ from 'lodash';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { Cards } from 'scryfall-sdk';
 import { CardAdapter } from 'src/app/models/card-adapter';
+import { CURRENCIES } from 'src/app/models/enums';
 import { DBService } from 'src/app/services/db.service';
+import { CardsStore } from 'src/app/stores/cards.store';
 
 @Component({
   selector: 'mtg-add-card-dialog',
@@ -28,6 +30,7 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
   constructor(
     private dialogRef: MatDialogRef<AddCardDialogComponent>,
     private dbService: DBService,
+    private cardsStore: CardsStore,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
@@ -129,5 +132,16 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
 
   toggleFoil() {
     this.isFoil = !this.isFoil;
+  }
+
+  priceOfPrint(): string {
+    switch (this.cardsStore.networth.currency) {
+      case CURRENCIES.EUR:
+        return parseFloat(this.selectedPrint.prices.eur) + ' €';
+      case CURRENCIES.USD:
+        return parseFloat(this.selectedPrint.prices.usd) + ' $';
+      default:
+        return '';
+    }
   }
 }
