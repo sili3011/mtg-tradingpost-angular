@@ -64,6 +64,7 @@
           'span-80': showProblemsOnly,
           'span-20': !showProblemsOnly
         }"
+        [matTooltip]="cardsListToHTMLList(deckValidation.sameNameDifferentCard)"
       >
         Some cards exceed the copy limit of
         {{ currentFormat ? currentFormat.maxCopiesOfCards : 0 }} in

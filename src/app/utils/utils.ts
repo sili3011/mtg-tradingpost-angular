@@ -117,8 +117,9 @@ export function deckToPie(
           (card) => card.color_identity.join().toLowerCase() === ''
         ).length;
       } else if (label === COLORS.MULTI) {
-        amount = deck.cards.filter((card) => card.color_identity.length > 1)
-          .length;
+        amount = deck.cards.filter(
+          (card) => card.color_identity.length > 1
+        ).length;
       } else {
         let mana = '';
         switch (label) {
@@ -160,6 +161,7 @@ export interface DeckValidation {
   hasNoIllegalColorIdentities: boolean;
   illegalColorIdentities: Array<CardAdapter>;
   needsCommander: boolean;
+  sameNameDifferentCard: Array<CardAdapter>;
 }
 
 export function validateDeck(deck: Deck, format: Format): DeckValidation {
@@ -180,8 +182,17 @@ export function validateDeck(deck: Deck, format: Format): DeckValidation {
     if (c.type_line.toLowerCase().includes('basic land')) {
       return;
     }
-    if (c.amount > format.maxCopiesOfCards) {
+    // VALIDATE SAME NAME DIFFERENT CARD
+    const sameNameCards = deck.cards.filter((card) => card.name === c.name);
+    let amount = 0;
+    if (sameNameCards) {
+      sameNameCards.map((card) => (amount += card.amount));
+    } else {
+      amount = c.amount;
+    }
+    if (amount > format.maxCopiesOfCards) {
       foundTooMany = true;
+      ret.sameNameDifferentCard = sameNameCards;
       return;
     }
   });
@@ -301,7 +312,7 @@ export function validateDeck(deck: Deck, format: Format): DeckValidation {
       card.color_identity.forEach((color) => {
         if (
           !MANACOLORS[
-            (deck.colors as unknown) as keyof typeof MANACOLORS
+            deck.colors as unknown as keyof typeof MANACOLORS
           ].includes(color.toLowerCase())
         ) {
           ret.illegalColorIdentities.push(card);

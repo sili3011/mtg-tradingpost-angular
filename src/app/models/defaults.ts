@@ -41,4 +41,5 @@ export const defaultDeckValidation = {
   hasNoIllegalColorIdentities: false,
   illegalColorIdentities: [],
   needsCommander: false,
+  sameNameDifferentCard: [],
 };

@@ -287,7 +287,8 @@
               [ngStyle]="{
                 color:
                   listType === ListTypes.DECK &&
-                  !deckValidation?.hasLegalAmountOfCopiesOfCards
+                  (!deckValidation?.hasLegalAmountOfCopiesOfCards ||
+                    deckValidation?.sameNameDifferentCard)
                     ? '#f44336'
                     : ''
               }"
@@ -312,7 +313,8 @@
                   [ngStyle]="{
                     color:
                       format &&
-                      row.amount > format.maxCopiesOfCards &&
+                      (row.amount > format.maxCopiesOfCards ||
+                        deckValidation?.sameNameDifferentCard!.includes(row)) &&
                       !row.type_line.toLowerCase().includes('basic land')
                         ? '#f44336'
                         : ''
