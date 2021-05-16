@@ -483,6 +483,8 @@
           (unassignAsCompanionEmitter)="unassignAsCompanion()"
           (assignAsCommanderEmitter)="assignAsCommander(card)"
           (moveToWishlistEmitter)="moveTo(card, ListTypes.WISHLIST)"
+          style="border-radius: 10px; margin: 0 5px"
+          [ngStyle]="{ background: isCardAProblem(card) ? '#a52a2a66' : '' }"
         ></mtg-card-detail
       ></span>
     </ng-scrollbar>

@@ -334,4 +334,17 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
       .filter((u, i) => i >= this.paginator.pageSize * this.paginator.pageIndex)
       .filter((u, i) => i < this.paginator.pageSize);
   }
+
+  isCardAProblem(card: CardAdapter): boolean {
+    if (this.format && this.deckValidation) {
+      return (
+        (card.amount > this.format!.maxCopiesOfCards &&
+          !card.type_line.toLowerCase().includes('basic land')) ||
+        this.deckValidation.sameNameDifferentCard!.includes(card) ||
+        this.deckValidation.illegalCards.includes(card) ||
+        this.deckValidation.illegalColorIdentities.includes(card)
+      );
+    }
+    return false;
+  }
 }
