@@ -64,11 +64,11 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
     this.autoCompleteCatalogue = await Cards.autoCompleteName(this.input);
   }, 200);
 
-  onEnter() {
+  onEnter(): void {
     this.onSelect(this.input);
   }
 
-  onSelect(option: string) {
+  onSelect(option: string): void {
     this.selectedPrint = undefined;
     this.otherPrints = [];
     this.loaded.next(false);
@@ -80,13 +80,12 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
         ).then((__: any) => (this.otherPrints = __.data));
         this.loaded.next(true);
       } else {
-        // deal with error
         throw new Error('Bad Request');
       }
     });
   }
 
-  getSelectedPrintPic() {
+  getSelectedPrintPic(): string {
     if (this.selectedPrint) {
       if (this.selectedPrint.image_uris) {
         this.lastPicLoaded = this.selectedPrint.image_uris.normal;
@@ -98,21 +97,21 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
     return this.lastPicLoaded;
   }
 
-  printSelect(print: CardAdapter) {
+  printSelect(print: CardAdapter): void {
     if (this.selectedPrint !== print) {
       this.selectedPrint = print;
     }
   }
 
-  get input() {
+  get input(): string {
     return this.searchControl.value?.trim();
   }
 
-  close() {
+  close(): void {
     this.dialogRef.close();
   }
 
-  addCard() {
+  addCard(): void {
     this.dbService.addCard(
       this.selectedPrint!,
       this.data.listType,
@@ -135,30 +134,34 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
     this.amount = 0;
   }
 
-  increment() {
+  increment(): void {
     ++this.amount;
   }
 
-  decrement() {
+  decrement(): void {
     if (this.amount > 1) {
       --this.amount;
     }
   }
 
-  toggleFoil() {
+  toggleFoil(): void {
     this.isFoil = !this.isFoil;
   }
 
-  toggleAlsoAddToCollection() {
+  toggleAlsoAddToCollection(): void {
     this.alsoAddToCollection = !this.alsoAddToCollection;
   }
 
-  priceOfPrint(): string {
+  priceOfPrint(): string | undefined {
     switch (this.cardsStore.networth.currency) {
       case CURRENCIES.EUR:
-        return parseFloat(this.selectedPrint.prices.eur) + ' €';
+        return isNaN(parseFloat(this.selectedPrint.prices.eur))
+          ? undefined
+          : parseFloat(this.selectedPrint.prices.eur) + ' €';
       case CURRENCIES.USD:
-        return parseFloat(this.selectedPrint.prices.usd) + ' $';
+        return isNaN(parseFloat(this.selectedPrint.prices.usd))
+          ? undefined
+          : parseFloat(this.selectedPrint.prices.usd) + ' $';
       default:
         return '';
     }

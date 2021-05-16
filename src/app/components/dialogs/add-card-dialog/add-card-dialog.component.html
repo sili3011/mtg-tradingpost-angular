@@ -62,10 +62,16 @@
             </div>
           </div>
           <div style="display: flex">
-            <span *ngIf="selectedPrint?.prices" style="margin: 0 auto">
+            <span
+              *ngIf="selectedPrint?.prices && priceOfPrint()"
+              style="margin: 0 auto"
+            >
               {{ priceOfPrint() }}
             </span>
-            <span *ngIf="!selectedPrint?.prices" style="margin: 0 auto">
+            <span
+              *ngIf="!selectedPrint?.prices || !priceOfPrint()"
+              style="margin: 0 auto"
+            >
               No price data available
             </span>
           </div>
