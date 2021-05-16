@@ -171,7 +171,7 @@ export function validateDeck(deck: Deck, format: Format): DeckValidation {
     (format.format !== FORMATS.COMMANDER &&
       amountOfCardsOfDeck(deck) >= format.minCardAmount) ||
     (format.format === FORMATS.COMMANDER &&
-      deck.cards.length === format.minCardAmount)
+      amountOfCardsOfDeck(deck) === format.minCardAmount)
   ) {
     ret.hasLegalAmountOfCards = true;
     --ret.amountOfProblems;
