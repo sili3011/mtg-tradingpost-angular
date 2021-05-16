@@ -207,6 +207,7 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   private reapplyDatasource() {
+    const filter = this.dataSource.filter;
     this.dataSource = new MatTableDataSource(this.cardsList);
     this.dataSource.sortingDataAccessor = (card, sortHeaderId) => {
       switch (sortHeaderId) {
@@ -232,6 +233,7 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
       }
     };
     this.dataSource.sort = this.sort;
+    this.dataSource.filter = filter;
     this.dataSource.paginator = this.paginator;
     this.rerender.emit(true);
   }
