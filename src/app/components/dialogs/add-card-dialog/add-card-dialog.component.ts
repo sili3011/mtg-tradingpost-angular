@@ -113,7 +113,7 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
 
   addCard(): void {
     this.dbService.addCard(
-      this.selectedPrint!,
+      Object.assign({}, this.selectedPrint!),
       this.data.listType,
       this.data.deckId,
       this.amount,
@@ -121,9 +121,9 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
     );
     if (this.alsoAddToCollection) {
       this.dbService.addCard(
-        this.selectedPrint!,
+        Object.assign({}, this.selectedPrint!),
         this.listtypes.COLLECTION,
-        this.data.deckId,
+        undefined,
         this.amount,
         this.isFoil
       );

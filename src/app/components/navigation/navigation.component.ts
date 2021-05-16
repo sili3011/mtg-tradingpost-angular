@@ -87,7 +87,7 @@ export class NavigationComponent implements OnDestroy {
     ref.afterClosed().subscribe(() => {
       if (ref.componentInstance.confirmed) {
         this.dbService.addCard(
-          card,
+          Object.assign({}, card),
           LISTTYPES.DECK,
           deck.id,
           ref.componentInstance.amount,
