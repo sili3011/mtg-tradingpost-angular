@@ -131,7 +131,8 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
     this.selectedPrint = undefined;
     this.otherPrints = [];
     this.searchControl.setValue('');
-    this.amount = 0;
+    this.amount = 1;
+    this.isFoil = false;
   }
 
   increment(): void {
