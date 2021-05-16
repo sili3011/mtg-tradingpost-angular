@@ -117,9 +117,25 @@
       </span>
     </div>
   </div>
-  <div mat-dialog-actions>
+  <div mat-dialog-actions style="margin: 0; padding: 0; min-height: 0">
     <button mat-button color="primary" (click)="close()">Close</button>
     <div style="flex: 1 1 auto"></div>
-    <button mat-button color="primary" (click)="addCard()">Add</button>
+    <mat-checkbox
+      color="primary"
+      *ngIf="
+        data.listType === listtypes.DECK ||
+        data.listType === listtypes.SIDEBOARD
+      "
+      (change)="toggleAlsoAddToCollection()"
+      >Also add to collection</mat-checkbox
+    >
+    <button
+      mat-button
+      color="primary"
+      (click)="addCard()"
+      [disabled]="!selectedPrint"
+    >
+      Add
+    </button>
   </div>
 </div>

@@ -5,7 +5,7 @@ import * as _ from 'lodash';
 import { BehaviorSubject, Subscription } from 'rxjs';
 import { Cards } from 'scryfall-sdk';
 import { CardAdapter } from 'src/app/models/card-adapter';
-import { CURRENCIES } from 'src/app/models/enums';
+import { CURRENCIES, LISTTYPES } from 'src/app/models/enums';
 import { DBService } from 'src/app/services/db.service';
 import { CardsStore } from 'src/app/stores/cards.store';
 
@@ -24,8 +24,11 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
 
   amount: number = 1;
   isFoil: boolean = false;
+  alsoAddToCollection: boolean = false;
 
   subscriptions: Subscription = new Subscription();
+
+  listtypes = LISTTYPES;
 
   constructor(
     private dialogRef: MatDialogRef<AddCardDialogComponent>,
@@ -117,7 +120,19 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
       this.amount,
       this.isFoil
     );
-    this.close();
+    if (this.alsoAddToCollection) {
+      this.dbService.addCard(
+        this.selectedPrint!,
+        this.listtypes.COLLECTION,
+        this.data.deckId,
+        this.amount,
+        this.isFoil
+      );
+    }
+    this.selectedPrint = undefined;
+    this.otherPrints = [];
+    this.searchControl.setValue('');
+    this.amount = 0;
   }
 
   increment() {
@@ -132,6 +147,10 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
 
   toggleFoil() {
     this.isFoil = !this.isFoil;
+  }
+
+  toggleAlsoAddToCollection() {
+    this.alsoAddToCollection = !this.alsoAddToCollection;
   }
 
   priceOfPrint(): string {

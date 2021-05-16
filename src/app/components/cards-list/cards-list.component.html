@@ -35,7 +35,9 @@
       style="margin-right: 3%"
       (click)="openAddCardDialog()"
     >
-      <mat-icon color="primary"> add_circle </mat-icon>
+      <mat-icon color="primary" style="margin-right: 5px">
+        add_circle
+      </mat-icon>
       <span style="margin-right: 15px">ADD CARD</span>
     </button>
   </div>
@@ -87,7 +89,7 @@
                   cdkDrag
                   [cdkDragData]="row"
                 >
-                  <span fxLayout="row"
+                  <span fxLayout="row" style="align-items: flex-end"
                     >{{ row.name }}
                     <mat-icon
                       style="color: #f1ca0f; font-size: 13px"
@@ -103,7 +105,7 @@
                     [alt]="row.name"
                 /></span>
                 <span *ngIf="row.card_faces" cdkDrag [cdkDragData]="row">
-                  <span fxLayout="row">
+                  <span fxLayout="row" style="align-items: flex-end">
                     <span
                       [matTooltip]="imageTooltip(row.card_faces[0].image_uris)"
                       matTooltipClass="fitToImage"
@@ -148,7 +150,7 @@
                     color: isCardIllegal(row) ? '#f44336' : ''
                   }"
                 >
-                  <span fxLayout="row"
+                  <span fxLayout="row" style="align-items: flex-end"
                     >{{ row.name }}
                     <mat-icon
                       style="color: #f1ca0f; font-size: 13px"
@@ -159,7 +161,7 @@
                   </span>
                 </span>
                 <span *ngIf="row.card_faces">
-                  <span fxLayout="row">
+                  <span fxLayout="row" style="align-items: flex-end">
                     <span
                       [matTooltip]="imageTooltip(row.card_faces[0].image_uris)"
                       matTooltipClass="fitToImage"
@@ -281,7 +283,7 @@
               mat-header-cell
               *matHeaderCellDef
               mat-sort-header
-              style="justify-content: center"
+              style="justify-content: center; align-items: center"
               [ngStyle]="{
                 color:
                   listType === ListTypes.DECK &&
@@ -293,7 +295,10 @@
               Amount
             </th>
             <td mat-cell *matCellDef="let row">
-              <div fxLayout="row" style="justify-content: center">
+              <div
+                fxLayout="row"
+                style="justify-content: center; align-items: center"
+              >
                 <button
                   mat-icon-button
                   color="primary"
