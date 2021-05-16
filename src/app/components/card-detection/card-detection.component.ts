@@ -33,6 +33,7 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
   disposer!: IReactionDisposer;
 
   constructor(
+    // Needed for whatever reason. Without it rear camera doesnt start on mobile
     private openCVService: NgOpenCVService,
     private hashStore: HashStore
   ) {}
@@ -43,24 +44,26 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
       console.log(this.selectedSets);
     });
 
-    this.openCVService.startCamera(
-      640,
-      (stream: any) => {
-        if (stream) {
-          this.cam.nativeElement.srcObject = stream;
-          this.cam.nativeElement.play();
-          this.cameraStarted = true;
-          let cap = new cv.VideoCapture(this.cam.nativeElement);
-          this.detectCard(cap);
-        }
-      },
-      this.cam
-    );
+    navigator.mediaDevices
+      .getUserMedia({
+        video: {
+          facingMode: 'environment',
+        },
+      })
+      .then((stream) => {
+        this.cam.nativeElement.srcObject = stream;
+        this.cameraStarted = true;
+        this.cam.nativeElement.play();
+        let cap = new cv.VideoCapture(this.cam.nativeElement);
+        this.detectCard(cap);
+      });
   }
 
   ngOnDestroy(): void {
     this.cameraStarted = false;
-    this.openCVService.stopCamera();
+    this.cam.nativeElement.srcObject.getTracks().forEach((track: any) => {
+      track.stop();
+    });
     this.disposer();
   }
 
