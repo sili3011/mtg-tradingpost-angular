@@ -288,7 +288,7 @@
                 color:
                   listType === ListTypes.DECK &&
                   (!deckValidation?.hasLegalAmountOfCopiesOfCards ||
-                    deckValidation?.sameNameDifferentCard)
+                    (deckValidation?.sameNameDifferentCard)!.length)
                     ? '#f44336'
                     : ''
               }"
