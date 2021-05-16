@@ -5,7 +5,6 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { NgOpenCVService } from 'ng-open-cv';
 import * as imghash from 'imghash';
 import * as leven from 'fast-levenshtein';
 import { autorun, IReactionDisposer } from 'mobx';
@@ -32,11 +31,7 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
 
   disposer!: IReactionDisposer;
 
-  constructor(
-    // Needed for whatever reason. Without it rear camera doesnt start on mobile
-    private openCVService: NgOpenCVService,
-    private hashStore: HashStore
-  ) {}
+  constructor(private hashStore: HashStore) {}
 
   ngOnInit(): void {
     this.disposer = autorun(() => {
