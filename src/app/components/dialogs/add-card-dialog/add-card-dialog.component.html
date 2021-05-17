@@ -76,8 +76,8 @@
             </span>
           </div>
         </div>
-        <div style="max-height: 400px; width: 70%; overflow-y: auto">
-          <div *ngIf="loaded">
+        <div style="max-height: 400px; width: 100%">
+          <ng-scrollbar style="height: 100%" *ngIf="loaded && !loadingSets">
             <button
               mat-icon-button
               *ngFor="let print of otherPrints"
@@ -91,6 +91,14 @@
                 size="2x"
               ></mtg-set>
             </button>
+          </ng-scrollbar>
+          <div style="display: flex; height: 100%">
+            <mat-progress-spinner
+              class="mat-spinner-color"
+              mode="indeterminate"
+              style="margin: auto"
+            >
+            </mat-progress-spinner>
           </div>
         </div>
       </div>

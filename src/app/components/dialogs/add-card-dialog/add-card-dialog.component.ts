@@ -21,6 +21,7 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
   selectedPrint: any;
   loaded: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
   lastPicLoaded = 'assets/mtg-cardback.jpg';
+  loadingSets = false;
 
   amount: number = 1;
   isFoil: boolean = false;
@@ -72,13 +73,26 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
     this.selectedPrint = undefined;
     this.otherPrints = [];
     this.loaded.next(false);
-    Cards.byName(option).then((_) => {
+    Cards.byName(option).then(async (_) => {
       if (_.object === 'card') {
         this.selectedPrint = _;
-        Cards.query(
-          _.prints_search_uri.replace('https://api.scryfall.com/', '')
-        ).then((__: any) => (this.otherPrints = __.data));
         this.loaded.next(true);
+        this.loadingSets = true;
+        await Cards.query(
+          _.prints_search_uri.replace('https://api.scryfall.com/', '')
+        ).then(async (__: any) => {
+          this.otherPrints = __.data;
+          let nextPage = __.next_page;
+          while (nextPage) {
+            await Cards.query(
+              nextPage.replace('https://api.scryfall.com/', '')
+            ).then((__: any) => {
+              this.otherPrints.push(...__.data);
+              nextPage = __.next_page;
+            });
+          }
+          this.loadingSets = false;
+        });
       } else {
         throw new Error('Bad Request');
       }

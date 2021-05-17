@@ -21,6 +21,7 @@ import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FlexModule } from '@angular/flex-layout/flex';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -58,6 +59,7 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
     MatChipsModule,
     MatButtonToggleModule,
     MatBadgeModule,
+    MatProgressSpinnerModule,
     DragDropModule,
     // AngularForms
     ReactiveFormsModule,

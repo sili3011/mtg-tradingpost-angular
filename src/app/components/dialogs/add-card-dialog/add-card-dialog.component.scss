@@ -49,3 +49,7 @@
 .mat-focused .placeholder {
   color: transparent;
 }
+
+.mat-spinner-color::ng-deep circle {
+  stroke: grey !important;
+}
