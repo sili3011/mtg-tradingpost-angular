@@ -62,7 +62,7 @@ export const Formats: Array<Format> = [
     minCardAmount: 100,
     maxCopiesOfCards: 1,
     hasCommander: true,
-    sideboardMaxCardAmount: 10,
+    sideboardMaxCardAmount: 0,
     mustComplyToColorIdentity: true,
   },
   {

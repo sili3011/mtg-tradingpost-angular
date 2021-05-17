@@ -3,7 +3,7 @@ import { CardAdapter } from '../models/card-adapter';
 import { Format } from '../models/constants';
 import { Deck } from '../models/deck';
 import { defaultDeckValidation } from '../models/defaults';
-import { COLORS, FORMATS, MANACOLORS } from '../models/enums';
+import { COLORS, CURRENCIES, FORMATS, MANACOLORS } from '../models/enums';
 
 export function imageTooltip(image: ImageUris, type: 'normal' | 'art'): string {
   switch (type) {
@@ -340,4 +340,34 @@ export function sameCardComparison(
   return card1 && card2
     ? card1.id === card2.id && card1.isFoil === card2.isFoil
     : false;
+}
+
+export function calculateNetworth(
+  currency: CURRENCIES,
+  cards?: Array<CardAdapter>
+): string {
+  if (cards) {
+    let value = 0;
+    cards.forEach((card) => {
+      switch (currency) {
+        case CURRENCIES.EUR:
+          if (card.prices.eur) {
+            value += parseFloat(card.prices.eur as string) * card.amount;
+          }
+          break;
+        case CURRENCIES.USD:
+          if (card.prices.usd) {
+            value += parseFloat(card.prices.usd as string) * card.amount;
+          }
+          break;
+      }
+    });
+    switch (currency) {
+      case CURRENCIES.EUR:
+        return value.toFixed(2) + '€';
+      case CURRENCIES.USD:
+        return value.toFixed(2) + '$';
+    }
+  }
+  return '';
 }

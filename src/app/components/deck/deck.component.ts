@@ -38,6 +38,7 @@ import { CardsStore } from 'src/app/stores/cards.store';
 import { DecksStore } from 'src/app/stores/decks.store';
 import {
   amountOfCardsOfDeck,
+  calculateNetworth,
   deckToCurve,
   deckToPie,
   DeckValidation,
@@ -492,5 +493,12 @@ export class DeckComponent implements OnInit, OnDestroy {
       You need to assign a commander.</div>`;
     }
     return ret;
+  }
+
+  getDeckValue(): string {
+    return calculateNetworth(
+      this.cardsStore.networth.currency,
+      this.deck?.cards
+    );
   }
 }

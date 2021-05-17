@@ -358,7 +358,7 @@
                 <button
                   mat-icon-button
                   matTooltip="Move to sideboard"
-                  *ngIf="listType === ListTypes.DECK"
+                  *ngIf="listType === ListTypes.DECK && !isCommander()"
                   (click)="moveTo(row, ListTypes.SIDEBOARD, deck?.id)"
                 >
                   <mat-icon color="primary" style="transform: rotate(180deg)">

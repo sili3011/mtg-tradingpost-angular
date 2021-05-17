@@ -106,7 +106,9 @@
         [ngStyle]="{
           color:
             amountOfCardsInDeck(deck!) <
-            (currentFormat ? currentFormat.minCardAmount : 60)
+              (currentFormat ? currentFormat.minCardAmount : 60) ||
+            (currentFormat?.format === Formats.COMMANDER &&
+              amountOfCardsInDeck(deck!) > 100)
               ? '#f44336'
               : 'white'
         }"
@@ -114,7 +116,10 @@
       >
       / {{ currentFormat ? currentFormat.minCardAmount : 60 }} )
       <div *ngIf="!listExpanded">
-        <div style="padding-top: 10px">
+        <div
+          style="padding-top: 10px"
+          *ngIf="currentFormat?.sideboardMaxCardAmount"
+        >
           Sideboard (
           <span
             [ngStyle]="{
@@ -124,6 +129,7 @@
           >
           / {{ currentFormat ? currentFormat.sideboardMaxCardAmount : 15 }} )
         </div>
+        <div style="padding-top: 10px">Value: {{ getDeckValue() }}</div>
         <div fxLayout="row">
           <div
             *ngIf="currentFormat?.hasCommander"
