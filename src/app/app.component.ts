@@ -30,7 +30,6 @@ export class AppComponent implements OnInit {
     Object.defineProperty(TooltipComponent.prototype, 'message', {
       set(v: any) {
         const el = document.querySelectorAll('.mat-tooltip');
-
         if (el) {
           el[el.length - 1].innerHTML = v;
         }
@@ -39,7 +38,12 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (!this.dbService.getHasBeenInitialized()) {
+    if (this.dbService.getHasBeenInitialized()) {
+      this.showLandingpage = false;
+      this.gotoApp();
+    }
+
+    if (!this.dbService.getHasBeenInitialized() && !this.showLandingpage) {
       this.dialog.open(DatabaseSelectionDialogComponent, {
         width: '50%',
         disableClose: true,
@@ -88,6 +92,12 @@ export class AppComponent implements OnInit {
   gotoApp() {
     this.showLandingpage = false;
     this.goto('/dashboard');
+    if (!this.dbService.getHasBeenInitialized()) {
+      this.dialog.open(DatabaseSelectionDialogComponent, {
+        width: '50%',
+        disableClose: true,
+      });
+    }
   }
 }
 

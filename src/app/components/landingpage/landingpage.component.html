@@ -1,4 +1,4 @@
-<div>
+<div *ngIf="!hide">
   <div
     style="
       background-size: cover;
@@ -12,7 +12,7 @@
     [ngStyle]="{ height: show ? '40%' : '0%' }"
   ></div>
   <div
-    class="shaker"
+    [ngClass]="{ shaker: show }"
     style="
       position: absolute;
       top: calc(40% - 200px / 2 - {{ scrolled }}px);
@@ -80,13 +80,42 @@
       </div>
       <div
         style="
+          color: #a58e4a;
           background-color: #232323;
           border-radius: 25px;
           width: calc(100% - 8rem);
           display: flex;
-          height: 20%;
+          font-size: 20px;
+          line-height: 30px;
         "
-      ></div>
+      >
+        <span style="margin: 1em; color: #ababab">
+          <span
+            style="
+              font-family: beleren;
+              color: #a58e4a;
+              font-size: 30px;
+              margin: 5px;
+            "
+            >Idea</span
+          ><br />
+          <p style="margin: 0.5em">
+            Did you ever build a deck and wonder how many of the cards you wanna
+            use you already own? <br />
+            Have you ever thought something like: <br />
+            "Do I have another Sol Ring for my commander deck idea? Or an Arcane
+            Signet?" <br />
+            "Maybe theres a deck I havent played in a long time whose card i
+            could use?" <br />
+            Or maybe there was this one bulk card you thaught was useless that
+            now perfectly fits in your deck. <br />
+            Fear not, keeping track of which cards you own and where you put
+            them has never been easier as with
+            <span style="font-family: beleren; color: #a58e4a">TADINGPOST</span
+            >!
+          </p>
+        </span>
+      </div>
     </div>
   </div>
 </div>
