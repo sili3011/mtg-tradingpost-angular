@@ -10,6 +10,7 @@ import * as leven from 'fast-levenshtein';
 import { autorun, IReactionDisposer } from 'mobx';
 import { HashStore } from 'src/app/stores/hash.store';
 import { Hash } from 'src/app/models/hash';
+import { NgOpenCVService } from 'ng-open-cv';
 
 @Component({
   selector: 'mtg-card-detection',
@@ -31,7 +32,10 @@ export class CardDetectionComponent implements OnInit, OnDestroy {
 
   disposer!: IReactionDisposer;
 
-  constructor(private hashStore: HashStore) {}
+  constructor(
+    private cvservice: NgOpenCVService,
+    private hashStore: HashStore
+  ) {}
 
   ngOnInit(): void {
     this.disposer = autorun(() => {
