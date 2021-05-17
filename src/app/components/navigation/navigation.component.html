@@ -146,7 +146,10 @@
         </mat-nav-list>
       </div>
     </mat-sidenav>
-    <mat-sidenav-content>
+    <mat-sidenav-content
+      (mouseenter)="onSidenavToggle(false)"
+      style="margin-left: 60px"
+    >
       <ng-scrollbar>
         <div class="main_content" class="basic-vh">
           <router-outlet></router-outlet>
