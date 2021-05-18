@@ -12,7 +12,7 @@
     [ngStyle]="{ height: show ? '40%' : '0%' }"
   ></div>
   <div
-    [ngClass]="{ shaker: show }"
+    [ngClass]="{ shaker: show && !hover }"
     style="
       position: absolute;
       top: calc(40% - 200px / 2 - {{ scrolled }}px);
@@ -25,12 +25,15 @@
       cursor: pointer;
       box-shadow: 0px 6px 1px -1px rgb(0 0 0 / 20%),
         0px 1px 1px 0px rgb(0 0 0 / 14%), 0px 1px 3px 0px rgb(0 0 0 / 12%);
-      transition: top 1s;
+      transition: top 1s, transform 1s;
     "
     [ngStyle]="{
-      top: stick ? 0 : show ? 'calc(40% - 200px / 2)' : 'calc(0% - 200px)'
+      top: stick ? 0 : show ? 'calc(40% - 200px / 2)' : 'calc(0% - 200px)',
+      transform: hover ? 'scale(1.1)' : ''
     }"
     (click)="leave()"
+    (mouseenter)="hover = true"
+    (mouseleave)="hover = false"
   >
     <div style="margin-top: 8px; margin-left: 25px">
       <mtg-set
@@ -57,7 +60,6 @@
     style="
       top: calc( 40% - {{ scrolled }}px);
       height: calc( 100% - 40% + {{ scrolled }}px);
-      padding: 5em;
     "
     [ngStyle]="{
       top: show ? '40%' : '100%',
@@ -71,8 +73,10 @@
           font-size: 45px;
           color: #a58e4a;
           text-shadow: 0px 0px 5px black;
-          padding-top: 6rem;
-          padding-bottom: 3rem;
+          padding-top: 8rem;
+          padding-bottom: 1rem;
+          line-height: 3rem;
+          margin: 0 1em 0.5em 1em;
         "
         class="container"
       >
@@ -80,13 +84,13 @@
       </div>
       <div
         style="
-          color: #a58e4a;
           background-color: #232323;
           border-radius: 25px;
-          width: calc(100% - 8rem);
           display: flex;
           font-size: 20px;
           line-height: 30px;
+          width: fit-content;
+          margin: 0 auto;
         "
       >
         <span style="margin: 1em; color: #ababab">
@@ -97,24 +101,195 @@
               font-size: 30px;
               margin: 5px;
             "
-            >Idea</span
+            >The Idea</span
           ><br />
-          <p style="margin: 0.5em">
-            Did you ever build a deck and wonder how many of the cards you wanna
-            use you already own? <br />
-            Have you ever thought something like: <br />
-            "Do I have another Sol Ring for my commander deck idea? Or an Arcane
-            Signet?" <br />
-            "Maybe theres a deck I havent played in a long time whose card i
-            could use?" <br />
-            Or maybe there was this one bulk card you thaught was useless that
-            now perfectly fits in your deck. <br />
-            Fear not, keeping track of which cards you own and where you put
-            them has never been easier as with
-            <span style="font-family: beleren; color: #a58e4a">TADINGPOST</span
-            >!
-          </p>
+          <div style="margin: 0.5em">
+            <p style="margin: 0">
+              Did you ever build a deck and wonder how many of the cards you
+              wanna use you already own? <br />
+              Have you ever thought something like:
+            </p>
+            <p style="margin: 10px">
+              "Do I have another
+              <span
+                [matTooltip]="
+                  imageTooltip(
+                    'https://c1.scryfall.com/file/scryfall-cards/normal/front/4/c/4cbc6901-6a4a-4d0a-83ea-7eefa3b35021.jpg?1618264523'
+                  )
+                "
+                matTooltipClass="fitToImage"
+                ><b>Sol Ring</b></span
+              >
+              for my commander deck idea? Or an
+              <span
+                [matTooltip]="
+                  imageTooltip(
+                    'https://c1.scryfall.com/file/scryfall-cards/normal/front/0/1/01b186af-8825-4257-80fd-9c1ecdb21414.jpg?1617647997'
+                  )
+                "
+                matTooltipClass="fitToImage"
+                ><b>Arcane Signet</b></span
+              >?" <br />
+              "Maybe theres a deck I havent played in a long time whose card i
+              could use?" <br />
+              "Do I have enough
+              <span
+                [matTooltip]="
+                  imageTooltip(
+                    'https://c1.scryfall.com/file/scryfall-cards/normal/front/f/f/ffdf9d2a-c163-43df-9a2f-20b8749c86ae.jpg?1618845153'
+                  )
+                "
+                matTooltipClass="fitToImage"
+                ><b>Counterspells</b></span
+              >?" <br />
+              "How much are my cards worth?" <br />
+              "What cards am I missing and how do get them the cheapest way?"
+            </p>
+            <p style="margin: 0">
+              Or maybe there was this one bulk card you thought was useless that
+              now perfectly fits in your deck. But where did you put it?
+            </p>
+            <p style="font-size: 22px; margin-bottom: 0; margin-top: 15px">
+              Fear not, keeping track of which cards you own and where you put
+              them has never been easier than with
+              <span
+                style="font-family: beleren; color: #a58e4a"
+                matTooltip="Thats the name of this app! Thanks for being here! :) Click on the big icon to start"
+                >TRADINGPOST</span
+              >!
+            </p>
+          </div>
         </span>
+      </div>
+      <div
+        style="
+          font-size: 45px;
+          color: #a58e4a;
+          text-shadow: 0px 0px 5px black;
+          padding-bottom: 1rem;
+          line-height: 3rem;
+          margin: 1em 1em 0.5em 1em;
+          text-align: center;
+        "
+        class="container"
+      >
+        Roadmap
+      </div>
+      <div
+        style="
+          font-size: 45px;
+          color: #a58e4a;
+          text-shadow: 0px 0px 5px black;
+          padding-bottom: 1rem;
+          line-height: 3rem;
+          margin: 1em 1em 0.5em 1em;
+          text-align: center;
+        "
+        class="container"
+      >
+        Features
+      </div>
+      <div class="feature-container">
+        <div style="width: 33%; display: flex">
+          <mat-icon
+            svgIcon="incognito-circle"
+            style="
+              margin: 0 auto;
+              width: 60% !important;
+              height: 100% !important;
+              color: grey;
+            "
+          ></mat-icon>
+        </div>
+        <div
+          style="
+            background-color: #232323;
+            border-radius: 25px;
+            display: flex;
+            font-size: 20px;
+            line-height: 30px;
+            width: 66%;
+            margin: 0 auto;
+          "
+        >
+          <span style="margin: 1em; color: #ababab">
+            <span
+              style="
+                font-family: beleren;
+                color: #a58e4a;
+                font-size: 30px;
+                margin: 5px;
+              "
+              >Accountless use</span
+            ><br />
+            Are you tired of creating new accounts and giving away your
+            information for yet another service? Me too! Thats why you can use
+            most of the
+            <span
+              style="font-family: beleren; color: #a58e4a"
+              matTooltip="Thats the name of this app! Thanks for being here! :) Click on the big icon to start"
+              >TRADINGPOST</span
+            >
+            features <b>without an account</b>! Just start the app, choose "Use
+            without account" and take the tour on how to handle your data
+            yourself! It's easy, I promise!
+          </span>
+        </div>
+      </div>
+      <div class="feature-container">
+        <div
+          style="
+            background-color: #232323;
+            border-radius: 25px;
+            display: flex;
+            font-size: 20px;
+            line-height: 30px;
+            width: 66%;
+            margin: 0 auto;
+          "
+        >
+          <span style="margin: 1em; color: #ababab">
+            <span
+              style="
+                font-family: beleren;
+                color: #a58e4a;
+                font-size: 30px;
+                margin: 5px;
+              "
+              >Digitize your collection</span
+            ><br />
+            What good is it to fantasize about a new deck that you wanna build
+            if you don't even know which cards you already own and which ones
+            you will need to get?<br />
+            <span
+              style="
+                font-family: beleren;
+                color: #a58e4a;
+                font-size: 24px;
+                margin: 5px;
+              "
+              >TRADINGPOST Card Detector</span
+            ><br />
+            Typing in every single card name of houndreds or thousands of cards
+            is tiresome, I feel you, I've bin there, trust me. But computers are
+            smart, we only need to tell them what we want them to do.<br />
+            Sadly, for now, this is in an highly experimental alpha state. It
+            will need more developement until it works properly and can be
+            presented to a broarder user base.
+          </span>
+        </div>
+        <div
+          style="
+            width: 33%;
+            display: flex;
+            background-image: url('../../assets/gifs/collection_view.gif');
+            background-size: cover;
+            border-radius: 10px;
+            min-height: 20rem;
+            min-width: 40rem;
+            margin: 0 1em;
+          "
+        ></div>
       </div>
     </div>
   </div>

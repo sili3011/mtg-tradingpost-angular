@@ -24,7 +24,7 @@
     </mat-card-header>
     <mat-card-content class="card-content">
       <mat-card-subtitle>Your assembled decks</mat-card-subtitle>
-      You have {{ decksStore.decks.length }} decks prepared.
+      You have {{ decksStore.activeAmount() }} active decks.
       {{ decksStore.playableAmount() }} ready to play,
       {{ decksStore.unplayableAmount() }} need your attention.
     </mat-card-content>

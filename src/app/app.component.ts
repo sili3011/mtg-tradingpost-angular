@@ -38,10 +38,10 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.dbService.getHasBeenInitialized()) {
-      this.showLandingpage = false;
-      this.gotoApp();
-    }
+    // if (this.dbService.getHasBeenInitialized()) {
+    //   this.showLandingpage = false;
+    //   this.gotoApp();
+    // }
 
     if (!this.dbService.getHasBeenInitialized() && !this.showLandingpage) {
       this.dialog.open(DatabaseSelectionDialogComponent, {

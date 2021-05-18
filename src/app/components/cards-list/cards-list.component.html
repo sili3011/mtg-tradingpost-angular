@@ -43,7 +43,7 @@
   </div>
 
   <div
-    [ngStyle]="{ 'max-height': !expanded ? '75%' : '85%' }"
+    [ngStyle]="{ 'max-height': !expanded && deck ? '75%' : '85%' }"
     style="height: 100%"
   >
     <ng-scrollbar>

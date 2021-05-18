@@ -19,11 +19,14 @@
   font-family: beleren, Arial, Helvetica, sans-serif;
 }
 
-.shaker {
-  /* Start the shake animation and make the animation last for 0.5 seconds */
-  animation: shake 5s;
+.feature-container {
+  display: flex;
+  flex-direction: row;
+  margin: 1rem;
+}
 
-  /* When the animation is finished, start again */
+.shaker {
+  animation: shake 5s;
   animation-iteration-count: infinite;
 }
 

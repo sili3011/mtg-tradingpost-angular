@@ -1,4 +1,5 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { imageTooltip } from 'src/app/utils/utils';
 
 @Component({
   selector: 'mtg-landingpage',
@@ -15,6 +16,7 @@ export class LandingpageComponent {
   scrolled = 0;
   stick = false;
   hide = false;
+  hover = false;
 
   constructor() {}
 
@@ -34,5 +36,9 @@ export class LandingpageComponent {
     if (this.scrolled > event.target.scrollTop || !this.stick) {
       this.scrolled = event.target.scrollTop;
     }
+  }
+
+  imageTooltip(input: string): string {
+    return imageTooltip({ normal: input, art_crop: '' }, 'normal');
   }
 }

@@ -5,7 +5,10 @@ import { Deck } from '../models/deck';
 import { defaultDeckValidation } from '../models/defaults';
 import { COLORS, CURRENCIES, FORMATS, MANACOLORS } from '../models/enums';
 
-export function imageTooltip(image: ImageUris, type: 'normal' | 'art'): string {
+export function imageTooltip(
+  image: ImageUris | { normal: string; art_crop: string },
+  type: 'normal' | 'art'
+): string {
   switch (type) {
     case 'normal':
       return `<img src="${image.normal}" style="border-radius: 25px;">`;

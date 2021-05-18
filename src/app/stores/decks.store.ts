@@ -10,11 +10,15 @@ export class DecksStore {
 
   constructor() {}
 
+  @computed activeAmount() {
+    return this.decks.filter((d) => d.active).length;
+  }
+
   @computed playableAmount() {
-    return this.decks.filter((d) => d.playable).length;
+    return this.decks.filter((d) => d.active).filter((d) => d.playable).length;
   }
 
   @computed unplayableAmount() {
-    return this.decks.filter((d) => !d.playable).length;
+    return this.decks.filter((d) => d.active).filter((d) => !d.playable).length;
   }
 }
