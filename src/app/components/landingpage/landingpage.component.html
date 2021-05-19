@@ -34,6 +34,7 @@
     (click)="leave()"
     (mouseenter)="hover = true"
     (mouseleave)="hover = false"
+    matRipple
   >
     <div style="margin-top: 8px; margin-left: 25px">
       <mtg-set
@@ -74,6 +75,7 @@
     >
       <div
         style="
+          font-family: beleren;
           font-size: 45px;
           color: #a58e4a;
           text-shadow: 0px 0px 5px black;
@@ -86,27 +88,9 @@
       >
         Welcome, to a new collecting experience!
       </div>
-      <div
-        style="
-          background-color: #232323;
-          border-radius: 25px;
-          display: flex;
-          font-size: 20px;
-          line-height: 30px;
-          width: fit-content;
-          margin: 0 auto;
-        "
-      >
+      <div class="text-container">
         <span style="margin: 1em; color: #ababab">
-          <span
-            style="
-              font-family: beleren;
-              color: #a58e4a;
-              font-size: 30px;
-              margin: 5px;
-            "
-            >The Idea</span
-          ><br />
+          <span class="gold-text">The Idea</span><br />
           <div style="margin: 0.5em">
             <p style="margin: 0">
               Did you ever build a deck and wonder how many of the cards you
@@ -165,36 +149,17 @@
           </div>
         </span>
       </div>
-      <div
-        style="
-          font-size: 45px;
-          color: #a58e4a;
-          text-shadow: 0px 0px 5px black;
-          padding-bottom: 1rem;
-          line-height: 3rem;
-          margin: 1em 1em 0.5em 1em;
-          text-align: center;
-        "
-        class="container"
-      >
-        Roadmap
-      </div>
+      <div class="gold-header">Roadmap</div>
       <div style="display: flex; flex-direction: row">
         <mat-progress-bar mode="buffer" [value]="20" [bufferValue]="37">
         </mat-progress-bar>
         <span
-          style="
-            position: absolute;
-            left: 30%;
-            background-color: gray;
-            border-radius: 25px;
-            height: 40px;
-            width: 40px;
-            display: flex;
-            margin-top: -20px;
-          "
+          style="left: 30%"
           matTooltip="Alpha release"
           matTooltipPosition="above"
+          class="release"
+          matRipple
+          (click)="setRelease(Releases.ALPHA)"
         >
           <mtg-set
             set="lea"
@@ -208,18 +173,12 @@
           ></mtg-set>
         </span>
         <span
-          style="
-            position: absolute;
-            left: 45%;
-            background-color: gray;
-            border-radius: 25px;
-            height: 40px;
-            width: 40px;
-            display: flex;
-            margin-top: -20px;
-          "
+          style="left: 66%"
           matTooltip="Beta release"
           matTooltipPosition="above"
+          class="release"
+          matRipple
+          (click)="setRelease(Releases.BETA)"
         >
           <mtg-set
             set="leb"
@@ -233,18 +192,12 @@
           ></mtg-set>
         </span>
         <span
-          style="
-            position: absolute;
-            left: 85%;
-            background-color: gray;
-            border-radius: 25px;
-            height: 40px;
-            width: 40px;
-            display: flex;
-            margin-top: -20px;
-          "
+          style="left: 85%"
           matTooltip="Release"
           matTooltipPosition="above"
+          class="release"
+          matRipple
+          (click)="setRelease(Releases.RELEASE)"
         >
           <mtg-set
             set="3ed"
@@ -258,20 +211,103 @@
           ></mtg-set>
         </span>
       </div>
-      <div
-        style="
-          font-size: 45px;
-          color: #a58e4a;
-          text-shadow: 0px 0px 5px black;
-          padding-bottom: 1rem;
-          line-height: 3rem;
-          margin: 1em 1em 0.5em 1em;
-          text-align: center;
-        "
-        class="container"
-      >
-        Features
+      <div style="display: flex; flex-direction: column">
+        <div
+          class="text-container"
+          style="
+            margin-top: 2em;
+            transition: height 1s;
+            overflow: hidden;
+            min-width: 50%;
+          "
+          [ngStyle]="{
+            height: selectedRelease === Releases.NONE ? 0 : '250px'
+          }"
+        >
+          <div style="margin: 1em; color: #ababab; width: 100%">
+            <span class="gold-text">{{ selectedRelease }}</span
+            ><br />
+            <div style="margin: 0.5em">
+              <div
+                *ngIf="selectedRelease === Releases.ALPHA"
+                style="display: flex"
+              >
+                <div style="width: 50%">
+                  <span class="silver-header">Done</span>
+                  <ul>
+                    <li>Collection management</li>
+                    <li>Deck builder</li>
+                    <li>Wishlist</li>
+                  </ul>
+                </div>
+                <mat-divider [vertical]="true"></mat-divider>
+                <div style="width: 50%">
+                  <span class="silver-header">In progress</span>
+                  <ul>
+                    <li>Order quick link</li>
+                    <li>Bug fixing & polishing</li>
+                  </ul>
+                </div>
+              </div>
+              <div
+                *ngIf="selectedRelease === Releases.BETA"
+                style="display: flex"
+              >
+                <div style="width: 50%">
+                  <span class="silver-header">In progress</span>
+                  <ul>
+                    <li>Card detector</li>
+                    <li>Collectors view</li>
+                  </ul>
+                </div>
+                <mat-divider [vertical]="true"></mat-divider>
+                <div style="width: 50%">
+                  <span class="silver-header">Not started</span>
+                  <ul>
+                    <li>Accounts</li>
+                    <li>Finances</li>
+                    <li>Order optimization</li>
+                  </ul>
+                </div>
+              </div>
+              <div
+                *ngIf="selectedRelease === Releases.RELEASE"
+                style="display: flex"
+              >
+                <div style="width: 50%">
+                  <span class="silver-header">Planned</span>
+                  <ul>
+                    <li>Localization</li>
+                    <li>Box opening game</li>
+                  </ul>
+                </div>
+                <mat-divider [vertical]="true"></mat-divider>
+                <div style="width: 50%">
+                  <span class="silver-header">Goodies</span>
+                  <ul>
+                    <li>Offline usage</li>
+                    <li>Desktop app</li>
+                    <li>Mobile</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <mat-icon
+          *ngIf="selectedRelease !== Releases.NONE"
+          svgIcon="chevron-up"
+          style="
+            margin: 10px auto;
+            color: grey;
+            cursor: pointer;
+            height: 40px;
+            width: 40px;
+          "
+          (click)="setRelease(Releases.NONE)"
+        ></mat-icon>
       </div>
+      <div class="gold-header">Features</div>
       <div class="feature-container">
         <div style="width: 33%; display: flex">
           <mat-icon
@@ -284,27 +320,9 @@
             "
           ></mat-icon>
         </div>
-        <div
-          style="
-            background-color: #232323;
-            border-radius: 25px;
-            display: flex;
-            font-size: 20px;
-            line-height: 30px;
-            width: 66%;
-            margin: 0 auto;
-          "
-        >
+        <div class="text-container" style="width: 66%">
           <span style="margin: 1em; color: #ababab">
-            <span
-              style="
-                font-family: beleren;
-                color: #a58e4a;
-                font-size: 30px;
-                margin: 5px;
-              "
-              >Accountless use</span
-            ><br />
+            <span class="gold-text">Accountless use</span><br />
             Are you tired of creating new accounts and giving away your
             information for yet another service? Me too! Thats why you can use
             most of the
@@ -320,37 +338,13 @@
         </div>
       </div>
       <div class="feature-container">
-        <div
-          style="
-            background-color: #232323;
-            border-radius: 25px;
-            display: flex;
-            font-size: 20px;
-            line-height: 30px;
-            width: 66%;
-            margin: 0 auto;
-          "
-        >
+        <div class="text-container" style="width: 66%">
           <span style="margin: 1em; color: #ababab">
-            <span
-              style="
-                font-family: beleren;
-                color: #a58e4a;
-                font-size: 30px;
-                margin: 5px;
-              "
-              >Digitize your collection</span
-            ><br />
+            <span class="gold-text">Digitize your collection</span><br />
             What good is it to fantasize about a new deck that you wanna build
             if you don't even know which cards you already own and which ones
             you will need to get?<br />
-            <span
-              style="
-                font-family: beleren;
-                color: #a58e4a;
-                font-size: 21px;
-                margin: 5px;
-              "
+            <span class="gold-text" style="font-size: 20px"
               >TRADINGPOST Card Detector</span
             ><br />
             Typing in every single card name of houndreds or thousands of cards
@@ -361,53 +355,25 @@
             presented to a broarder user base.
           </span>
         </div>
-        <div
-          style="
-            width: 33%;
-            display: flex;
-            background-image: url('../../assets/gifs/collection_view.gif');
-            background-size: cover;
-            border-radius: 10px;
-            min-height: 20rem;
-            min-width: 40rem;
-            margin: 0 1em;
-          "
-        ></div>
+        <div style="margin: auto">
+          <div
+            class="gif-insert"
+            style="
+              background-image: url('../../assets/gifs/collection_view.gif');
+            "
+          ></div>
+        </div>
       </div>
       <div class="feature-container">
-        <div
-          style="
-            width: 33%;
-            display: flex;
-            background-image: url('../../assets/gifs/deck_view.gif');
-            background-size: cover;
-            border-radius: 10px;
-            min-height: 20rem;
-            min-width: 40rem;
-            margin: 0 1em;
-          "
-        ></div>
-        <div
-          style="
-            background-color: #232323;
-            border-radius: 25px;
-            display: flex;
-            font-size: 20px;
-            line-height: 30px;
-            width: 66%;
-            margin: 0 auto;
-          "
-        >
+        <div style="margin: auto">
+          <div
+            class="gif-insert"
+            style="background-image: url('../../assets/gifs/deck_view.gif')"
+          ></div>
+        </div>
+        <div class="text-container" style="width: 66%">
           <span style="margin: 1em; color: #ababab">
-            <span
-              style="
-                font-family: beleren;
-                color: #a58e4a;
-                font-size: 30px;
-                margin: 5px;
-              "
-              >Deck planner</span
-            ><br />
+            <span class="gold-text">Deck planner</span><br />
             No matter if you want to build a new deck or improve an existing one
             this app gives you all the tools you need to keep track of stats
             like curve and distribution while trying to keep it sa simple and
@@ -419,7 +385,7 @@
         style="
           background-color: #232323;
           width: 100%;
-          height: 200px;
+          height: fit-content;
           position: absolute;
           left: 0;
           box-shadow: inset 0px 20px 20px 0px #0000001f;

@@ -1,6 +1,13 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { imageTooltip } from 'src/app/utils/utils';
 
+enum RELEASES {
+  NONE = '',
+  ALPHA = 'Alpha',
+  BETA = 'Beta',
+  RELEASE = 'Release',
+}
+
 @Component({
   selector: 'mtg-landingpage',
   templateUrl: './landingpage.component.html',
@@ -17,6 +24,9 @@ export class LandingpageComponent {
   stick = false;
   hide = false;
   hover = false;
+  selectedRelease = RELEASES.NONE;
+
+  Releases = RELEASES;
 
   constructor() {}
 
@@ -40,5 +50,9 @@ export class LandingpageComponent {
 
   imageTooltip(input: string): string {
     return imageTooltip({ normal: input, art_crop: '' }, 'normal');
+  }
+
+  setRelease(release: RELEASES) {
+    this.selectedRelease = release;
   }
 }
