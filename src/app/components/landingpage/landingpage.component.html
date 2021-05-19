@@ -67,7 +67,11 @@
     }"
     (scroll)="handleScroll($event)"
   >
-    <div style="height: 1500px; margin-top: {{ scrolled }}px; transition: none">
+    <div
+      style="height: 1500px; margin: 0 4em; margin-top: {{
+        scrolled
+      }}px; transition: none"
+    >
       <div
         style="
           font-size: 45px;
@@ -175,6 +179,85 @@
       >
         Roadmap
       </div>
+      <div style="display: flex; flex-direction: row">
+        <mat-progress-bar mode="buffer" [value]="20" [bufferValue]="37">
+        </mat-progress-bar>
+        <span
+          style="
+            position: absolute;
+            left: 30%;
+            background-color: gray;
+            border-radius: 25px;
+            height: 40px;
+            width: 40px;
+            display: flex;
+            margin-top: -20px;
+          "
+          matTooltip="Alpha release"
+          matTooltipPosition="above"
+        >
+          <mtg-set
+            set="lea"
+            rarity="rare"
+            size="2x"
+            style="
+              text-shadow: 0 0 4px black;
+              align-self: center;
+              margin: 0 auto;
+            "
+          ></mtg-set>
+        </span>
+        <span
+          style="
+            position: absolute;
+            left: 45%;
+            background-color: gray;
+            border-radius: 25px;
+            height: 40px;
+            width: 40px;
+            display: flex;
+            margin-top: -20px;
+          "
+          matTooltip="Beta release"
+          matTooltipPosition="above"
+        >
+          <mtg-set
+            set="leb"
+            rarity="rare"
+            size="2x"
+            style="
+              text-shadow: 0 0 4px black;
+              align-self: center;
+              margin: 0 auto;
+            "
+          ></mtg-set>
+        </span>
+        <span
+          style="
+            position: absolute;
+            left: 85%;
+            background-color: gray;
+            border-radius: 25px;
+            height: 40px;
+            width: 40px;
+            display: flex;
+            margin-top: -20px;
+          "
+          matTooltip="Release"
+          matTooltipPosition="above"
+        >
+          <mtg-set
+            set="3ed"
+            rarity="rare"
+            size="2x"
+            style="
+              text-shadow: 0 0 4px black;
+              align-self: center;
+              margin: 0 auto;
+            "
+          ></mtg-set>
+        </span>
+      </div>
       <div
         style="
           font-size: 45px;
@@ -265,7 +348,7 @@
               style="
                 font-family: beleren;
                 color: #a58e4a;
-                font-size: 24px;
+                font-size: 21px;
                 margin: 5px;
               "
               >TRADINGPOST Card Detector</span
@@ -290,6 +373,75 @@
             margin: 0 1em;
           "
         ></div>
+      </div>
+      <div class="feature-container">
+        <div
+          style="
+            width: 33%;
+            display: flex;
+            background-image: url('../../assets/gifs/deck_view.gif');
+            background-size: cover;
+            border-radius: 10px;
+            min-height: 20rem;
+            min-width: 40rem;
+            margin: 0 1em;
+          "
+        ></div>
+        <div
+          style="
+            background-color: #232323;
+            border-radius: 25px;
+            display: flex;
+            font-size: 20px;
+            line-height: 30px;
+            width: 66%;
+            margin: 0 auto;
+          "
+        >
+          <span style="margin: 1em; color: #ababab">
+            <span
+              style="
+                font-family: beleren;
+                color: #a58e4a;
+                font-size: 30px;
+                margin: 5px;
+              "
+              >Deck planner</span
+            ><br />
+            No matter if you want to build a new deck or improve an existing one
+            this app gives you all the tools you need to keep track of stats
+            like curve and distribution while trying to keep it sa simple and
+            clear as possible.
+          </span>
+        </div>
+      </div>
+      <div
+        style="
+          background-color: #232323;
+          width: 100%;
+          height: 200px;
+          position: absolute;
+          left: 0;
+          box-shadow: inset 0px 20px 20px 0px #0000001f;
+          display: flex;
+        "
+      >
+        <p
+          style="width: 30%; margin: 2em auto; color: #ababab; font-size: 10px"
+        >
+          Portions of TRADINGPOST are unofficial Fan Content permitted under the
+          Wizards of the Coast Fan Content Policy. The literal and graphical
+          information presented on this site about Magic: The Gathering,
+          including card images, the mana symbols, and Oracle text, is copyright
+          Wizards of the Coast, LLC, a subsidiary of Hasbro, Inc. TRADINGPOST is
+          not produced by, endorsed by, supported by, or affiliated with Wizards
+          of the Coast. <br />
+          <br />
+          Card prices and promotional offers represent daily estimates and/or
+          market values provided by our affiliates. Absolutely no guarantee is
+          made for any price information. See stores for final prices and
+          details.
+        </p>
       </div>
     </div>
   </div>
