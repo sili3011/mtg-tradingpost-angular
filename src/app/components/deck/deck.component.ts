@@ -320,61 +320,61 @@ export class DeckComponent implements OnInit, OnDestroy {
     this.deck?.cards.forEach((card) => {
       if (card.type_line.toLowerCase().split(' ').includes('land')) {
         if (card.color_identity.length > 1) {
-          ++landM;
+          landM += card.amount;
         } else {
           if (!card.color_identity[0]) {
-            ++landC;
+            landC += card.amount;
             return;
           }
           const mana = card.color_identity[0].toLowerCase();
           switch (mana) {
             case 'g':
-              ++landG;
+              landG += card.amount;
               break;
             case 'r':
-              ++landR;
+              landR += card.amount;
               break;
             case 'b':
-              ++landB;
+              landB += card.amount;
               break;
             case 'u':
-              ++landU;
+              landU += card.amount;
               break;
             case 'w':
-              ++landW;
+              landW += card.amount;
               break;
             case '':
-              ++landC;
+              landC += card.amount;
               break;
           }
         }
       } else {
         if (card.color_identity.length > 1) {
-          ++multi;
+          multi += card.amount;
         } else {
           if (!card.color_identity[0]) {
-            ++landC;
+            landC += card.amount;
             return;
           }
           const mana = card.color_identity[0].toLowerCase();
           switch (mana) {
             case 'g':
-              ++green;
+              green += card.amount;
               break;
             case 'r':
-              ++red;
+              red += card.amount;
               break;
             case 'b':
-              ++black;
+              black += card.amount;
               break;
             case 'u':
-              ++blue;
+              blue += card.amount;
               break;
             case 'w':
-              ++white;
+              white += card.amount;
               break;
             case '':
-              ++coloreless;
+              coloreless += card.amount;
               break;
           }
         }

@@ -39,19 +39,24 @@ export class CardsStore {
   @computed get networthWithCurrency() {
     this.networth.value = 0;
     this.collection.forEach((card) => {
-      switch (this.networth.currency) {
-        case CURRENCIES.EUR:
-          if (card.prices.eur) {
-            this.networth.value +=
-              parseFloat(card.prices.eur as string) * card.amount;
-          }
-          break;
-        case CURRENCIES.USD:
-          if (card.prices.usd) {
-            this.networth.value +=
-              parseFloat(card.prices.usd as string) * card.amount;
-          }
-          break;
+      if (card.isFoil) {
+        this.networth.value +=
+          parseFloat(card.prices.usd_foil as string) * card.amount;
+      } else {
+        switch (this.networth.currency) {
+          case CURRENCIES.EUR:
+            if (card.prices.eur) {
+              this.networth.value +=
+                parseFloat(card.prices.eur as string) * card.amount;
+            }
+            break;
+          case CURRENCIES.USD:
+            if (card.prices.usd) {
+              this.networth.value +=
+                parseFloat(card.prices.usd as string) * card.amount;
+            }
+            break;
+        }
       }
     });
     switch (this.networth.currency) {
