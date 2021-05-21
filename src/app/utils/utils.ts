@@ -352,17 +352,21 @@ export function calculateNetworth(
   if (cards) {
     let value = 0;
     cards.forEach((card) => {
-      switch (currency) {
-        case CURRENCIES.EUR:
-          if (card.prices.eur) {
-            value += parseFloat(card.prices.eur as string) * card.amount;
-          }
-          break;
-        case CURRENCIES.USD:
-          if (card.prices.usd) {
-            value += parseFloat(card.prices.usd as string) * card.amount;
-          }
-          break;
+      if (card.isFoil) {
+        value += parseFloat(card.prices.usd_foil as string) * card.amount;
+      } else {
+        switch (currency) {
+          case CURRENCIES.EUR:
+            if (card.prices.eur) {
+              value += parseFloat(card.prices.eur as string) * card.amount;
+            }
+            break;
+          case CURRENCIES.USD:
+            if (card.prices.usd) {
+              value += parseFloat(card.prices.usd as string) * card.amount;
+            }
+            break;
+        }
       }
     });
     switch (currency) {

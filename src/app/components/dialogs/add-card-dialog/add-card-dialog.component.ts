@@ -168,6 +168,11 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
   }
 
   priceOfPrint(): string | undefined {
+    if (this.isFoil) {
+      return isNaN(parseFloat(this.selectedPrint.prices.usd_foil))
+        ? undefined
+        : parseFloat(this.selectedPrint.prices.usd_foil) + ' $';
+    }
     switch (this.cardsStore.networth.currency) {
       case CURRENCIES.EUR:
         return isNaN(parseFloat(this.selectedPrint.prices.eur))

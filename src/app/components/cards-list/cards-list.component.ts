@@ -124,6 +124,9 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
         case 'cmc':
           return card.cmc;
         case 'value':
+          if (card.isFoil) {
+            return parseFloat(card.prices.usd_foil!);
+          }
           switch (this.selectedCurrency) {
             case CURRENCIES.EUR:
               return parseFloat(card.prices.eur!);
@@ -220,6 +223,9 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
         case 'cmc':
           return card.cmc;
         case 'value':
+          if (card.isFoil) {
+            return parseFloat(card.prices.usd_foil!);
+          }
           switch (this.selectedCurrency) {
             case CURRENCIES.EUR:
               return parseFloat(card.prices.eur!);

@@ -197,6 +197,7 @@
                 [rarity]="row.rarity"
                 [fixed]="true"
                 size="2x"
+                [foil]="row.isFoil"
               ></mtg-set>
             </td>
           </ng-container>
@@ -269,12 +270,19 @@
           <ng-container matColumnDef="value">
             <th mat-header-cell *matHeaderCellDef mat-sort-header>Value</th>
             <td mat-cell *matCellDef="let row">
-              <span *ngIf="selectedCurrency === Currencies.EUR"
-                >{{ row.prices.eur }} €</span
+              <span *ngIf="row.isFoil"> {{ row.prices.usd_foil }} $ </span>
+              <span
+                *ngIf="selectedCurrency === Currencies.EUR && row.isFoil"
+                matTooltip="This price is USD because there are no non USD foil prices (yet)."
+                >*</span
               >
-              <span *ngIf="selectedCurrency === Currencies.USD">
-                <span *ngIf="!row.isFoil"> {{ row.prices.usd }} $ </span>
-                <span *ngIf="row.isFoil"> {{ row.prices.usd_foil }} $ </span>
+              <span *ngIf="!row.isFoil">
+                <span *ngIf="selectedCurrency === Currencies.USD">
+                  {{ row.prices.usd }} $
+                </span>
+                <span *ngIf="selectedCurrency === Currencies.EUR"
+                  >{{ row.prices.eur }} €</span
+                >
               </span>
             </td>
           </ng-container>
