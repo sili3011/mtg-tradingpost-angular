@@ -353,7 +353,7 @@ export class DeckComponent implements OnInit, OnDestroy {
           multi += card.amount;
         } else {
           if (!card.color_identity[0]) {
-            landC += card.amount;
+            coloreless += card.amount;
             return;
           }
           const mana = card.color_identity[0].toLowerCase();
