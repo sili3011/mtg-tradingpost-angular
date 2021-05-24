@@ -116,13 +116,13 @@ export function deckToPie(
     if (type === PIECHART.COLORS) {
       let amount = 0;
       if (label === COLORS.COLORLESS) {
-        amount = deck.cards.filter(
-          (card) => card.color_identity.join().toLowerCase() === ''
-        ).length;
+        deck.cards
+          .filter((card) => card.color_identity.join().toLowerCase() === '')
+          .forEach((card) => (amount += card.amount));
       } else if (label === COLORS.MULTI) {
-        amount = deck.cards.filter(
-          (card) => card.color_identity.length > 1
-        ).length;
+        deck.cards
+          .filter((card) => card.color_identity.length > 1)
+          .forEach((card) => (amount += card.amount));
       } else {
         let mana = '';
         switch (label) {
@@ -142,11 +142,13 @@ export function deckToPie(
             mana = 'w';
             break;
         }
-        amount = deck.cards.filter(
-          (card) =>
-            card.color_identity.length === 1 &&
-            card.color_identity.join().toLowerCase().includes(mana)
-        ).length;
+        deck.cards
+          .filter(
+            (card) =>
+              card.color_identity.length === 1 &&
+              card.color_identity.join().toLowerCase().includes(mana)
+          )
+          .forEach((card) => (amount += card.amount));
       }
       ret.push(amount);
     }
