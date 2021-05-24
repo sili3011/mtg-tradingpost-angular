@@ -107,11 +107,13 @@ export function deckToPie(
   const ret: Array<number> = [];
   labels.forEach((label) => {
     if (type === PIECHART.TYPES) {
-      ret.push(
-        deck.cards.filter((card) =>
+      let amount = 0;
+      deck.cards
+        .filter((card) =>
           card.type_line.toLowerCase().split(' ').includes(label.toLowerCase())
-        ).length
-      );
+        )
+        .forEach((card) => (amount += card.amount));
+      ret.push(amount);
     }
     if (type === PIECHART.COLORS) {
       let amount = 0;
