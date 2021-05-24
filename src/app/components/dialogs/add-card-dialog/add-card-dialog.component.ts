@@ -8,6 +8,7 @@ import { CardAdapter } from 'src/app/models/card-adapter';
 import { CURRENCIES, LISTTYPES } from 'src/app/models/enums';
 import { DBService } from 'src/app/services/db.service';
 import { CardsStore } from 'src/app/stores/cards.store';
+import { DecksStore } from 'src/app/stores/decks.store';
 
 @Component({
   selector: 'mtg-add-card-dialog',
@@ -23,6 +24,8 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
   lastPicLoaded = 'assets/mtg-cardback.jpg';
   loadingSets = false;
 
+  cardsAlreadyIncluded: Array<CardAdapter> | undefined;
+
   amount: number = 1;
   isFoil: boolean = false;
   alsoAddToCollection: boolean = false;
@@ -35,6 +38,7 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
     private dialogRef: MatDialogRef<AddCardDialogComponent>,
     private dbService: DBService,
     private cardsStore: CardsStore,
+    private decksStore: DecksStore,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
@@ -73,11 +77,24 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
     this.selectedPrint = undefined;
     this.otherPrints = [];
     this.loaded.next(false);
+    this.cardsAlreadyIncluded = undefined;
+
     Cards.byName(option).then(async (_) => {
       if (_.object === 'card') {
         this.selectedPrint = _;
         this.loaded.next(true);
         this.loadingSets = true;
+
+        if (this.data.deckId) {
+          this.cardsAlreadyIncluded = this.decksStore.decks
+            .find((deck) => deck.id === this.data.deckId)
+            ?.cards.filter((card) => card.name === _.name);
+        } else {
+          this.cardsAlreadyIncluded = this.cardsStore.collection.filter(
+            (card) => card.name === _.name
+          );
+        }
+
         await Cards.query(
           _.prints_search_uri.replace('https://api.scryfall.com/', '')
         ).then(async (__: any) => {
@@ -113,7 +130,13 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
 
   printSelect(print: CardAdapter): void {
     if (this.selectedPrint !== print) {
-      this.selectedPrint = print;
+      this.selectedPrint = Object.assign({}, print);
+    }
+    if (print.amount > 1) {
+      this.selectedPrint.amount = 1;
+    }
+    if (print.isFoil) {
+      this.isFoil = true;
     }
   }
 

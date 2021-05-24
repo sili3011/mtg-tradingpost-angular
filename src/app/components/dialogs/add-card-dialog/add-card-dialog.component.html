@@ -76,29 +76,69 @@
             </span>
           </div>
         </div>
-        <div style="max-height: 400px; width: 100%">
-          <ng-scrollbar style="height: 100%" *ngIf="loaded && !loadingSets">
-            <button
-              mat-icon-button
-              *ngFor="let print of otherPrints"
-              (click)="printSelect(print)"
+        <div style="max-height: 400px; width: 100%; margin: 0 0 0 1em">
+          <div *ngIf="selectedPrint" style="height: 100%">
+            <div
+              style="margin: 1em 0"
+              *ngIf="
+                loaded &&
+                !loadingSets &&
+                cardsAlreadyIncluded &&
+                cardsAlreadyIncluded.length
+              "
             >
-              <mtg-set
-                [set]="print.set"
-                [set_name]="print.set_name"
-                [rarity]="print.rarity"
-                [fixed]="true"
-                size="2x"
-              ></mtg-set>
-            </button>
-          </ng-scrollbar>
-          <div style="display: flex; height: 100%">
-            <mat-progress-spinner
-              class="mat-spinner-color"
-              mode="indeterminate"
-              style="margin: auto"
+              <span *ngIf="data.deckId">Prints already in this deck:</span>
+              <span *ngIf="!data.deckId"
+                >Prints already in your collection:</span
+              >
+              <div>
+                <button
+                  mat-button
+                  *ngFor="let already of cardsAlreadyIncluded"
+                  (click)="printSelect(already)"
+                >
+                  <div style="display: flex; flex-direction: row">
+                    <span style="margin-right: 5px"
+                      >{{ already.amount }} x</span
+                    >
+                    <mtg-set
+                      [set]="already.set"
+                      [set_name]="already.set_name"
+                      [rarity]="already.rarity"
+                      [fixed]="true"
+                      [foil]="already.isFoil"
+                      size="2x"
+                    ></mtg-set>
+                  </div>
+                </button>
+              </div>
+            </div>
+            <span *ngIf="loaded && !loadingSets"
+              >Sets this card was printed in:</span
             >
-            </mat-progress-spinner>
+            <ng-scrollbar style="height: 70%" *ngIf="loaded && !loadingSets">
+              <button
+                mat-icon-button
+                *ngFor="let print of otherPrints"
+                (click)="printSelect(print)"
+              >
+                <mtg-set
+                  [set]="print.set"
+                  [set_name]="print.set_name"
+                  [rarity]="print.rarity"
+                  [fixed]="true"
+                  size="2x"
+                ></mtg-set>
+              </button>
+            </ng-scrollbar>
+            <div style="display: flex; height: 100%" *ngIf="loadingSets">
+              <mat-progress-spinner
+                class="mat-spinner-color"
+                mode="indeterminate"
+                style="margin: auto"
+              >
+              </mat-progress-spinner>
+            </div>
           </div>
         </div>
       </div>
