@@ -81,13 +81,13 @@
           >
         </span>
         . It's currently at
-        <span *ngIf="cardsStore.networth.currency === Currencies.EUR"
-          >{{ cardsStore.wishlist[0].prices.eur }}€</span
-        >
-        <span *ngIf="cardsStore.networth.currency === Currencies.USD"
-          >{{ cardsStore.wishlist[0].prices.usd }}$</span
-        ></span
-      >
+        {{
+          getFixedPrice(
+            cardsStore.networth.currency,
+            cardsStore.wishlist[0].prices
+          )
+        }}
+      </span>
     </mat-card-content>
   </mat-card>
   <mat-card matRipple class="card" (click)="goto('box-opening')">

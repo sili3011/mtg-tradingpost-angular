@@ -9,6 +9,7 @@ import { CURRENCIES, LISTTYPES } from 'src/app/models/enums';
 import { DBService } from 'src/app/services/db.service';
 import { CardsStore } from 'src/app/stores/cards.store';
 import { DecksStore } from 'src/app/stores/decks.store';
+import { fixPrice } from 'src/app/utils/utils';
 
 @Component({
   selector: 'mtg-add-card-dialog',
@@ -196,17 +197,9 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
         ? undefined
         : parseFloat(this.selectedPrint.prices.usd_foil) + ' $';
     }
-    switch (this.cardsStore.networth.currency) {
-      case CURRENCIES.EUR:
-        return isNaN(parseFloat(this.selectedPrint.prices.eur))
-          ? undefined
-          : parseFloat(this.selectedPrint.prices.eur) + ' €';
-      case CURRENCIES.USD:
-        return isNaN(parseFloat(this.selectedPrint.prices.usd))
-          ? undefined
-          : parseFloat(this.selectedPrint.prices.usd) + ' $';
-      default:
-        return '';
-    }
+    return (
+      fixPrice(this.cardsStore.networth.currency, this.selectedPrint.prices) +
+      (this.cardsStore.networth.currency === CURRENCIES.EUR ? '€' : '$')
+    );
   }
 }

@@ -5,7 +5,7 @@ import { Networth } from '../services/db.service';
 import { defaultNetworth } from '../models/defaults';
 import { CURRENCIES } from '../models/enums';
 import { DecksStore } from './decks.store';
-import { sameCardComparison } from '../utils/utils';
+import { fixPrice, sameCardComparison } from '../utils/utils';
 
 @Injectable({
   providedIn: 'root',
@@ -43,20 +43,8 @@ export class CardsStore {
         this.networth.value +=
           parseFloat(card.prices.usd_foil as string) * card.amount;
       } else {
-        switch (this.networth.currency) {
-          case CURRENCIES.EUR:
-            if (card.prices.eur) {
-              this.networth.value +=
-                parseFloat(card.prices.eur as string) * card.amount;
-            }
-            break;
-          case CURRENCIES.USD:
-            if (card.prices.usd) {
-              this.networth.value +=
-                parseFloat(card.prices.usd as string) * card.amount;
-            }
-            break;
-        }
+        this.networth.value +=
+          fixPrice(this.networth.currency, card.prices) * card.amount;
       }
     });
     switch (this.networth.currency) {

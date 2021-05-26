@@ -1,4 +1,4 @@
-import { ImageUris } from 'scryfall-sdk';
+import { ImageUris, Prices } from 'scryfall-sdk';
 import { CardAdapter } from '../models/card-adapter';
 import { Format } from '../models/constants';
 import { Deck } from '../models/deck';
@@ -359,18 +359,7 @@ export function calculateNetworth(
       if (card.isFoil) {
         value += parseFloat(card.prices.usd_foil as string) * card.amount;
       } else {
-        switch (currency) {
-          case CURRENCIES.EUR:
-            if (card.prices.eur) {
-              value += parseFloat(card.prices.eur as string) * card.amount;
-            }
-            break;
-          case CURRENCIES.USD:
-            if (card.prices.usd) {
-              value += parseFloat(card.prices.usd as string) * card.amount;
-            }
-            break;
-        }
+        value += fixPrice(currency, card.prices) * card.amount;
       }
     });
     switch (currency) {
@@ -381,4 +370,27 @@ export function calculateNetworth(
     }
   }
   return '';
+}
+
+export function fixPrice(target: CURRENCIES, prices: Prices): number {
+  let ret = '0';
+  if (target === CURRENCIES.EUR && !prices.eur) {
+    if (prices.usd) {
+      ret = (parseFloat(prices.usd) * 0.82).toString();
+    }
+  } else if (target === CURRENCIES.USD && !prices.usd) {
+    if (prices.eur) {
+      ret = (parseFloat(prices.eur) * 1.22).toString();
+    }
+  } else {
+    switch (target) {
+      case CURRENCIES.EUR:
+        ret = prices.eur!;
+        break;
+      case CURRENCIES.USD:
+        ret = prices.usd!;
+        break;
+    }
+  }
+  return parseFloat(parseFloat(ret).toFixed(2));
 }

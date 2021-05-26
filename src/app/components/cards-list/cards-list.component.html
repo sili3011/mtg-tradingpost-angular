@@ -277,12 +277,9 @@
                 >*</span
               >
               <span *ngIf="!row.isFoil">
-                <span *ngIf="selectedCurrency === Currencies.USD">
-                  {{ row.prices.usd }} $
+                <span>
+                  {{ getFixedPrice(selectedCurrency, row.prices) }}
                 </span>
-                <span *ngIf="selectedCurrency === Currencies.EUR"
-                  >{{ row.prices.eur }} €</span
-                >
               </span>
             </td>
           </ng-container>

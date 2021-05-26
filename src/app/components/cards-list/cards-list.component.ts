@@ -15,6 +15,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { IReactionDisposer, autorun } from 'mobx';
+import { Prices } from 'scryfall-sdk';
 import { CardAdapter } from 'src/app/models/card-adapter';
 import { Format } from 'src/app/models/constants';
 import { Deck } from 'src/app/models/deck';
@@ -24,6 +25,7 @@ import { CardsStore } from 'src/app/stores/cards.store';
 import { DecksStore } from 'src/app/stores/decks.store';
 import {
   DeckValidation,
+  fixPrice,
   imageTooltip,
   sameCardComparison,
 } from 'src/app/utils/utils';
@@ -127,12 +129,7 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
           if (card.isFoil) {
             return parseFloat(card.prices.usd_foil!);
           }
-          switch (this.selectedCurrency) {
-            case CURRENCIES.EUR:
-              return parseFloat(card.prices.eur!);
-            case CURRENCIES.USD:
-              return parseFloat(card.prices.usd!);
-          }
+          return fixPrice(this.selectedCurrency, card.prices);
         case 'amount':
           return card.amount;
         default:
@@ -226,12 +223,7 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
           if (card.isFoil) {
             return parseFloat(card.prices.usd_foil!);
           }
-          switch (this.selectedCurrency) {
-            case CURRENCIES.EUR:
-              return parseFloat(card.prices.eur!);
-            case CURRENCIES.USD:
-              return parseFloat(card.prices.usd!);
-          }
+          return fixPrice(this.selectedCurrency, card.prices);
         case 'amount':
           return card.amount;
         default:
@@ -352,5 +344,11 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
       );
     }
     return false;
+  }
+
+  getFixedPrice(currency: CURRENCIES, prices: Prices): string {
+    return (
+      fixPrice(currency, prices) + (currency === CURRENCIES.EUR ? '€' : '$')
+    );
   }
 }

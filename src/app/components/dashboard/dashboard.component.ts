@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { Prices } from 'scryfall-sdk';
 import { CURRENCIES } from 'src/app/models/enums';
 import { CardsStore } from 'src/app/stores/cards.store';
 import { DecksStore } from 'src/app/stores/decks.store';
 import { UserStore } from 'src/app/stores/user.store';
-import { imageTooltip } from 'src/app/utils/utils';
+import { fixPrice, imageTooltip } from 'src/app/utils/utils';
 
 @Component({
   selector: 'mtg-dashboard',
@@ -27,5 +28,11 @@ export class DashboardComponent {
 
   imageTooltip(card: any): string {
     return imageTooltip(card, 'normal');
+  }
+
+  getFixedPrice(currency: CURRENCIES, prices: Prices): string {
+    return (
+      fixPrice(currency, prices) + (currency === CURRENCIES.EUR ? '€' : '$')
+    );
   }
 }
