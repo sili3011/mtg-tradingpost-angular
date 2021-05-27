@@ -495,6 +495,11 @@
     </ng-scrollbar>
   </div>
 
+  <div style="margin: 1em; position: absolute; bottom: 0px; left: 0px">
+    <span style="color: rgba(255, 255, 255, 0.7)"
+      >Value: {{ getCollectionValue() }}</span
+    >
+  </div>
   <mat-paginator
     [pageSizeOptions]="
       listType === ListTypes.DECK ? [5, 10, 25, 100] : [10, 25, 100]

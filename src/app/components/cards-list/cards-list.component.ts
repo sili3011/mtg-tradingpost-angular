@@ -24,6 +24,7 @@ import { DBService } from 'src/app/services/db.service';
 import { CardsStore } from 'src/app/stores/cards.store';
 import { DecksStore } from 'src/app/stores/decks.store';
 import {
+  calculateNetworth,
   DeckValidation,
   fixPrice,
   imageTooltip,
@@ -350,5 +351,9 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
     return (
       fixPrice(currency, prices) + (currency === CURRENCIES.EUR ? '€' : '$')
     );
+  }
+
+  getCollectionValue(): string {
+    return calculateNetworth(this.cardsStore.networth.currency, this.cardsList);
   }
 }
