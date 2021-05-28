@@ -30,6 +30,7 @@ import {
   imageTooltip,
   sameCardComparison,
 } from 'src/app/utils/utils';
+import { AddCardAmountToListDialogComponent } from '../dialogs/add-card-amount-to-list-dialog/add-card-amount-to-list-dialog.component';
 import { AddCardDialogComponent } from '../dialogs/add-card-dialog/add-card-dialog.component';
 
 @Component({
@@ -355,5 +356,26 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
 
   getCollectionValue(): string {
     return calculateNetworth(this.cardsStore.networth.currency, this.cardsList);
+  }
+
+  moveCardToWishlist(card: CardAdapter) {
+    const ref = this.dialog.open(AddCardAmountToListDialogComponent, {
+      data: {
+        name: card.name,
+        amount: card.amount,
+        listToAddTo: LISTTYPES.WISHLIST,
+      },
+    });
+    ref.afterClosed().subscribe(() => {
+      if (ref.componentInstance.confirmed) {
+        this.dbService.addCard(
+          Object.assign({}, card),
+          LISTTYPES.WISHLIST,
+          undefined,
+          ref.componentInstance.amount,
+          card.isFoil
+        );
+      }
+    });
   }
 }

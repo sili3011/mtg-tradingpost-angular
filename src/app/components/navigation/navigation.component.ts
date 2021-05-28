@@ -7,7 +7,7 @@ import { Deck } from 'src/app/models/deck';
 import { LISTTYPES } from 'src/app/models/enums';
 import { DBService } from 'src/app/services/db.service';
 import { DecksStore } from 'src/app/stores/decks.store';
-import { AddCardAmountToDeckDialogComponent } from '../dialogs/add-card-amount-to-deck-dialog/add-card-amount-to-deck-dialog.component';
+import { AddCardAmountToListDialogComponent } from '../dialogs/add-card-amount-to-list-dialog/add-card-amount-to-list-dialog.component';
 import { Router } from '@angular/router';
 import { ConfirmDialogComponent } from '../dialogs/confirm-dialog/confirm-dialog.component';
 import { CardAdapter } from 'src/app/models/card-adapter';
@@ -80,10 +80,9 @@ export class NavigationComponent implements OnDestroy {
 
   dropCardOnDeck($event: any, deck: Deck) {
     const card: CardAdapter = $event.item.data;
-    const ref = this.dialog.open(AddCardAmountToDeckDialogComponent, {
+    const ref = this.dialog.open(AddCardAmountToListDialogComponent, {
       data: { name: card.name, amount: card.amount },
     });
-    console.log(card.isFoil);
     ref.afterClosed().subscribe(() => {
       if (ref.componentInstance.confirmed) {
         this.dbService.addCard(

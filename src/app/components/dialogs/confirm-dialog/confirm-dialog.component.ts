@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AddCardAmountToDeckDialogComponent } from '../add-card-amount-to-deck-dialog/add-card-amount-to-deck-dialog.component';
+import { AddCardAmountToListDialogComponent } from '../add-card-amount-to-list-dialog/add-card-amount-to-list-dialog.component';
 
 @Component({
   selector: 'mtg-confirm-dialog',
@@ -11,7 +11,7 @@ export class ConfirmDialogComponent implements OnInit {
   confirmed: boolean = false;
 
   constructor(
-    private dialogRef: MatDialogRef<AddCardAmountToDeckDialogComponent>,
+    private dialogRef: MatDialogRef<AddCardAmountToListDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 

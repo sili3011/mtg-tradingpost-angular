@@ -18,7 +18,6 @@ import { ManaComponent } from './utils/mana/mana.component';
 import { SetComponent } from './utils/set/set.component';
 import { DeckComponent } from './components/deck/deck.component';
 import { AddCardDialogComponent } from './components/dialogs/add-card-dialog/add-card-dialog.component';
-import { AddCardAmountToDeckDialogComponent } from './components/dialogs/add-card-amount-to-deck-dialog/add-card-amount-to-deck-dialog.component';
 import { ConfirmDialogComponent } from './components/dialogs/confirm-dialog/confirm-dialog.component';
 import { DeckManagementComponent } from './components/deck-management/deck-management.component';
 import { ProblemStatusComponent } from './components/problem-status/problem-status.component';
@@ -28,6 +27,7 @@ import { NgOpenCVModule } from 'ng-open-cv';
 import { AngularFireModule } from '@angular/fire';
 import { CardDetailComponent } from './components/card-detail/card-detail.component';
 import { LandingpageComponent } from './components/landingpage/landingpage.component';
+import { AddCardAmountToListDialogComponent } from './components/dialogs/add-card-amount-to-list-dialog/add-card-amount-to-list-dialog.component';
 
 const openCVConfig = {
   scriptUrl: 'assets/opencv/asm/4.5.1/opencv.js',
@@ -50,7 +50,7 @@ const openCVConfig = {
     SetComponent,
     DeckComponent,
     AddCardDialogComponent,
-    AddCardAmountToDeckDialogComponent,
+    AddCardAmountToListDialogComponent,
     ConfirmDialogComponent,
     DeckManagementComponent,
     ProblemStatusComponent,
