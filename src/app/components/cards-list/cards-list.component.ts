@@ -14,6 +14,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { IReactionDisposer, autorun } from 'mobx';
 import { Prices } from 'scryfall-sdk';
 import { CardAdapter } from 'src/app/models/card-adapter';
@@ -32,6 +33,7 @@ import {
 } from 'src/app/utils/utils';
 import { AddCardAmountToListDialogComponent } from '../dialogs/add-card-amount-to-list-dialog/add-card-amount-to-list-dialog.component';
 import { AddCardDialogComponent } from '../dialogs/add-card-dialog/add-card-dialog.component';
+import { ConfirmDialogComponent } from '../dialogs/confirm-dialog/confirm-dialog.component';
 
 @Component({
   selector: 'mtg-cards-list',
@@ -91,7 +93,8 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
     private cardsStore: CardsStore,
     private decksStore: DecksStore,
     private dbService: DBService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private router: Router
   ) {
     this.dataSource = new MatTableDataSource();
   }
@@ -314,6 +317,22 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
     );
   }
 
+  isEnoughOnWishlist(card: CardAdapter): boolean {
+    const missing = this.missingCards.find(
+      (c) => card.id === c.id && card.isFoil === c.isFoil
+    );
+    if (missing) {
+      const wishlistCard = this.cardsStore.wishlist.find(
+        (c) => card.id === c.id && card.isFoil === c.isFoil
+      );
+      if (wishlistCard) {
+        return missing.amount - wishlistCard.amount <= 0;
+      }
+      return false;
+    }
+    return true;
+  }
+
   dropCard(event: CdkDragDrop<CardAdapter[]>) {
     if (this.listType === LISTTYPES.WISHLIST) {
       moveItemInArray(
@@ -358,7 +377,29 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
     return calculateNetworth(this.cardsStore.networth.currency, this.cardsList);
   }
 
-  moveCardToWishlist(card: CardAdapter) {
+  moveCardToWishlist(card: CardAdapter): void {
+    if (this.isEnoughOnWishlist(card)) {
+      const ref = this.dialog.open(ConfirmDialogComponent, {
+        data: {
+          message:
+            'There are already enough of this card on your wishlist, but you still need to buy them.',
+          confirm: 'Buy now',
+          close: 'Add more',
+        },
+      });
+      ref.afterClosed().subscribe(() => {
+        if (ref.componentInstance.confirmed) {
+          this.router.navigate(['/wishlist']);
+        } else {
+          this.addCardAmountToList(card);
+        }
+      });
+    } else {
+      this.addCardAmountToList(card);
+    }
+  }
+
+  addCardAmountToList(card: CardAdapter): void {
     const ref = this.dialog.open(AddCardAmountToListDialogComponent, {
       data: {
         name: card.name,

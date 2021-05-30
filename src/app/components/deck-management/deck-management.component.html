@@ -3,7 +3,8 @@
     class="card"
     *ngFor="let deck of decks"
     [ngStyle]="{
-      background: deck.colors ? getColorHexes(deck.colors) : ''
+      background: deck.colors ? getColorHexes(deck.colors) : '',
+      filter: deck.active ? '' : 'grayscale(75%)'
     }"
     (mouseenter)="hoveredDeckId = deck.id"
     (mouseleave)="hoveredDeckId = ''"
@@ -21,7 +22,10 @@
       matRipple
     >
       <mat-card-title class="card-title">{{ deck.name }}</mat-card-title>
-      <mat-chip-list style="position: absolute; right: 1em; top: 1em">
+      <mat-chip-list
+        style="position: absolute; right: 1em; top: 1em"
+        *ngIf="deck.active"
+      >
         <mat-chip
           [disableRipple]="true"
           style="

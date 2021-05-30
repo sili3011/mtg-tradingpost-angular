@@ -435,7 +435,11 @@
                   <mat-icon
                     color="primary"
                     [ngStyle]="{
-                      color: !isCardInMissingCards(row) ? '' : '#f44336'
+                      color: !isCardInMissingCards(row)
+                        ? 'grey'
+                        : isEnoughOnWishlist(row)
+                        ? ''
+                        : '#f44336'
                     }"
                   >
                     post_add

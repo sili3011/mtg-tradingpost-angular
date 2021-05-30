@@ -90,6 +90,9 @@
           >
             <mat-icon
               [svgIcon]="rla.isActive ? 'window-open' : 'window-closed'"
+              [ngStyle]="{
+                color: deck.active ? 'white' : 'gray'
+              }"
             ></mat-icon>
             <span
               [@animateText]="linkText ? 'show' : 'hide'"
