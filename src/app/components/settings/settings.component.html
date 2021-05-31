@@ -1,16 +1,25 @@
 <mat-card style="margin: 2%; height: 100%">
-  <div fxLayout="row">
-    <button
-      mat-raised-button
-      color="primary"
-      style="color: black"
-      (click)="openDBDialog()"
-    >
-      Manage DB
-    </button>
+  <span style="font-size: 30px">Preferences</span>
+  <div style="margin: 2em">
+    <mat-form-field>
+      <mat-label>Select your prefered currency</mat-label>
+      <mat-select matSelect [formControl]="currencyControl">
+        <mat-option [value]="currencies.EUR">€</mat-option>
+        <mat-option [value]="currencies.USD">$</mat-option>
+      </mat-select>
+    </mat-form-field>
   </div>
-  <mat-select matSelect [formControl]="currencyControl">
-    <mat-option [value]="currencies.EUR">€</mat-option>
-    <mat-option [value]="currencies.USD">$</mat-option>
-  </mat-select>
+  <span style="font-size: 30px">Database</span>
+  <div style="margin: 2em">
+    <div fxLayout="row">
+      <button
+        mat-raised-button
+        color="primary"
+        style="color: black"
+        (click)="openDBDialog()"
+      >
+        Manage DB
+      </button>
+    </div>
+  </div>
 </mat-card>

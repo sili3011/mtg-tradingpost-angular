@@ -5,8 +5,6 @@ import { FileInput, FileValidator } from 'ngx-material-file-input';
 import { DBService } from 'src/app/services/db.service';
 import { saveAs } from 'file-saver';
 import { OverwriteDatabaseConfirmationDialogComponent } from '../overwrite-database-confirmation-dialog/overwrite-database-confirmation-dialog.component';
-import { CardsStore } from 'src/app/stores/cards.store';
-import { UserStore } from 'src/app/stores/user.store';
 import { Subscription } from 'rxjs';
 
 @Component({
