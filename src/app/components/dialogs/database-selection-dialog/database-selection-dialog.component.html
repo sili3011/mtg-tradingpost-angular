@@ -1,3 +1,6 @@
 <div style="height: 100%; overflow: hidden">
-  <mtg-database-settings></mtg-database-settings>
+  <mtg-database-settings
+    [isDialog]="true"
+    (closeEmitter)="close()"
+  ></mtg-database-settings>
 </div>

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
 import { FileValidator, FileInput } from 'ngx-material-file-input';
@@ -13,12 +13,17 @@ import { saveAs } from 'file-saver';
   styleUrls: ['./database-settings.component.scss'],
 })
 export class DatabaseSettingsComponent implements OnInit {
+  @Input()
+  isDialog = false;
+
   dbGroup: FormGroup;
   inputJSON: any;
 
-  backupped: boolean = false;
-  createNew: boolean = false;
+  isBackupped: boolean = false;
+  isCreateNew: boolean = false;
+  isDirty: boolean = false;
 
+  @Output()
   closeEmitter: EventEmitter<void> = new EventEmitter();
 
   subscriptions: Subscription = new Subscription();
@@ -49,10 +54,11 @@ export class DatabaseSettingsComponent implements OnInit {
               name: this.inputJSON.name,
               owner: this.inputJSON.owner,
             });
-            this.createNew = false;
+            this.isCreateNew = false;
           };
           fileReader.readAsText(fileInput);
         }
+        this.isDirty = true;
       })
     );
 
@@ -63,6 +69,7 @@ export class DatabaseSettingsComponent implements OnInit {
         } else if (name !== this.inputJSON.name) {
           this.setDummyFileToShow();
         }
+        this.isDirty = true;
       })
     );
 
@@ -73,6 +80,7 @@ export class DatabaseSettingsComponent implements OnInit {
         } else if (owner !== this.inputJSON.owner) {
           this.setDummyFileToShow();
         }
+        this.isDirty = true;
       })
     );
 
@@ -97,6 +105,10 @@ export class DatabaseSettingsComponent implements OnInit {
         file: new FileInput([dbAsFile]),
       });
     }
+
+    if (!this.hasBeenInitialized) {
+      this.isCreateNew = true;
+    }
   }
 
   ngOnDestroy(): void {
@@ -118,16 +130,32 @@ export class DatabaseSettingsComponent implements OnInit {
     }
   }
 
-  createBackup() {
+  createNew(): void {
+    this.isCreateNew = true;
+    this.dbGroup.patchValue({
+      name: '',
+      owner: '',
+      file: new FileInput([
+        new File([], '', {
+          type: 'application/json',
+        }),
+      ]),
+    });
+    if (!this.inputJSON) {
+      this.inputJSON = this.file;
+    }
+    this.isDirty = true;
+  }
+
+  createBackup(): void {
+    this.dbService.setName(this.name);
+    this.dbService.setName(this.owner);
     const json = this.dbService.createBackup();
     const blob = new Blob([JSON.stringify(json)], {
       type: 'text/json;charset=utf-8',
     });
-    saveAs(
-      blob,
-      this.dbService.getName() + '_' + this.dbService.getOwner() + '.json'
-    );
-    this.backupped = true;
+    saveAs(blob, this.name + '_' + this.owner + '.json');
+    this.isBackupped = true;
   }
 
   get name() {
@@ -146,13 +174,20 @@ export class DatabaseSettingsComponent implements OnInit {
     return this.dbService.getHasBeenInitialized();
   }
 
+  clearName() {
+    this.dbGroup.patchValue({
+      name: '',
+    });
+  }
+
+  clearOwner() {
+    this.dbGroup.patchValue({
+      owner: '',
+    });
+  }
+
   confirm() {
-    if (
-      (this.createNew && !this.backupped) ||
-      (!this.createNew &&
-        (this.name !== this.dbService.getName() ||
-          this.owner !== this.dbService.getOwner()))
-    ) {
+    if (!this.isBackupped) {
       let ref = this.dialog.open(OverwriteDatabaseConfirmationDialogComponent, {
         width: '50%',
         disableClose: true,
@@ -173,7 +208,7 @@ export class DatabaseSettingsComponent implements OnInit {
   }
 
   complete() {
-    if (this.createNew) {
+    if (this.isCreateNew) {
       this.dbService.createNewDB(this.name, this.owner);
     } else {
       this.dbService.setDB(this.inputJSON);

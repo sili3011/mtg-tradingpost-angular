@@ -1,47 +1,74 @@
 <h1 mat-dialog-title>Manage your collection</h1>
-<div mat-dialog-content>
-  <form [formGroup]="dbGroup">
-    <div fxLayout="row">
-      <mat-icon svgIcon="database" class="input" color="primary"></mat-icon>
-      <mat-form-field class="form-field">
-        <ngx-mat-file-input
-          formControlName="file"
-          placeholder="DB as JSON"
-          valuePlaceholder="No file selected"
-          [required]="true"
-          [accept]="'.json'"
-        ></ngx-mat-file-input>
-        <mat-icon color="primary" matSuffix>folder</mat-icon>
-        <mat-error *ngIf="dbGroup.get('file')?.hasError('required')">
-          Please select a file
-        </mat-error>
-        <mat-error *ngIf="dbGroup.get('file')?.hasError('maxContentSize')">
-          The total size must not exceed
-          {{
-            dbGroup.get("file")?.getError("maxContentSize").maxSize | byteFormat
-          }}
-          ({{
-            dbGroup.get("file")?.getError("maxContentSize").actualSize
-              | byteFormat
-          }}).
-        </mat-error>
-      </mat-form-field>
-    </div>
-    <div fxLayout="row">
-      <mat-icon svgIcon="rename-box" class="input" color="primary"></mat-icon>
-      <mat-form-field class="form-field">
-        <mat-label>Name of database</mat-label>
-        <input matInput formControlName="name" />
-      </mat-form-field>
-    </div>
-    <div fxLayout="row">
-      <mat-icon svgIcon="account-star" class="input" color="primary"></mat-icon>
-      <mat-form-field class="form-field">
-        <mat-label>Owner</mat-label>
-        <input matInput formControlName="owner" />
-      </mat-form-field>
-    </div>
-  </form>
+<form [formGroup]="dbGroup">
+  <div fxLayout="row">
+    <mat-icon svgIcon="rename-box" class="input" color="primary"></mat-icon>
+    <mat-form-field class="form-field">
+      <mat-label>Name of database</mat-label>
+      <input matInput formControlName="name" />
+      <button
+        *ngIf="name"
+        matSuffix
+        mat-icon-button
+        aria-label="Clear"
+        (click)="clearName()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+  <div fxLayout="row">
+    <mat-icon svgIcon="account-star" class="input" color="primary"></mat-icon>
+    <mat-form-field class="form-field">
+      <mat-label>Owner</mat-label>
+      <input matInput formControlName="owner" />
+      <button
+        *ngIf="owner"
+        matSuffix
+        mat-icon-button
+        aria-label="Clear"
+        (click)="clearOwner()"
+      >
+        <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+  <div fxLayout="row">
+    <mat-icon svgIcon="database" class="input" color="primary"></mat-icon>
+    <mat-form-field class="form-field">
+      <ngx-mat-file-input
+        formControlName="file"
+        placeholder="DB as JSON"
+        valuePlaceholder="No file selected"
+        [required]="true"
+        [accept]="'.json'"
+      ></ngx-mat-file-input>
+      <mat-icon color="primary" matSuffix style="cursor: pointer"
+        >folder</mat-icon
+      >
+      <mat-error *ngIf="dbGroup.get('file')?.hasError('required')">
+        Please select a file
+      </mat-error>
+      <mat-error *ngIf="dbGroup.get('file')?.hasError('maxContentSize')">
+        The total size must not exceed
+        {{
+          dbGroup.get("file")?.getError("maxContentSize").maxSize | byteFormat
+        }}
+        ({{
+          dbGroup.get("file")?.getError("maxContentSize").actualSize
+            | byteFormat
+        }}).
+      </mat-error>
+    </mat-form-field>
+  </div>
+</form>
+<div
+  style="text-align: center; color: primary; margin: 1em 0"
+  [ngStyle]="{ 'margin-bottom': !isCreateNew ? '34px' : '0' }"
+>
+  <span *ngIf="isCreateNew"
+    >New db will be created if confirmed. Be sure to have your current one
+    backuped.</span
+  >
 </div>
 <div style="text-align: center">
   <button
@@ -51,7 +78,8 @@
     #tooltip="matTooltip"
     matTooltip="Create new database"
     matTooltipPosition="left"
-    (click)="createNew = true"
+    (click)="createNew()"
+    [disabled]="isCreateNew"
   >
     <mat-icon svgIcon="database-plus" style="color: #303030"></mat-icon>
   </button>
@@ -70,16 +98,7 @@
     <mat-icon svgIcon="database-refresh" style="color: #303030"></mat-icon>
   </button>
 </div>
-<div
-  style="text-align: center; color: primary; margin-top: 1em"
-  [ngStyle]="{ 'margin-bottom': !createNew ? '34px' : '0' }"
->
-  <span *ngIf="createNew"
-    >New db will be created if confirmed. Be sure to have your current one
-    backuped.</span
-  >
-</div>
-<div mat-dialog-actions>
+<div *ngIf="isDialog" style="display: flex">
   <button
     mat-button
     color="primary"
@@ -97,4 +116,22 @@
   >
     Confirm
   </button>
+</div>
+<div *ngIf="!isDialog" style="display: flex">
+  <div style="margin: 1em auto">
+    <button
+      mat-raised-button
+      color="primary"
+      style="color: #303030"
+      [disabled]="
+        !inputJSON || !hasBeenInitialized || !isDirty || !dbGroup.valid
+      "
+      [disableRipple]="
+        !inputJSON || !hasBeenInitialized || !isDirty || !dbGroup.valid
+      "
+      (click)="confirm()"
+    >
+      Confirm
+    </button>
+  </div>
 </div>

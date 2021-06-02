@@ -23,9 +23,11 @@ export class CardsStore {
 
   @computed get totalCardsCount() {
     let total = 0;
-    this.collection.forEach((card) => {
-      total += card.amount;
-    });
+    if (this.collection) {
+      this.collection.forEach((card) => {
+        total += card.amount;
+      });
+    }
     return total;
   }
 

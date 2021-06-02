@@ -1,0 +1,16 @@
+.input {
+  transform: scale(1.4);
+  margin: 1.6em;
+}
+
+.form-field {
+  width: 80%;
+  font-size: large;
+}
+
+::ng-deep .confirmDialog {
+  mat-dialog-container {
+    padding: 0;
+    overflow: hidden;
+  }
+}
