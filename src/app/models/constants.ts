@@ -1,3 +1,4 @@
+import { GuidedTour, Orientation, TourStep } from 'ngx-guided-tour';
 import { FORMATS } from './enums';
 
 export interface Format {
@@ -75,3 +76,17 @@ export const Formats: Array<Format> = [
     mustComplyToColorIdentity: true,
   },
 ];
+
+const steps: Array<TourStep> = [
+  {
+    title: 'Greetings!',
+    content:
+      'We detected that this is your first visit! Mind to go on a short tour with us?',
+  },
+];
+
+export const tour: GuidedTour = {
+  tourId: 'starter',
+  useOrb: true,
+  steps: steps,
+};

@@ -5,7 +5,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { TooltipComponent } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
 import Dexie from 'dexie';
+import { GuidedTourService } from 'ngx-guided-tour';
 import { DatabaseSelectionDialogComponent } from './components/dialogs/database-selection-dialog/database-selection-dialog.component';
+import { tour } from './models/constants';
 import { DBService } from './services/db.service';
 import { HashStore } from './stores/hash.store';
 
@@ -25,7 +27,8 @@ export class AppComponent implements OnInit {
     private hashStore: HashStore,
     private dialog: MatDialog,
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private guidedTourService: GuidedTourService
   ) {
     Object.defineProperty(TooltipComponent.prototype, 'message', {
       set(v: any) {
@@ -38,15 +41,19 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.guidedTourService.startTour(tour);
     if (this.dbService.getHasBeenInitialized()) {
       this.showLandingpage = false;
       this.gotoApp();
     }
 
     if (!this.dbService.getHasBeenInitialized() && !this.showLandingpage) {
-      this.dialog.open(DatabaseSelectionDialogComponent, {
+      const ref = this.dialog.open(DatabaseSelectionDialogComponent, {
         width: '50%',
         disableClose: true,
+      });
+      ref.afterClosed().subscribe(() => {
+        this.guidedTourService.startTour(tour);
       });
     }
 
@@ -93,9 +100,12 @@ export class AppComponent implements OnInit {
     this.showLandingpage = false;
     this.goto('/dashboard');
     if (!this.dbService.getHasBeenInitialized()) {
-      this.dialog.open(DatabaseSelectionDialogComponent, {
+      const ref = this.dialog.open(DatabaseSelectionDialogComponent, {
         width: '50%',
         disableClose: true,
+      });
+      ref.afterClosed().subscribe(() => {
+        this.guidedTourService.startTour(tour);
       });
     }
   }

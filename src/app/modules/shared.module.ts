@@ -33,6 +33,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgApexchartsModule } from 'ng-apexcharts';
 import { NgOpenCVModule } from 'ng-open-cv';
 import { NgScrollbarModule } from 'ngx-scrollbar';
+import { GuidedTourModule, GuidedTourService } from 'ngx-guided-tour';
 
 @NgModule({
   declarations: [],
@@ -78,6 +79,8 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
     NgApexchartsModule,
     NgOpenCVModule,
     NgScrollbarModule,
+    GuidedTourModule,
   ],
+  providers: [GuidedTourService],
 })
 export class SharedModule {}
