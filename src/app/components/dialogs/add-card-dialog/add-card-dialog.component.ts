@@ -1,4 +1,10 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  Inject,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as _ from 'lodash';
@@ -10,13 +16,18 @@ import { DBService } from 'src/app/services/db.service';
 import { CardsStore } from 'src/app/stores/cards.store';
 import { DecksStore } from 'src/app/stores/decks.store';
 import { fixPrice } from 'src/app/utils/utils';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'mtg-add-card-dialog',
   templateUrl: './add-card-dialog.component.html',
   styleUrls: ['./add-card-dialog.component.scss'],
 })
-export class AddCardDialogComponent implements OnInit, OnDestroy {
+export class AddCardDialogComponent
+  implements OnInit, OnDestroy, AfterViewInit
+{
+  environment = environment;
+
   searchControl = new FormControl();
   autoCompleteCatalogue: Array<any> = [];
   otherPrints: Array<any> = [];
@@ -43,7 +54,9 @@ export class AddCardDialogComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
-  ngOnInit(): void {
+  ngOnInit(): void {}
+
+  ngAfterViewInit(): void {
     this.subscriptions.add(
       this.searchControl.valueChanges.subscribe(() => {
         this.loaded.next(false);

@@ -6,6 +6,7 @@ import { CardsStore } from 'src/app/stores/cards.store';
 import { DecksStore } from 'src/app/stores/decks.store';
 import { UserStore } from 'src/app/stores/user.store';
 import { fixPrice, imageTooltip } from 'src/app/utils/utils';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'mtg-dashboard',
@@ -13,6 +14,8 @@ import { fixPrice, imageTooltip } from 'src/app/utils/utils';
   styleUrls: ['./dashboard.component.scss'],
 })
 export class DashboardComponent {
+  environment = environment;
+
   Currencies = CURRENCIES;
 
   constructor(

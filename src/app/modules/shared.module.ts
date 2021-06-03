@@ -23,6 +23,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { MatTabsModule } from '@angular/material/tabs';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FlexModule } from '@angular/flex-layout/flex';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -62,6 +63,7 @@ import { NgScrollbarModule } from 'ngx-scrollbar';
     MatBadgeModule,
     MatProgressSpinnerModule,
     MatProgressBarModule,
+    MatTabsModule,
     DragDropModule,
     // AngularForms
     ReactiveFormsModule,

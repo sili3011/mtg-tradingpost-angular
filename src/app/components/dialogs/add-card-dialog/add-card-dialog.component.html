@@ -1,175 +1,215 @@
-<div style="height: 100%; overflow: hidden">
+<div style="height: 100%; overflow: hidden; min-height: 66vh">
   <div mat-dialog-content>
-    <div style="overflow: hidden">
-      <mat-form-field style="width: 100%">
-        <input
-          matInput
-          [formControl]="searchControl"
-          [matAutocomplete]="auto"
-          (keyup.enter)="onEnter()"
-        />
-        <mat-placeholder
-          class="placeholder"
-          *ngIf="input === undefined || input === ''"
-          >Search</mat-placeholder
-        >
-        <mat-icon
-          svgIcon="magnify"
-          class="input"
-          color="primary"
-          matSuffix
-        ></mat-icon>
-        <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-          <mat-option
-            *ngFor="let option of autoCompleteCatalogue"
-            [value]="option"
-            (click)="onSelect(option)"
-          >
-            {{ option }}
-          </mat-option>
-        </mat-autocomplete>
-      </mat-form-field>
-      <div fxLayout="row">
-        <button
-          *ngIf="selectedPrint && selectedPrint.foil"
-          mat-icon-button
-          [matTooltip]="
-            isFoil ? 'Marked as foil. Shiny!' : 'Mark as foil. Shiny!'
-          "
-          style="position: absolute; z-index: 99; margin-left: 250px"
-          (click)="toggleFoil()"
-        >
-          <mat-icon style="color: #f1ca0f; font-size: 30px; margin-right: 5px">
-            {{ isFoil ? "star" : "star_border" }}
-          </mat-icon>
-        </button>
-        <div style="min-width: 300px">
-          <div class="dialog-flip-card">
-            <div class="dialog-flip-card-inner">
-              <div class="dialog-flip-card-front">
-                <img
-                  src="assets/mtg-cardback.jpg"
-                  style="border-radius: 15px"
-                />
+    <mat-tab-group>
+      <mat-tab>
+        <ng-template matTabLabel>
+          <mat-icon
+            style="margin: 0 5px"
+            color="primary"
+            svgIcon="keyboard-outline"
+          ></mat-icon>
+          Manual search
+        </ng-template>
+        <ng-template matTabContent>
+          <div style="overflow: hidden; margin-top: 2em">
+            <mat-form-field style="width: 100%">
+              <input
+                matInput
+                [formControl]="searchControl"
+                [matAutocomplete]="auto"
+                (keyup.enter)="onEnter()"
+              />
+              <mat-placeholder
+                class="placeholder"
+                *ngIf="input === undefined || input === ''"
+                >Search</mat-placeholder
+              >
+              <mat-icon
+                svgIcon="magnify"
+                class="input"
+                color="primary"
+                matSuffix
+              ></mat-icon>
+              <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
+                <mat-option
+                  *ngFor="let option of autoCompleteCatalogue"
+                  [value]="option"
+                  (click)="onSelect(option)"
+                >
+                  {{ option }}
+                </mat-option>
+              </mat-autocomplete>
+            </mat-form-field>
+            <div fxLayout="row">
+              <button
+                *ngIf="selectedPrint && selectedPrint.foil"
+                mat-icon-button
+                [matTooltip]="
+                  isFoil ? 'Marked as foil. Shiny!' : 'Mark as foil. Shiny!'
+                "
+                style="position: absolute; z-index: 99; margin-left: 250px"
+                (click)="toggleFoil()"
+              >
+                <mat-icon
+                  style="color: #f1ca0f; font-size: 30px; margin-right: 5px"
+                >
+                  {{ isFoil ? "star" : "star_border" }}
+                </mat-icon>
+              </button>
+              <div style="min-width: 300px">
+                <div class="dialog-flip-card">
+                  <div class="dialog-flip-card-inner">
+                    <div class="dialog-flip-card-front">
+                      <img
+                        src="assets/mtg-cardback.jpg"
+                        style="border-radius: 15px"
+                      />
+                    </div>
+                    <div class="dialog-flip-card-back">
+                      <img
+                        [src]="getSelectedPrintPic()"
+                        :lazy-src="assets/mtg-cardback.jpg"
+                        style="border-radius: 15px; width: 280px"
+                      />
+                    </div>
+                  </div>
+                </div>
+                <div style="display: flex">
+                  <span
+                    *ngIf="selectedPrint?.prices && priceOfPrint()"
+                    style="margin: 0 auto"
+                  >
+                    {{ priceOfPrint() }}
+                  </span>
+                  <span
+                    *ngIf="!selectedPrint?.prices || !priceOfPrint()"
+                    style="margin: 0 auto"
+                  >
+                    No price data available
+                  </span>
+                </div>
               </div>
-              <div class="dialog-flip-card-back">
-                <img
-                  [src]="getSelectedPrintPic()"
-                  :lazy-src="assets/mtg-cardback.jpg"
-                  style="border-radius: 15px; width: 280px"
-                />
+              <div style="max-height: 400px; width: 100%; margin: 0 0 0 1em">
+                <div *ngIf="selectedPrint" style="height: 100%">
+                  <div
+                    style="margin: 1em 0"
+                    *ngIf="
+                      loaded &&
+                      !loadingSets &&
+                      cardsAlreadyIncluded &&
+                      cardsAlreadyIncluded.length
+                    "
+                  >
+                    <span *ngIf="data.deckId"
+                      >Prints already in this deck:</span
+                    >
+                    <span *ngIf="!data.deckId"
+                      >Prints already in your collection:</span
+                    >
+                    <div>
+                      <button
+                        mat-button
+                        *ngFor="let already of cardsAlreadyIncluded"
+                        (click)="printSelect(already)"
+                      >
+                        <div style="display: flex; flex-direction: row">
+                          <span style="margin-right: 5px"
+                            >{{ already.amount }} x</span
+                          >
+                          <mtg-set
+                            [set]="already.set"
+                            [set_name]="already.set_name"
+                            [rarity]="already.rarity"
+                            [fixed]="true"
+                            [foil]="already.isFoil"
+                            size="2x"
+                          ></mtg-set>
+                        </div>
+                      </button>
+                    </div>
+                  </div>
+                  <span *ngIf="loaded && !loadingSets"
+                    >Sets this card was printed in:</span
+                  >
+                  <ng-scrollbar
+                    style="height: 70%"
+                    *ngIf="loaded && !loadingSets"
+                  >
+                    <button
+                      mat-icon-button
+                      *ngFor="let print of otherPrints"
+                      (click)="printSelect(print)"
+                    >
+                      <mtg-set
+                        [set]="print.set"
+                        [set_name]="print.set_name"
+                        [rarity]="print.rarity"
+                        [fixed]="true"
+                        size="2x"
+                      ></mtg-set>
+                    </button>
+                  </ng-scrollbar>
+                  <div style="display: flex; height: 100%" *ngIf="loadingSets">
+                    <mat-progress-spinner
+                      class="mat-spinner-color"
+                      mode="indeterminate"
+                      style="margin: auto"
+                    >
+                    </mat-progress-spinner>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
           <div style="display: flex">
-            <span
-              *ngIf="selectedPrint?.prices && priceOfPrint()"
-              style="margin: 0 auto"
-            >
-              {{ priceOfPrint() }}
-            </span>
-            <span
-              *ngIf="!selectedPrint?.prices || !priceOfPrint()"
-              style="margin: 0 auto"
-            >
-              No price data available
-            </span>
-          </div>
-        </div>
-        <div style="max-height: 400px; width: 100%; margin: 0 0 0 1em">
-          <div *ngIf="selectedPrint" style="height: 100%">
-            <div
-              style="margin: 1em 0"
-              *ngIf="
-                loaded &&
-                !loadingSets &&
-                cardsAlreadyIncluded &&
-                cardsAlreadyIncluded.length
-              "
-            >
-              <span *ngIf="data.deckId">Prints already in this deck:</span>
-              <span *ngIf="!data.deckId"
-                >Prints already in your collection:</span
-              >
-              <div>
-                <button
-                  mat-button
-                  *ngFor="let already of cardsAlreadyIncluded"
-                  (click)="printSelect(already)"
-                >
-                  <div style="display: flex; flex-direction: row">
-                    <span style="margin-right: 5px"
-                      >{{ already.amount }} x</span
-                    >
-                    <mtg-set
-                      [set]="already.set"
-                      [set_name]="already.set_name"
-                      [rarity]="already.rarity"
-                      [fixed]="true"
-                      [foil]="already.isFoil"
-                      size="2x"
-                    ></mtg-set>
-                  </div>
-                </button>
-              </div>
-            </div>
-            <span *ngIf="loaded && !loadingSets"
-              >Sets this card was printed in:</span
-            >
-            <ng-scrollbar style="height: 70%" *ngIf="loaded && !loadingSets">
+            <span style="margin: 0 auto">
               <button
                 mat-icon-button
-                *ngFor="let print of otherPrints"
-                (click)="printSelect(print)"
+                color="primary"
+                style="margin-right: 10px"
+                (click)="decrement()"
+                [disabled]="amount <= 1"
               >
-                <mtg-set
-                  [set]="print.set"
-                  [set_name]="print.set_name"
-                  [rarity]="print.rarity"
-                  [fixed]="true"
-                  size="2x"
-                ></mtg-set>
+                <mat-icon
+                  color="primary"
+                  [ngStyle]="{ color: amount <= 1 ? 'grey' : '' }"
+                >
+                  remove
+                </mat-icon>
               </button>
-            </ng-scrollbar>
-            <div style="display: flex; height: 100%" *ngIf="loadingSets">
-              <mat-progress-spinner
-                class="mat-spinner-color"
-                mode="indeterminate"
-                style="margin: auto"
+              <span style="margin-top: 1em; margin-bottom: 1em">{{
+                amount
+              }}</span>
+              <button
+                mat-icon-button
+                color="primary"
+                style="margin-left: 10px"
+                (click)="increment()"
               >
-              </mat-progress-spinner>
-            </div>
+                <mat-icon color="primary"> add </mat-icon>
+              </button>
+            </span>
           </div>
-        </div>
-      </div>
-    </div>
-    <div style="display: flex">
-      <span style="margin: 0 auto">
-        <button
-          mat-icon-button
-          color="primary"
-          style="margin-right: 10px"
-          (click)="decrement()"
-          [disabled]="amount <= 1"
-        >
-          <mat-icon
-            color="primary"
-            [ngStyle]="{ color: amount <= 1 ? 'grey' : '' }"
+        </ng-template>
+      </mat-tab>
+      <mat-tab [disabled]="environment.production">
+        <ng-template matTabLabel>
+          <span
+            matTooltip="Work in progress"
+            style="display: flex; align-items: flex-end"
           >
-            remove
-          </mat-icon>
-        </button>
-        <span style="margin-top: 1em; margin-bottom: 1em">{{ amount }}</span>
-        <button
-          mat-icon-button
-          color="primary"
-          style="margin-left: 10px"
-          (click)="increment()"
-        >
-          <mat-icon color="primary"> add </mat-icon>
-        </button>
-      </span>
-    </div>
+            <mat-icon
+              style="margin: 0 5px; color: gray"
+              svgIcon="camera-enhance-outline"
+            ></mat-icon>
+            Detector</span
+          >
+        </ng-template>
+        <ng-template matTabContent>
+          <mtg-card-detection></mtg-card-detection>
+        </ng-template>
+      </mat-tab>
+    </mat-tab-group>
   </div>
   <div mat-dialog-actions style="margin: 0; padding: 0; min-height: 0">
     <button mat-button color="primary" (click)="close()">Close</button>

@@ -90,7 +90,11 @@
       </span>
     </mat-card-content>
   </mat-card>
-  <mat-card matRipple class="card" (click)="goto('box-opening')">
+  <mat-card
+    class="card"
+    (click)="environment.production ? '' : goto('box-opening')"
+    style="filter: grayscale(75%); cursor: default"
+  >
     <mat-card-header
       class="card-header"
       style="background-image: url('../../assets/unh-4-cardpecker.jpg')"
@@ -103,6 +107,13 @@
       >
       Track your new cards and their value. 0 games played.
     </mat-card-content>
+    <mat-card-actions style="display: flex">
+      <mat-icon
+        svgIcon="account-hard-hat"
+        style="margin: 0 auto; color: gray"
+        matTooltip="Work in progess"
+      ></mat-icon
+    ></mat-card-actions>
   </mat-card>
   <mat-card matRipple class="card">
     <mat-card-header
