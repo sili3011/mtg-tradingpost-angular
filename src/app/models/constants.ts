@@ -83,10 +83,30 @@ const steps: Array<TourStep> = [
     content:
       'We detected that this is your first visit! Mind to go on a short tour with us?',
   },
+  {
+    selector: '.dashboard',
+    title: 'Dashboard',
+    content:
+      'This is the center of operations, you can go everywhere from here.',
+    orientation: Orientation.Center,
+  },
+  {
+    selector: '.to-dashboard',
+    title: 'Coming back',
+    content:
+      'You can get back to the dashboard from anywhere by clicking on the mtg-tradingpost logo.',
+    orientation: Orientation.Bottom,
+  },
+  {
+    selector: '.settings',
+    title: 'Settings!',
+    content: 'Lets start with the settings.',
+    orientation: Orientation.TopLeft,
+  },
 ];
 
 export const tour: GuidedTour = {
   tourId: 'starter',
-  useOrb: true,
+  useOrb: false,
   steps: steps,
 };

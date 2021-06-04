@@ -41,7 +41,9 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.guidedTourService.startTour(tour);
+    // TODO: remove
+    this.startTour();
+
     if (this.dbService.getHasBeenInitialized()) {
       this.showLandingpage = false;
       this.gotoApp();
@@ -53,7 +55,7 @@ export class AppComponent implements OnInit {
         disableClose: true,
       });
       ref.afterClosed().subscribe(() => {
-        this.guidedTourService.startTour(tour);
+        this.startTour();
       });
     }
 
@@ -96,7 +98,7 @@ export class AppComponent implements OnInit {
     this.router.navigate([`/${name}`]);
   }
 
-  gotoApp() {
+  gotoApp(): void {
     this.showLandingpage = false;
     this.goto('/dashboard');
     if (!this.dbService.getHasBeenInitialized()) {
@@ -105,9 +107,14 @@ export class AppComponent implements OnInit {
         disableClose: true,
       });
       ref.afterClosed().subscribe(() => {
-        this.guidedTourService.startTour(tour);
+        this.startTour();
       });
     }
+  }
+
+  startTour(): void {
+    this.guidedTourService.startTour(tour);
+    window.dispatchEvent(new Event('resize'));
   }
 }
 

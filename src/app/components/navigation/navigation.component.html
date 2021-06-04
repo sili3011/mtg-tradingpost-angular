@@ -7,7 +7,12 @@
       padding: 5px;
     "
   >
-    <span routerLink="/dashboard" fxLayout="row">
+    <span
+      routerLink="/dashboard"
+      fxLayout="row"
+      class="to-dashboard"
+      style="width: fit-content"
+    >
       <mtg-set
         set="jud"
         rarity="rare"
@@ -136,6 +141,7 @@
             style="position: absolute; bottom: 60px"
             (click)="stopPropagation($event)"
             #set="routerLinkActive"
+            class="settings"
           >
             <mat-icon [ngStyle]="{ color: set.isActive ? '#cc8010' : 'white' }"
               >settings</mat-icon

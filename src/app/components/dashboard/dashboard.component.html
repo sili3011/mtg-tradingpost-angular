@@ -1,4 +1,8 @@
-<div style="margin-left: 5%; padding-bottom: 60px" fxLayout="row wrap">
+<div
+  class="dashboard"
+  style="margin-left: 5%; padding-bottom: 60px"
+  fxLayout="row wrap"
+>
   <mat-card matRipple class="card" (click)="goto('collection')">
     <mat-card-header
       class="card-header"
@@ -29,7 +33,12 @@
       {{ decksStore.unplayableAmount() }} need your attention.
     </mat-card-content>
   </mat-card>
-  <mat-card matRipple class="card">
+  <mat-card
+    matRipple
+    class="card"
+    style="filter: grayscale(75%); cursor: default"
+    [matRippleDisabled]="true"
+  >
     <mat-card-header
       class="card-header"
       style="background-image: url('../../assets/xln-117-revel-in-riches.jpg')"
@@ -37,10 +46,17 @@
       <mat-card-title class="card-title">Finances</mat-card-title>
     </mat-card-header>
     <mat-card-content class="card-content">
-      <mat-card-subtitle>Net worth of your collection</mat-card-subtitle>
+      <mat-card-subtitle>Networth of your collection</mat-card-subtitle>
       Your cards collection has a total value of
       {{ cardsStore.networthWithCurrency }}.
     </mat-card-content>
+    <mat-card-actions style="display: flex">
+      <mat-icon
+        svgIcon="account-hard-hat"
+        style="margin: 0 auto; color: gray"
+        matTooltip="Work in progess"
+      ></mat-icon
+    ></mat-card-actions>
   </mat-card>
   <mat-card matRipple class="card" (click)="goto('wishlist')">
     <mat-card-header
@@ -91,9 +107,11 @@
     </mat-card-content>
   </mat-card>
   <mat-card
+    matRipple
     class="card"
     (click)="environment.production ? '' : goto('box-opening')"
     style="filter: grayscale(75%); cursor: default"
+    [matRippleDisabled]="true"
   >
     <mat-card-header
       class="card-header"
