@@ -34,3 +34,10 @@
   flex: 0 0 15% !important;
   width: 15% !important;
 }
+
+::ng-deep .noPadding {
+  mat-dialog-container {
+    padding: 24px 0;
+    overflow: hidden;
+  }
+}

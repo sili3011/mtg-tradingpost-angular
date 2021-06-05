@@ -36,7 +36,7 @@
   <mat-card
     matRipple
     class="card"
-    style="filter: grayscale(75%); cursor: default"
+    style="filter: grayscale(75%); cursor: not-allowed"
     [matRippleDisabled]="true"
   >
     <mat-card-header
@@ -110,7 +110,7 @@
     matRipple
     class="card"
     (click)="environment.production ? '' : goto('box-opening')"
-    style="filter: grayscale(75%); cursor: default"
+    style="filter: grayscale(75%); cursor: not-allowed"
     [matRippleDisabled]="true"
   >
     <mat-card-header

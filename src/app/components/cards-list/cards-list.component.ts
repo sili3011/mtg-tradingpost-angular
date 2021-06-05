@@ -203,6 +203,7 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
       .open(AddCardDialogComponent, {
         width: '50%',
         data: { listType: this.listType, deckId: this.deck?.id },
+        panelClass: 'noPadding',
       })
       .afterClosed()
       .subscribe(() => {

@@ -165,7 +165,7 @@ ngx-guided-tour {
   .tour-block {
     color: #cc8010 !important;
     background-color: #303030 !important;
-    box-shadow: none !important;
+    box-shadow: 1px 1px 4px #151515 !important;
     border-radius: 10px;
   }
 
@@ -196,5 +196,9 @@ ngx-guided-tour {
         padding: 1px 10px !important;
       }
     }
+  }
+
+  .guided-tour-spotlight-overlay {
+    border-radius: 10px;
   }
 }

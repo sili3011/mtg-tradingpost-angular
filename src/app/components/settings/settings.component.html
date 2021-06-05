@@ -1,16 +1,18 @@
-<mat-card style="margin: 2%; height: 100%">
-  <span style="font-size: 30px">Preferences</span>
-  <div style="margin: 2em">
-    <mat-form-field>
-      <mat-label>Select your prefered currency</mat-label>
-      <mat-select matSelect [formControl]="currencyControl">
-        <mat-option [value]="currencies.EUR">€</mat-option>
-        <mat-option [value]="currencies.USD">$</mat-option>
-      </mat-select>
-    </mat-form-field>
+<mat-card style="margin: 2%; height: 100%"
+  ><div class="preferences">
+    <span style="font-size: 30px">Preferences</span>
+    <div style="margin: 2em">
+      <mat-form-field>
+        <mat-label>Select your prefered currency</mat-label>
+        <mat-select matSelect [formControl]="currencyControl">
+          <mat-option [value]="currencies.EUR">€</mat-option>
+          <mat-option [value]="currencies.USD">$</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
   </div>
   <span style="font-size: 30px">Database</span>
-  <div style="margin: 2em">
+  <div style="margin: 2em" class="database">
     <mtg-database-settings></mtg-database-settings>
   </div>
 </mat-card>

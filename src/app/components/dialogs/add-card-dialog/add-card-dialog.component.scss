@@ -53,3 +53,7 @@
 .mat-spinner-color::ng-deep circle {
   stroke: grey !important;
 }
+
+::ng-deep .mat-tab-body-content {
+  padding: 0 24px !important;
+}

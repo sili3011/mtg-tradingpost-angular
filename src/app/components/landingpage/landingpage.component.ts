@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnChanges,
+  Output,
+  SimpleChanges,
+} from '@angular/core';
 import { imageTooltip } from 'src/app/utils/utils';
 
 enum RELEASES {
@@ -13,7 +20,7 @@ enum RELEASES {
   templateUrl: './landingpage.component.html',
   styleUrls: ['./landingpage.component.scss'],
 })
-export class LandingpageComponent {
+export class LandingpageComponent implements OnChanges {
   @Input()
   show = true;
 
@@ -30,12 +37,17 @@ export class LandingpageComponent {
 
   constructor() {}
 
+  ngOnChanges(changes: SimpleChanges): void {
+    if (!changes.show.currentValue) {
+      setTimeout(() => {
+        this.hide = true;
+      }, 3000);
+    }
+  }
+
   leave(): void {
     this.stick = false;
     this.leaveLandingpageEmitter.emit();
-    setTimeout(() => {
-      this.hide = true;
-    }, 3000);
   }
 
   handleScroll(event: any): void {
