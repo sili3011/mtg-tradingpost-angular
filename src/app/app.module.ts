@@ -29,6 +29,7 @@ import { CardDetailComponent } from './components/card-detail/card-detail.compon
 import { LandingpageComponent } from './components/landingpage/landingpage.component';
 import { AddCardAmountToListDialogComponent } from './components/dialogs/add-card-amount-to-list-dialog/add-card-amount-to-list-dialog.component';
 import { DatabaseSettingsComponent } from './components/database-settings/database-settings.component';
+import { TooSmallWarningDialogComponent } from './components/dialogs/too-small-warning-dialog/too-small-warning-dialog.component';
 
 const openCVConfig = {
   scriptUrl: 'assets/opencv/asm/4.5.1/opencv.js',
@@ -60,6 +61,7 @@ const openCVConfig = {
     CardDetailComponent,
     LandingpageComponent,
     DatabaseSettingsComponent,
+    TooSmallWarningDialogComponent,
   ],
   imports: [
     BrowserModule,

@@ -12,8 +12,10 @@ import {
   TourStep,
 } from 'ngx-guided-tour';
 import { DatabaseSelectionDialogComponent } from './components/dialogs/database-selection-dialog/database-selection-dialog.component';
+import { TooSmallWarningDialogComponent } from './components/dialogs/too-small-warning-dialog/too-small-warning-dialog.component';
 import { DBService } from './services/db.service';
 import { HashStore } from './stores/hash.store';
+import { BreakpointObserver } from '@angular/cdk/layout';
 
 @Component({
   selector: 'app-root',
@@ -32,7 +34,8 @@ export class AppComponent implements OnInit {
     private dialog: MatDialog,
     private http: HttpClient,
     private router: Router,
-    private guidedTourService: GuidedTourService
+    private guidedTourService: GuidedTourService,
+    private breakpointObserver: BreakpointObserver
   ) {
     Object.defineProperty(TooltipComponent.prototype, 'message', {
       set(v: any) {
@@ -47,6 +50,14 @@ export class AppComponent implements OnInit {
   ngOnInit(): void {
     // TODO: remove
     this.startTour();
+
+    this.breakpointObserver
+      .observe(['(max-width: 999px)'])
+      .subscribe((result) => {
+        if (result.matches) {
+          this.dialog.open(TooSmallWarningDialogComponent, {});
+        }
+      });
 
     if (this.dbService.getHasBeenInitialized()) {
       this.showLandingpage = false;
