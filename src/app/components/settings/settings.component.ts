@@ -1,9 +1,12 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
+import { Router } from '@angular/router';
 import { autorun, IReactionDisposer } from 'mobx';
+import { GuidedTourService } from 'ngx-guided-tour';
 import { Subscription } from 'rxjs';
 import { CURRENCIES } from 'src/app/models/enums';
+import StartTour from 'src/app/models/startTour';
 import { DBService } from 'src/app/services/db.service';
 import { CardsStore } from 'src/app/stores/cards.store';
 import { DatabaseSelectionDialogComponent } from '../dialogs/database-selection-dialog/database-selection-dialog.component';
@@ -25,7 +28,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
   constructor(
     private dialog: MatDialog,
     private cardStore: CardsStore,
-    private dbService: DBService
+    private dbService: DBService,
+    private router: Router,
+    private guidedTourService: GuidedTourService
   ) {}
 
   ngOnInit(): void {
@@ -51,5 +56,10 @@ export class SettingsComponent implements OnInit, OnDestroy {
       width: '50%',
       disableClose: true,
     });
+  }
+
+  restartTour(): void {
+    const tour = new StartTour(this.router, this.guidedTourService);
+    tour.startTour();
   }
 }
