@@ -52,6 +52,7 @@
             routerLinkActive="true"
             (click)="stopPropagation($event)"
             #col="routerLinkActive"
+            class="to-collection"
           >
             <mat-icon [ngStyle]="{ color: col.isActive ? '#cc8010' : 'white' }"
               >format_align_justify</mat-icon
@@ -136,6 +137,21 @@
           </a>
           <a
             mat-list-item
+            style="position: absolute; bottom: 110px"
+            (click)="stopPropagation($event)"
+            [matMenuTriggerFor]="helpMenu"
+          >
+            <mat-icon [ngStyle]="{ color: set.isActive ? '#cc8010' : 'white' }"
+              >help</mat-icon
+            >
+            <span
+              [@animateText]="linkText ? 'show' : 'hide'"
+              class="sidenav-span"
+              >Help
+            </span>
+          </a>
+          <a
+            mat-list-item
             routerLink="/settings"
             routerLinkActive="true"
             style="position: absolute; bottom: 60px"
@@ -167,3 +183,13 @@
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>
+<mat-menu #helpMenu="matMenu">
+  <button mat-menu-item (click)="startTour()">
+    <mat-icon svgIcon="transit-detour">transit-detour</mat-icon>
+    <span>Take the tour again</span>
+  </button>
+  <button mat-menu-item>
+    <mat-icon svgIcon="bug">bug</mat-icon>
+    <span>Give feedback / Report bug</span>
+  </button>
+</mat-menu>

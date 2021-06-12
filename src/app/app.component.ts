@@ -67,7 +67,7 @@ export class AppComponent implements OnInit {
         disableClose: true,
       });
       ref.afterClosed().subscribe(() => {
-        const tour = new StartTour(this.router, this.guidedTourService);
+        const tour = new StartTour(this.router, this.guidedTourService, true);
         tour.startTour();
       });
     }
@@ -120,7 +120,7 @@ export class AppComponent implements OnInit {
         disableClose: true,
       });
       ref.afterClosed().subscribe(() => {
-        const tour = new StartTour(this.router, this.guidedTourService);
+        const tour = new StartTour(this.router, this.guidedTourService, true);
         tour.startTour();
       });
     }

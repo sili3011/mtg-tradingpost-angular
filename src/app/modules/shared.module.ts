@@ -24,6 +24,7 @@ import { MatBadgeModule } from '@angular/material/badge';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatMenuModule } from '@angular/material/menu';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 import { FlexModule } from '@angular/flex-layout/flex';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -65,6 +66,7 @@ import { GuidedTourModule, GuidedTourService } from 'ngx-guided-tour';
     MatProgressSpinnerModule,
     MatProgressBarModule,
     MatTabsModule,
+    MatMenuModule,
     DragDropModule,
     // AngularForms
     ReactiveFormsModule,

@@ -11,6 +11,8 @@ import { AddCardAmountToListDialogComponent } from '../dialogs/add-card-amount-t
 import { Router } from '@angular/router';
 import { ConfirmDialogComponent } from '../dialogs/confirm-dialog/confirm-dialog.component';
 import { CardAdapter } from 'src/app/models/card-adapter';
+import StartTour from 'src/app/models/startTour';
+import { GuidedTourService } from 'ngx-guided-tour';
 
 @Component({
   selector: 'mtg-navigation',
@@ -33,7 +35,8 @@ export class NavigationComponent implements OnDestroy {
     private router: Router,
     public decksStore: DecksStore,
     private dbService: DBService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private guidedTourService: GuidedTourService
   ) {
     this.subscriptions.add(
       this.sideNavState$.subscribe((res) => (this.onSideNavChange = res))
@@ -108,5 +111,10 @@ export class NavigationComponent implements OnDestroy {
   stopPropagation($event: any) {
     $event.stopPropagation();
     $event.preventDefault();
+  }
+
+  startTour() {
+    const tour = new StartTour(this.router, this.guidedTourService);
+    tour.startTour();
   }
 }
