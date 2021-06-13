@@ -45,14 +45,17 @@ export class AppComponent implements OnInit {
 
   ngOnInit(): void {
     // TODO: remove
-    const tour = new StartTour(this.router, this.guidedTourService);
-    tour.startTour();
+    // const tour = new StartTour(this.router, this.guidedTourService);
+    // tour.startTour();
 
     this.breakpointObserver
       .observe(['(max-width: 999px)'])
       .subscribe((result) => {
         if (result.matches) {
           this.dialog.open(TooSmallWarningDialogComponent, {});
+          if (this.guidedTourService.currentTourStepCount) {
+            this.guidedTourService.skipTour();
+          }
         }
       });
 
