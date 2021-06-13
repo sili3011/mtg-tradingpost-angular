@@ -22,6 +22,7 @@ export class DatabaseSettingsComponent implements OnInit {
   isBackupped: boolean = false;
   isCreateNew: boolean = false;
   isDirty: boolean = false;
+  isAdvanced: boolean = true;
 
   @Output()
   closeEmitter: EventEmitter<void> = new EventEmitter();
@@ -108,10 +109,22 @@ export class DatabaseSettingsComponent implements OnInit {
         file: new FileInput([dbAsFile]),
       });
       this.isDirty = false;
+    } else {
+      this.dbGroup.patchValue(
+        {
+          name: 'default',
+        },
+        { emitEvent: false }
+      );
     }
 
     if (!this.hasBeenInitialized) {
       this.isCreateNew = true;
+    }
+
+    if (this.isDialog) {
+      this.isAdvanced = false;
+      this.advancedChanged();
     }
   }
 
@@ -190,8 +203,18 @@ export class DatabaseSettingsComponent implements OnInit {
     });
   }
 
+  advancedChanged() {
+    if (this.isAdvanced) {
+      this.dbGroup.get('name')?.enable();
+      this.dbGroup.get('file')?.enable();
+    } else {
+      this.dbGroup.get('name')?.disable();
+      this.dbGroup.get('file')?.disable();
+    }
+  }
+
   confirm() {
-    if (!this.isBackupped) {
+    if (!this.isBackupped && this.hasBeenInitialized) {
       let ref = this.dialog.open(OverwriteDatabaseConfirmationDialogComponent, {
         width: '50%',
         disableClose: true,

@@ -47,6 +47,10 @@ export class AppComponent implements OnInit {
     // TODO: remove
     // const tour = new StartTour(this.router, this.guidedTourService);
     // tour.startTour();
+    // const ref = this.dialog.open(DatabaseSelectionDialogComponent, {
+    //   width: '50%',
+    //   disableClose: true,
+    // });
 
     this.breakpointObserver
       .observe(['(max-width: 999px)'])
