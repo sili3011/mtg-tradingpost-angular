@@ -1,0 +1,8 @@
+<h2 style="text-align: center; color: #cc8010">{{ header }}</h2>
+<p
+  style="color: rgba(255, 255, 255, 0.7); max-width: 350px"
+  [innerHtml]="content"
+></p>
+<div mat-dialog-actions style="padding: 0; justify-content: center">
+  <button mat-button color="primary" (click)="close()">Close</button>
+</div>

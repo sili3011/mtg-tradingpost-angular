@@ -14,6 +14,7 @@ import { CardAdapter } from 'src/app/models/card-adapter';
 import StartTour from 'src/app/models/startTour';
 import { GuidedTourService } from 'ngx-guided-tour';
 import { FeedbackDialogComponent } from '../dialogs/feedback-dialog/feedback-dialog.component';
+import { InformationDialogComponent } from '../dialogs/information-dialog/information-dialog.component';
 
 @Component({
   selector: 'mtg-navigation',
@@ -117,6 +118,16 @@ export class NavigationComponent implements OnDestroy {
   openFeedbackDialog() {
     this.dialog.open(FeedbackDialogComponent, {
       width: '50%',
+    });
+  }
+
+  openAboutDialog() {
+    this.dialog.open(InformationDialogComponent, {
+      data: {
+        header: 'About',
+        content:
+          '<span class="tradingpost">TRADINGPOST</span> is an application to keep a digitized version of your collected TCGs organized. Currently only supporting "Magic: The Gathering". <br />  <br />Made by Silvio Schmidt.<br /> Contact me via <a href="mailto:contact@mtg-tradingpost.com" class="primary">contact@mtg-tradingpost.com</a>. <br /> Find the project at <a href="https://github.com/sili3011/mtg-tradingpost-angular" target="_blank" class="primary">GitHub</a>.<br /><br />Portions of TRADINGPOST are unofficial Fan Content permitted under the Wizards of the Coast Fan Content Policy. The literal and graphical information presented on this site about Magic: The Gathering, including card images, the mana symbols, and Oracle text, is copyright Wizards of the Coast, LLC, a subsidiary of Hasbro, Inc. <span class="tradingpost">TRADINGPOST</span> is not produced by, endorsed by, supported by, or affiliated with Wizards of the Coast. <br /> <br /> Card prices and promotional offers represent daily estimates and/or market values. Absolutely no guarantee is made for any price information. See stores for final prices and details.',
+      },
     });
   }
 
