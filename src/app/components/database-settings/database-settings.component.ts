@@ -50,10 +50,13 @@ export class DatabaseSettingsComponent implements OnInit {
           fileReader.onload = (e) => {
             const stringDummy = e.target!.result as string;
             this.inputJSON = JSON.parse(stringDummy);
-            this.dbGroup.patchValue({
-              name: this.inputJSON.name,
-              owner: this.inputJSON.owner,
-            });
+            this.dbGroup.patchValue(
+              {
+                name: this.inputJSON.name,
+                owner: this.inputJSON.owner,
+              },
+              { emitEvent: false }
+            );
             this.isCreateNew = false;
           };
           fileReader.readAsText(fileInput);
@@ -104,6 +107,7 @@ export class DatabaseSettingsComponent implements OnInit {
       this.dbGroup.patchValue({
         file: new FileInput([dbAsFile]),
       });
+      this.isDirty = false;
     }
 
     if (!this.hasBeenInitialized) {
