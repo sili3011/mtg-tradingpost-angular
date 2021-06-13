@@ -13,6 +13,7 @@ import { ConfirmDialogComponent } from '../dialogs/confirm-dialog/confirm-dialog
 import { CardAdapter } from 'src/app/models/card-adapter';
 import StartTour from 'src/app/models/startTour';
 import { GuidedTourService } from 'ngx-guided-tour';
+import { FeedbackDialogComponent } from '../dialogs/feedback-dialog/feedback-dialog.component';
 
 @Component({
   selector: 'mtg-navigation',
@@ -111,6 +112,12 @@ export class NavigationComponent implements OnDestroy {
   stopPropagation($event: any) {
     $event.stopPropagation();
     $event.preventDefault();
+  }
+
+  openFeedbackDialog() {
+    this.dialog.open(FeedbackDialogComponent, {
+      width: '50%',
+    });
   }
 
   startTour() {

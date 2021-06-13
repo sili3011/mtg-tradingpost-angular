@@ -18,3 +18,9 @@ span:focus {
     height: 85vh;
   }
 }
+
+::ng-deep .mat-menu-panel-sub {
+  position: absolute;
+  top: -166px;
+  left: 58px;
+}

@@ -10,6 +10,7 @@ import StartTour from 'src/app/models/startTour';
 import { DBService } from 'src/app/services/db.service';
 import { CardsStore } from 'src/app/stores/cards.store';
 import { DatabaseSelectionDialogComponent } from '../dialogs/database-selection-dialog/database-selection-dialog.component';
+import { FeedbackDialogComponent } from '../dialogs/feedback-dialog/feedback-dialog.component';
 
 @Component({
   selector: 'mtg-settings',
@@ -51,10 +52,9 @@ export class SettingsComponent implements OnInit, OnDestroy {
     this.disposer();
   }
 
-  openDBDialog() {
-    this.dialog.open(DatabaseSelectionDialogComponent, {
+  openFeedbackDialog() {
+    this.dialog.open(FeedbackDialogComponent, {
       width: '50%',
-      disableClose: true,
     });
   }
 

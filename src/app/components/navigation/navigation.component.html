@@ -183,13 +183,17 @@
     </mat-sidenav-content>
   </mat-sidenav-container>
 </div>
-<mat-menu #helpMenu="matMenu">
+<mat-menu #helpMenu="matMenu" class="mat-menu-panel-sub">
   <button mat-menu-item (click)="startTour()">
     <mat-icon svgIcon="transit-detour">transit-detour</mat-icon>
     <span>Take the tour again</span>
   </button>
-  <button mat-menu-item>
+  <button mat-menu-item (click)="openFeedbackDialog()">
     <mat-icon svgIcon="bug">bug</mat-icon>
     <span>Give feedback / Report bug</span>
+  </button>
+  <button mat-menu-item>
+    <mat-icon svgIcon="information">information</mat-icon>
+    <span>About / Contact</span>
   </button>
 </mat-menu>
