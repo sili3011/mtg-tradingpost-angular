@@ -6,7 +6,7 @@ import { autorun, IReactionDisposer } from 'mobx';
 import { GuidedTourService } from 'ngx-guided-tour';
 import { Subscription } from 'rxjs';
 import { CURRENCIES } from 'src/app/models/enums';
-import StartTour from 'src/app/models/startTour';
+import StartTour from 'src/app/models/start-tour';
 import { DBService } from 'src/app/services/db.service';
 import { CardsStore } from 'src/app/stores/cards.store';
 import { DatabaseSelectionDialogComponent } from '../dialogs/database-selection-dialog/database-selection-dialog.component';

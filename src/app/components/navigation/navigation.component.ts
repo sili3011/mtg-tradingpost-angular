@@ -11,7 +11,7 @@ import { AddCardAmountToListDialogComponent } from '../dialogs/add-card-amount-t
 import { Router } from '@angular/router';
 import { ConfirmDialogComponent } from '../dialogs/confirm-dialog/confirm-dialog.component';
 import { CardAdapter } from 'src/app/models/card-adapter';
-import StartTour from 'src/app/models/startTour';
+import StartTour from 'src/app/models/start-tour';
 import { GuidedTourService } from 'ngx-guided-tour';
 import { FeedbackDialogComponent } from '../dialogs/feedback-dialog/feedback-dialog.component';
 import { InformationDialogComponent } from '../dialogs/information-dialog/information-dialog.component';

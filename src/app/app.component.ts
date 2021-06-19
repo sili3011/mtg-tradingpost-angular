@@ -4,13 +4,13 @@ import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { TooltipComponent } from '@angular/material/tooltip';
 import { Router } from '@angular/router';
-import Dexie from 'dexie';
 import { DatabaseSelectionDialogComponent } from './components/dialogs/database-selection-dialog/database-selection-dialog.component';
 import { TooSmallWarningDialogComponent } from './components/dialogs/too-small-warning-dialog/too-small-warning-dialog.component';
 import { DBService } from './services/db.service';
 import { HashStore } from './stores/hash.store';
 import { BreakpointObserver } from '@angular/cdk/layout';
-import StartTour from './models/startTour';
+import { HashtablesDatabase } from './models/hashtable-database';
+import StartTour from './models/start-tour';
 import { GuidedTourService } from 'ngx-guided-tour';
 
 @Component({
@@ -132,22 +132,4 @@ export class AppComponent implements OnInit {
       });
     }
   }
-}
-
-// TODO: put code below somewhere else
-class HashtablesDatabase extends Dexie {
-  hashtables: Dexie.Table<IHashtable, number>;
-
-  constructor() {
-    super('hashtablesDatabase');
-    this.version(1).stores({
-      hashtables: 'code,data',
-    });
-    this.hashtables = this.table('hashtables');
-  }
-}
-
-interface IHashtable {
-  code: string;
-  data: JSON;
 }
