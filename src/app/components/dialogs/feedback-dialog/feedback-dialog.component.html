@@ -1,5 +1,78 @@
-<div style="display: flex">
+<mat-tab-group>
+  <mat-tab>
+    <ng-template matTabLabel>
+      <mat-icon
+        style="margin: 0 5px"
+        color="primary"
+        svgIcon="message-alert-outline"
+      ></mat-icon>
+      Send feedback
+    </ng-template>
+    <ng-template matTabContent>
+      <div>
+        <mat-form-field style="width: 100%">
+          <mat-label>Send feedback</mat-label>
+          <textarea
+            matInput
+            placeholder="What I really miss is..."
+            [formControl]="feedbackControl"
+          ></textarea>
+        </mat-form-field>
+      </div>
+    </ng-template>
+  </mat-tab>
+  <mat-tab>
+    <ng-template matTabLabel>
+      <mat-icon
+        style="margin: 0 5px"
+        color="primary"
+        svgIcon="bug-outline"
+      ></mat-icon>
+      Report bug
+    </ng-template>
+    <ng-template matTabContent style="padding: 24px">
+      <div>
+        <mat-form-field style="width: 100%">
+          <mat-label>Select a subject</mat-label>
+          <mat-select matSelect [formControl]="subjectControl">
+            <mat-option value="Account"> Account </mat-option>
+            <mat-option value="Card detector"> Card detector </mat-option>
+            <mat-option value="Collection"> Collection </mat-option>
+            <mat-option value="Dashboard"> Dashboard </mat-option>
+            <mat-option value="Deck"> Deck </mat-option>
+            <mat-option value="Other"> Other </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field style="width: 100%">
+          <mat-label>Bug description</mat-label>
+          <textarea
+            matInput
+            placeholder="When I go to my collection and try to... Then... So..."
+            [formControl]="feedbackControl"
+          ></textarea>
+        </mat-form-field>
+        <div style="display: flex">
+          <mat-checkbox
+            color="primary"
+            matCheckbox
+            style="margin: 0 auto"
+            [formControl]="canReproduceControl"
+            >I can reproduce this behavior consistently</mat-checkbox
+          >
+        </div>
+      </div>
+    </ng-template>
+  </mat-tab>
+</mat-tab-group>
+<div style="display: flex; padding: 0 15px">
   <button mat-button color="primary" (click)="close()">Close</button>
   <div style="flex: 1 1 auto"></div>
-  <button mat-button color="primary" (click)="close()">Confirm</button>
+  <button
+    mat-button
+    color="primary"
+    (click)="send()"
+    [disabled]="feedbackControl.value.trim() === ''"
+  >
+    Send
+  </button>
 </div>

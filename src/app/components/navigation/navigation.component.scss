@@ -24,3 +24,10 @@ span:focus {
   top: -166px;
   left: 58px;
 }
+
+::ng-deep .noPadding {
+  mat-dialog-container {
+    padding: 15px 0;
+    overflow: hidden;
+  }
+}

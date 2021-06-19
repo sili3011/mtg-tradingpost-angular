@@ -1,0 +1,11 @@
+::ng-deep .mat-tab-body {
+  overflow-y: inherit !important;
+}
+
+::ng-deep .mat-tab-body-content {
+  padding: 15px 24px !important;
+}
+
+::ng-deep .mat-tab-label {
+  width: 50%;
+}

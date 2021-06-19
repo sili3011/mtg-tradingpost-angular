@@ -118,6 +118,7 @@ export class NavigationComponent implements OnDestroy {
   openFeedbackDialog() {
     this.dialog.open(FeedbackDialogComponent, {
       width: '50%',
+      panelClass: 'noPadding',
     });
   }
 
