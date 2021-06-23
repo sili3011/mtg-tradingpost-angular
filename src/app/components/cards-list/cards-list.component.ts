@@ -420,4 +420,20 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
       }
     });
   }
+
+  createCardMarketBuylist(): void {
+    let ret = '';
+    this.cardsList.forEach(
+      (card) =>
+        (ret = ret + `${card.amount} ${card.name} (${card.set_name}) \r\n`)
+    );
+    const dummyTextArea = document.createElement('textarea');
+    dummyTextArea.innerHTML = ret;
+    const parentElement = document.getElementById('cards');
+    parentElement!.appendChild(dummyTextArea);
+    dummyTextArea.select();
+    document.execCommand('copy');
+    parentElement!.removeChild(dummyTextArea);
+    window.location.href = 'https://www.cardmarket.com/en/Magic/Wants';
+  }
 }

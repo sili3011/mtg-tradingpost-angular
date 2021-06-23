@@ -8,7 +8,33 @@
   }"
 >
   <div fxLayout="row">
-    <mat-form-field style="margin-left: 15%; margin-right: 12%; width: 70%">
+    <button
+      mat-button
+      color="primary"
+      style="margin-right: 3%"
+      class="add-card"
+      *ngIf="listType === ListTypes.WISHLIST"
+      [matMenuTriggerFor]="buylistMenu"
+    >
+      <mat-icon svgIcon="playlist-plus"></mat-icon>
+      <span style="margin-right: 15px">CREATE BUYLIST</span>
+      <mat-menu #buylistMenu="matMenu">
+        <button
+          mat-menu-item
+          (click)="createCardMarketBuylist()"
+          matTooltip="Redirects you to CardMarket.com, your card list will be copied to the clipboard. Over at CardMarket you must be logged in to use their feature."
+        >
+          <mat-icon svgIcon="arrow-top-right-bottom-left-bold"></mat-icon>
+          <span>CardMarket</span>
+        </button>
+      </mat-menu>
+    </button>
+    <mat-form-field
+      style="margin-right: 12%; width: 70%"
+      [ngStyle]="{
+        'margin-left': listType !== ListTypes.WISHLIST ? '15%' : '12%'
+      }"
+    >
       <input
         matInput
         (keyup)="applyFilter($event)"
