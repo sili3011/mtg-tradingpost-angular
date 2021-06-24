@@ -437,7 +437,7 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
     const ref = this.dialog.open(ConfirmDialogComponent, {
       data: {
         message:
-          'Your wishlist has been copied to your clipboard! Do you want to be redirected directly to CardMarket´s shopping wizard? You will need to login or make an account over there first.',
+          'Your wishlist has been copied to your clipboard! Do you want to be redirected directly to CardMarket´s shopping wizard? You will need to login or create an account over there first.',
         confirm: 'Go to CardMarket',
         close: 'Stay',
       },
@@ -446,6 +446,36 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
       if (ref.componentInstance.confirmed) {
         window.open(
           'https://www.cardmarket.com/en/Magic/Wants',
+          '_blank' // <- This is what makes it open in a new window.
+        );
+      }
+    });
+  }
+
+  createCardKingdomBuylist(): void {
+    let ret = '';
+    this.cardsList.forEach(
+      (card) => (ret = ret + `${card.amount} ${card.name} \r\n`)
+    );
+    const dummyTextArea = document.createElement('textarea');
+    dummyTextArea.innerHTML = ret;
+    const parentElement = document.getElementById('cards');
+    parentElement!.appendChild(dummyTextArea);
+    dummyTextArea.select();
+    document.execCommand('copy');
+    parentElement!.removeChild(dummyTextArea);
+    const ref = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        message:
+          'Your wishlist has been copied to your clipboard! Do you want to be redirected directly to CardKingdom´s deck builder? You may need to login or create an account over there first.',
+        confirm: 'Go to CardKingdom',
+        close: 'Stay',
+      },
+    });
+    ref.afterClosed().subscribe(() => {
+      if (ref.componentInstance.confirmed) {
+        window.open(
+          'https://www.cardkingdom.com/builder',
           '_blank' // <- This is what makes it open in a new window.
         );
       }
