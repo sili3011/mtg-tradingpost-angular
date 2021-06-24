@@ -434,6 +434,21 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
     dummyTextArea.select();
     document.execCommand('copy');
     parentElement!.removeChild(dummyTextArea);
-    window.location.href = 'https://www.cardmarket.com/en/Magic/Wants';
+    const ref = this.dialog.open(ConfirmDialogComponent, {
+      data: {
+        message:
+          'Your wishlist has been copied to your clipboard! Do you want to be redirected directly to CardMarket´s shopping wizard? You will need to login or make an account over there first.',
+        confirm: 'Go to CardMarket',
+        close: 'Stay',
+      },
+    });
+    ref.afterClosed().subscribe(() => {
+      if (ref.componentInstance.confirmed) {
+        window.open(
+          'https://www.cardmarket.com/en/Magic/Wants',
+          '_blank' // <- This is what makes it open in a new window.
+        );
+      }
+    });
   }
 }
