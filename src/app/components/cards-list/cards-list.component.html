@@ -11,12 +11,12 @@
     <button
       mat-button
       color="primary"
-      style="margin-right: 3%"
+      style="min-width: 185px"
       class="add-card"
       *ngIf="listType === ListTypes.WISHLIST"
       [matMenuTriggerFor]="buylistMenu"
     >
-      <mat-icon svgIcon="playlist-plus"></mat-icon>
+      <mat-icon svgIcon="basket-plus" style="margin-right: 5px"></mat-icon>
       <span style="margin-right: 15px">CREATE BUYLIST</span>
       <mat-menu #buylistMenu="matMenu">
         <button
@@ -38,9 +38,9 @@
       </mat-menu>
     </button>
     <mat-form-field
-      style="margin-right: 12%; width: 70%"
+      style="margin-right: 4%; width: 70%"
       [ngStyle]="{
-        'margin-left': listType !== ListTypes.WISHLIST ? '15%' : '12%'
+        'margin-left': listType !== ListTypes.WISHLIST ? '15%' : '4%'
       }"
     >
       <input
@@ -66,7 +66,7 @@
     <button
       mat-button
       color="primary"
-      style="margin-right: 3%"
+      style="min-width: 185px"
       (click)="openAddCardDialog()"
       class="add-card"
     >
