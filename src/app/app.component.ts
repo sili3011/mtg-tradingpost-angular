@@ -63,6 +63,7 @@ export class AppComponent implements OnInit {
         }
       });
 
+    // comment out for landingpage debugging
     if (this.dbService.getHasBeenInitialized()) {
       this.showLandingpage = false;
       this.gotoApp();
