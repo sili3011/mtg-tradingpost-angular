@@ -42,6 +42,27 @@
             </mat-form-field>
             <div fxLayout="row">
               <button
+                *ngIf="this.selectedPrint && !this.selectedPrint.image_uris"
+                mat-icon-button
+                [matTooltip]="
+                  showBackside
+                    ? 'This is the cards back, flip it over!'
+                    : 'This card has a backside, flip it over!'
+                "
+                style="
+                  position: absolute;
+                  z-index: 99;
+                  margin-left: 130px;
+                  margin-top: 365px;
+                "
+                (click)="toggleShowBackside()"
+              >
+                <mat-icon
+                  svgIcon="orbit-variant"
+                  style="height: 40px; width: 40px"
+                ></mat-icon>
+              </button>
+              <button
                 *ngIf="selectedPrint && selectedPrint.foil"
                 mat-icon-button
                 [matTooltip]="

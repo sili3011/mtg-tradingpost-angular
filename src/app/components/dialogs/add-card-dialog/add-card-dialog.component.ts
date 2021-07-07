@@ -42,6 +42,8 @@ export class AddCardDialogComponent
   isFoil: boolean = false;
   alsoAddToCollection: boolean = false;
 
+  showBackside: boolean = false;
+
   subscriptions: Subscription = new Subscription();
 
   listtypes = LISTTYPES;
@@ -135,7 +137,9 @@ export class AddCardDialogComponent
       if (this.selectedPrint.image_uris) {
         this.lastPicLoaded = this.selectedPrint.image_uris.normal;
       } else {
-        this.lastPicLoaded = this.selectedPrint.card_faces[0].image_uris.normal; // MULTI FACED CARDS | TODO: show both sides?
+        this.lastPicLoaded = this.showBackside
+          ? this.selectedPrint.card_faces[1].image_uris.normal
+          : this.selectedPrint.card_faces[0].image_uris.normal;
       }
       return this.lastPicLoaded;
     }
@@ -198,6 +202,10 @@ export class AddCardDialogComponent
 
   toggleFoil(): void {
     this.isFoil = !this.isFoil;
+  }
+
+  toggleShowBackside(): void {
+    this.showBackside = !this.showBackside;
   }
 
   toggleAlsoAddToCollection(): void {
