@@ -115,7 +115,7 @@
       mat-fab
       color="primary"
       [disabled]="
-        (!file || file.files?.length === 0 || file.files[0].size === 0) &&
+        (!file || file?.files?.length === 0 || file?.files[0].size === 0) &&
         !hasBeenInitialized
       "
       #tooltip="matTooltip"

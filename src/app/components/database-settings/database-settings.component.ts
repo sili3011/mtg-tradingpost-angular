@@ -43,26 +43,28 @@ export class DatabaseSettingsComponent implements OnInit {
   ngOnInit(): void {
     this.subscriptions.add(
       this.dbGroup.get('file')!.valueChanges.subscribe((fileInput) => {
-        if (fileInput.files) {
-          fileInput = fileInput.files[0];
+        if (fileInput) {
+          if (fileInput.files) {
+            fileInput = fileInput.files[0];
+          }
+          if (fileInput.size > 0) {
+            let fileReader = new FileReader();
+            fileReader.onload = (e) => {
+              const stringDummy = e.target!.result as string;
+              this.inputJSON = JSON.parse(stringDummy);
+              this.dbGroup.patchValue(
+                {
+                  name: this.inputJSON.name,
+                  owner: this.inputJSON.owner,
+                },
+                { emitEvent: false }
+              );
+              this.isCreateNew = false;
+            };
+            fileReader.readAsText(fileInput);
+          }
+          this.isDirty = true;
         }
-        if (fileInput.size > 0) {
-          let fileReader = new FileReader();
-          fileReader.onload = (e) => {
-            const stringDummy = e.target!.result as string;
-            this.inputJSON = JSON.parse(stringDummy);
-            this.dbGroup.patchValue(
-              {
-                name: this.inputJSON.name,
-                owner: this.inputJSON.owner,
-              },
-              { emitEvent: false }
-            );
-            this.isCreateNew = false;
-          };
-          fileReader.readAsText(fileInput);
-        }
-        this.isDirty = true;
       })
     );
 
