@@ -1,4 +1,3 @@
-import { JsonpClientBackend } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { computed, observable } from 'mobx';
 import { Hash } from '../models/hash';

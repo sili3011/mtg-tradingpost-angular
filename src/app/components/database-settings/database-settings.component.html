@@ -1,5 +1,5 @@
 <h1 mat-dialog-title>Manage your collection</h1>
-<div style="margin: 1em">
+<div style="margin: 1rem">
   <mat-radio-group
     aria-label="Select an option"
     *ngIf="isDialog"
@@ -7,7 +7,7 @@
     (change)="advancedChanged()"
   >
     <mat-radio-button [value]="false" color="primary">Default</mat-radio-button>
-    <mat-radio-button [value]="true" color="primary" style="margin-left: 1em"
+    <mat-radio-button [value]="true" color="primary" style="margin-left: 1rem"
       >Advanced</mat-radio-button
     >
   </mat-radio-group>
@@ -90,7 +90,7 @@
 </form>
 <div *ngIf="!isDialog">
   <div
-    style="text-align: center; color: primary; margin: 1em 0"
+    style="text-align: center; color: primary; margin: 1rem 0"
     [ngStyle]="{ 'margin-bottom': !isCreateNew ? '34px' : '0' }"
   >
     <span *ngIf="isCreateNew"
@@ -128,6 +128,15 @@
     </button>
   </div>
 </div>
+<div style="display: flex; margin: 1rem 2rem; color: #da3333">
+  <mat-icon svgIcon="cookie-alert" style="margin: 1rem; width: 60px"></mat-icon>
+  <span>
+    Hey, even though we are not using cookies, be careful when clearing your
+    data, as we use local storage to save your data when you are not using an
+    account! So be sure to backup your data in the settings section before doing
+    so!
+  </span>
+</div>
 <div *ngIf="isDialog" style="display: flex">
   <button
     mat-button
@@ -148,7 +157,7 @@
   </button>
 </div>
 <div *ngIf="!isDialog" style="display: flex">
-  <div style="margin: 1em auto">
+  <div style="margin: 1rem auto">
     <button
       mat-raised-button
       color="primary"
