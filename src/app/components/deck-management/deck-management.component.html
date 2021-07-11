@@ -23,7 +23,7 @@
     >
       <mat-card-title class="card-title">{{ deck.name }}</mat-card-title>
       <mat-chip-list
-        style="position: absolute; right: 1em; top: 1em"
+        style="position: absolute; right: 1rem; top: 1rem"
         *ngIf="deck.active"
       >
         <mat-chip
@@ -55,7 +55,7 @@
       style="height: calc(42% - 3px); margin: 0; margin-top: 5px"
     >
       <ng-scrollbar>
-        <mat-card-subtitle style="height: 100%; margin: 1em 1em 0 1em">
+        <mat-card-subtitle style="height: 100%; margin: 1rem 1rem 0 1rem">
           <mtg-problem-status
             *ngIf="getFormat(deck) && validate(deck).amountOfProblems > 0"
             [showProblemsOnly]="true"
