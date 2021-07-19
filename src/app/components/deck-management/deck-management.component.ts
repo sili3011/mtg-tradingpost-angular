@@ -57,9 +57,8 @@ export class DeckManagementComponent implements OnInit, OnDestroy {
   }
 
   getColorHexes(identity: MANACOLORS): string {
-    const colors = Object.values(MANACOLORS)[
-      Object.keys(MANACOLORS).indexOf(identity)
-    ];
+    const colors =
+      Object.values(MANACOLORS)[Object.keys(MANACOLORS).indexOf(identity)];
     let color = `linear-gradient(60deg, COLORS)`;
     switch (colors) {
       case MANACOLORS.NONE:
@@ -277,10 +276,11 @@ export class DeckManagementComponent implements OnInit, OnDestroy {
   }
 
   missingCards(deck: Deck): Array<CardAdapter> {
-    return this.cardsStore.missingCards.filter((c) =>
-      deck.cards
-        .map((card) => [card.id, card.isFoil])
-        .includes([c.id, c.isFoil])
+    return this.cardsStore.missingCards.filter(
+      (c) =>
+        deck.cards.filter(
+          (card) => card.id === c.id && card.isFoil === c.isFoil
+        ).length > 0
     );
   }
 }

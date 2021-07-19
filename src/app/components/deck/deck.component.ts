@@ -37,13 +37,14 @@ import { DBService } from 'src/app/services/db.service';
 import { CardsStore } from 'src/app/stores/cards.store';
 import { DecksStore } from 'src/app/stores/decks.store';
 import {
-  amountOfCardsOfDeck,
+  amountOfCardsInDeck,
   calculateNetworth,
   deckToCurve,
   deckToPie,
   DeckValidation,
   imageTooltip,
   PIECHART,
+  problemsToHTMLList,
   validateDeck,
 } from 'src/app/utils/utils';
 import { CardsListComponent } from '../cards-list/cards-list.component';
@@ -430,7 +431,7 @@ export class DeckComponent implements OnInit, OnDestroy {
   }
 
   amountOfCardsInDeck(deck: Deck): number {
-    return amountOfCardsOfDeck(deck);
+    return amountOfCardsInDeck(deck);
   }
 
   setHover(hovered: 'comm' | 'comp') {
@@ -452,47 +453,13 @@ export class DeckComponent implements OnInit, OnDestroy {
   }
 
   problemsToHTMLList() {
-    let ret = '';
-    if (!this.deckValidation.hasLegalAmountOfCards) {
-      ret += `<div>${this.amountOfCardsInDeck(
-        this.deck!
-      )} is not a valid amount of cards in
-      ${
-        this.currentFormat ? this.formatArray[this.currentFormat.format] : 0
-      }.</div>`;
-    }
-    if (!this.deckValidation.hasLegalAmountOfCopiesOfCards) {
-      ret += `<div>Some cards exceed the copy limit of
-      ${this.currentFormat ? this.currentFormat.maxCopiesOfCards : 0} in
-      ${
-        this.currentFormat ? this.formatArray[this.currentFormat.format] : 0
-      }.</div>`;
-    }
-    if (!this.deckValidation.hasNotMoreThanMaximumOfSideboardCards) {
-      ret += `<div>${
-        this.deck!.sideboard.length
-      } is not a valid amount of cards for a
-      sideboard in
-      ${
-        this.currentFormat ? this.formatArray[this.currentFormat.format] : 0
-      }.</div>`;
-    }
-    if (!this.deckValidation.hasNoIllegalCards) {
-      ret += `<div>${
-        this.deckValidation.illegalCards.length
-      } of these cards are illegal in
-      ${this.formatArray[this.currentFormat?.format]}.</div>`;
-    }
-    if (!this.deckValidation.hasNoIllegalColorIdentities) {
-      ret += `<div>
-      ${this.deckValidation.illegalColorIdentities.length} of these cards are
-      illegal in ${this.deck!.colors}.</div>`;
-    }
-    if (!this.deckValidation.needsCommander) {
-      ret += `<div>
-      You need to assign a commander.</div>`;
-    }
-    return ret;
+    return problemsToHTMLList(
+      this.deckValidation,
+      this.deck!,
+      this.currentFormat,
+      this.formatArray[this.currentFormat?.format],
+      this.missingCards.length
+    );
   }
 
   getDeckValue(): string {

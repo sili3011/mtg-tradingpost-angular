@@ -17,7 +17,7 @@ export function imageTooltip(
   }
 }
 
-export function amountOfCardsOfDeck(deck: Deck): number {
+export function amountOfCardsInDeck(deck: Deck): number {
   let cardsCount = 0;
   deck.cards.forEach((card) => (cardsCount += card.amount));
   if (deck.companion) {
@@ -176,9 +176,9 @@ export function validateDeck(deck: Deck, format: Format): DeckValidation {
   // VALIDATE CARD AMOUNT
   if (
     (format.format !== FORMATS.COMMANDER &&
-      amountOfCardsOfDeck(deck) >= format.minCardAmount) ||
+      amountOfCardsInDeck(deck) >= format.minCardAmount) ||
     (format.format === FORMATS.COMMANDER &&
-      amountOfCardsOfDeck(deck) === format.minCardAmount)
+      amountOfCardsInDeck(deck) === format.minCardAmount)
   ) {
     ret.hasLegalAmountOfCards = true;
     --ret.amountOfProblems;
@@ -336,6 +336,48 @@ export function validateDeck(deck: Deck, format: Format): DeckValidation {
   if (format.hasCommander && !deck.commander) {
     ret.needsCommander = true;
     ++ret.amountOfProblems;
+  }
+  return ret;
+}
+
+export function problemsToHTMLList(
+  deckValidation: DeckValidation,
+  deck: Deck,
+  currentFormat: Format,
+  currentFormatString: string,
+  missingCardsCount: number
+) {
+  let ret = '';
+  if (!deckValidation.hasLegalAmountOfCards) {
+    ret += `<div>${amountOfCardsInDeck(deck)} is not a valid amount of cards in
+    ${currentFormatString}.</div>`;
+  }
+  if (!deckValidation.hasLegalAmountOfCopiesOfCards) {
+    ret += `<div>Some cards exceed the copy limit of
+    ${currentFormat.maxCopiesOfCards} in
+    ${currentFormatString}.</div>`;
+  }
+  if (!deckValidation.hasNotMoreThanMaximumOfSideboardCards) {
+    ret += `<div>${deck.sideboard.length} is not a valid amount of cards for a
+    sideboard in
+    ${currentFormatString}.</div>`;
+  }
+  if (!deckValidation.hasNoIllegalCards) {
+    ret += `<div>${deckValidation.illegalCards.length} of these cards are illegal in
+    ${currentFormatString}.</div>`;
+  }
+  if (!deckValidation.hasNoIllegalColorIdentities) {
+    ret += `<div>
+    ${deckValidation.illegalColorIdentities.length} of these cards are
+    illegal in ${deck.colors}.</div>`;
+  }
+  if (missingCardsCount > 0) {
+    ret += `<div>
+    You are missing ${missingCardsCount} cards for the deck to be complete.</div>`;
+  }
+  if (deckValidation.needsCommander) {
+    ret += `<div>
+    You need to assign a commander.</div>`;
   }
   return ret;
 }
