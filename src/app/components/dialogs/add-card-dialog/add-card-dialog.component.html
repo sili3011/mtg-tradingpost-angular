@@ -68,11 +68,12 @@
                 [matTooltip]="
                   isFoil ? 'Marked as foil. Shiny!' : 'Mark as foil. Shiny!'
                 "
-                style="position: absolute; z-index: 99; margin-left: 250px"
+                style="position: absolute; z-index: 99; margin-left: 270px"
                 (click)="toggleFoil()"
               >
                 <mat-icon
-                  style="color: #f1ca0f; font-size: 30px; margin-right: 5px"
+                  style="font-size: 30px; margin-right: 5px"
+                  class="ss-grad ss-foil"
                 >
                   {{ isFoil ? "star" : "star_border" }}
                 </mat-icon>
