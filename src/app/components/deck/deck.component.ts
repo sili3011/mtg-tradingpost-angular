@@ -45,6 +45,7 @@ import {
   imageTooltip,
   PIECHART,
   problemsToHTMLList,
+  sameCardComparison,
   validateDeck,
 } from 'src/app/utils/utils';
 import { CardsListComponent } from '../cards-list/cards-list.component';
@@ -284,9 +285,8 @@ export class DeckComponent implements OnInit, OnDestroy {
     }
     this.missingCards = this.cardsStore.missingCards.filter(
       (c) =>
-        this.deck!.cards.filter(
-          (card) => card.id === c.id && card.isFoil === c.isFoil
-        ).length > 0
+        this.deck!.cards.filter((card) => sameCardComparison(c, card)).length >
+        0
     );
     this.amountOfProblems = this.getAmountOfProblems();
     this.cd.detectChanges();

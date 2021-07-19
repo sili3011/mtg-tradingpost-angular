@@ -312,19 +312,15 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
 
   isCardInMissingCards(card: CardAdapter) {
     return (
-      this.missingCards.filter(
-        (c) => card.id === c.id && card.isFoil === c.isFoil
-      ).length > 0
+      this.missingCards.filter((c) => sameCardComparison(c, card)).length > 0
     );
   }
 
   isEnoughOnWishlist(card: CardAdapter): boolean {
-    const missing = this.missingCards.find(
-      (c) => card.id === c.id && card.isFoil === c.isFoil
-    );
+    const missing = this.missingCards.find((c) => sameCardComparison(c, card));
     if (missing) {
-      const wishlistCard = this.cardsStore.wishlist.find(
-        (c) => card.id === c.id && card.isFoil === c.isFoil
+      const wishlistCard = this.cardsStore.wishlist.find((c) =>
+        sameCardComparison(c, card)
       );
       if (wishlistCard) {
         return missing.amount - wishlistCard.amount <= 0;
@@ -401,10 +397,11 @@ export class CardsListComponent implements OnInit, OnChanges, AfterViewInit {
   }
 
   addCardAmountToList(card: CardAdapter): void {
+    const missing = this.missingCards.find((c) => sameCardComparison(c, card));
     const ref = this.dialog.open(AddCardAmountToListDialogComponent, {
       data: {
         name: card.name,
-        amount: card.amount,
+        amount: missing ? missing.amount : card.amount,
         listToAddTo: LISTTYPES.WISHLIST,
       },
     });

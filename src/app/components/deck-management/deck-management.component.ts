@@ -10,7 +10,11 @@ import { COLORHEXES, FORMATS, MANACOLORS } from 'src/app/models/enums';
 import { DBService } from 'src/app/services/db.service';
 import { CardsStore } from 'src/app/stores/cards.store';
 import { DecksStore } from 'src/app/stores/decks.store';
-import { DeckValidation, validateDeck } from 'src/app/utils/utils';
+import {
+  DeckValidation,
+  sameCardComparison,
+  validateDeck,
+} from 'src/app/utils/utils';
 import { ConfirmDialogComponent } from '../dialogs/confirm-dialog/confirm-dialog.component';
 
 @Component({
@@ -277,10 +281,7 @@ export class DeckManagementComponent implements OnInit, OnDestroy {
 
   missingCards(deck: Deck): Array<CardAdapter> {
     return this.cardsStore.missingCards.filter(
-      (c) =>
-        deck.cards.filter(
-          (card) => card.id === c.id && card.isFoil === c.isFoil
-        ).length > 0
+      (c) => deck.cards.filter((card) => sameCardComparison(c, card)).length > 0
     );
   }
 }
