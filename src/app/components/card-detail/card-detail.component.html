@@ -20,11 +20,20 @@
         [matTooltip]="
           card!.isFoil ? 'Marked as foil. Shiny!' : 'Mark as foil. Shiny!'
         "
-        style="position: absolute; z-index: 9999; margin-left: -25px"
+        style="
+          position: absolute;
+          z-index: 9999;
+          margin: -15px 90px;
+          cursor: default;
+        "
+        disableRipple
       >
-        <mat-icon style="font-size: 30px" class="ss-grad ss-foil">
-          {{ card!.isFoil ? "star" : "star_border" }}
-        </mat-icon>
+        <i
+          alt="foil"
+          aria-hidden
+          class="ss ss-htr ss-4x ss-fw ss-foil"
+          style="text-shadow: 0 0 6px black"
+        ></i>
       </button>
       <div style="min-width: 146px; z-index: 9998">
         <div

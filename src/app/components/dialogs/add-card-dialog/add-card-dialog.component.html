@@ -68,15 +68,21 @@
                 [matTooltip]="
                   isFoil ? 'Marked as foil. Shiny!' : 'Mark as foil. Shiny!'
                 "
-                style="position: absolute; z-index: 99; margin-left: 270px"
+                style="
+                  position: absolute;
+                  z-index: 99;
+                  margin: -15px 230px;
+                  color: #646464;
+                "
                 (click)="toggleFoil()"
               >
-                <mat-icon
-                  style="font-size: 30px; margin-right: 5px"
-                  class="ss-grad ss-foil"
-                >
-                  {{ isFoil ? "star" : "star_border" }}
-                </mat-icon>
+                <i
+                  alt="foil"
+                  aria-hidden
+                  class="ss ss-htr ss-4x ss-fw"
+                  [ngClass]="{ 'ss-foil': isFoil }"
+                  style="text-shadow: 0 0 6px black"
+                ></i>
               </button>
               <div style="min-width: 300px">
                 <div class="dialog-flip-card">
